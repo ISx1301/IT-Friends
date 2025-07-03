@@ -1,0 +1,14 @@
+@use "sass:math";
+@use "sass:meta";
+
+@function strip-unit($value)
+  @if meta.type-of($value) == "number" and not math.is-unitless($value)
+    @return math.div($value, ($value * 0 + 1))
+  @return $value
+
+
+@function get-vw($font: $base-value, $vw-viewport)
+  $vw-context: strip-unit($vw-viewport) * 0.01 * 1px
+  @if ($vw-context == 0px)
+    @return $font
+  @return math.div($font, $vw-context) * 1vw
