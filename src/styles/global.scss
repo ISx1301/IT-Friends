@@ -1,0 +1,58 @@
+@use "fonts";
+@use "vars";
+@use "functions";
+@use "style";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    font-size: theme('fontSize.base');
+    @media screen and (min-width: vars.$width-vw) { 
+      font-size: functions.get-vw(vars.$base-value, vars.$width-vw);
+    }
+  }
+  a {
+    text-underline-offset: 0.25em;
+    text-decoration: underline;
+  }
+  input, textarea {
+    outline: none;
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+	input[type=number] {
+    -moz-appearance: textfield;
+	}
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-medium;
+    @apply leading-tight;
+    hyphens: auto;
+    @media screen and (min-width: theme('screens.xl')) { 
+      hyphens: none;
+    }
+  }
+}
+
+body {
+	font-family: theme('fontFamily.primary');
+	font-size: inherit;
+	font-weight: theme('fontWeight.normal');
+	margin: auto;
+	padding: 0;
+	line-height: 1.5 !important;
+	color: theme('colors.black');
+	text-align: left;
+	background-color: theme('colors.white');
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	-webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
