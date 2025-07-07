@@ -1,23 +1,15 @@
 ---
 import '../styles/global.scss';
+import Head from '../layouts/head.astro';
+import Header from '../components/header.astro';
 ---
 
 <html lang="en">
-  <head>
-    <!-- TODO: insert head layout -->
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Test</title>
-	</head>
+  <Head />
 	<body>
-    <!-- TODO: insert Default layout with pages -->	
-    <details>
-      <summary class="font-bold text-blue-600 text-3xl">Test</summary>
-      <p class="sass-test">Sass test</p>
-    </details>
-    <div class="flex gap-x-5 max-h-[60vh] overflow-hidden">
+    <Header />
+  <!-- 
+    <div class="flex gap-x-5 max-h-[40vh] overflow-hidden">
       <div class="flex flex-col gap-y-5" style="transform: translate3d(0, 0, 0)">
         <div class="flex-shrink-0 rounded-full aspect-4/11 overflow-hidden">
           <img class="w-full h-full object-cover" src="https://placehold.co/170x460" alt="">
@@ -62,9 +54,6 @@ import '../styles/global.scss';
           <img class="w-full h-full object-cover" src="https://placehold.co/170x460" alt="">
         </div>
       </div>
-    </div>
+    </div> -->
 	</body>
-  <script>
-		import '../scripts/index.ts';
-	</script>
 </html>
