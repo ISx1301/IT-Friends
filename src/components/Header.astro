@@ -1,0 +1,159 @@
+---
+import Logo from './public/logo.svg';
+import Mobile from './public/mobile.svg';
+import Facebook from './public/facebook.svg';
+import Instagram from './public/instagram.svg';
+import DropdownBlack from './public/dropdown-black.svg';
+import DropdownWhite from './public/dropdown-white.svg';
+import Telegram from './public/telegram.svg';
+---
+
+<header class="relative">
+
+  <!-- ===== navigation top block ===== -->
+  <div id="logo-menu" class="py-nav-top flex justify-between items-center transition-colors duration-1000 ease-in-out container">
+
+    <!-- logo -->
+    <a href="#">
+      <Logo />
+    </a>
+
+    <!-- contact mobile -->
+    <div class="sm:hidden lg:flex items-center gap-2">
+      <Mobile />
+      <p class="font-medium text-lg">+38 (067) 123-45-67</p>
+    </div>
+
+    <!-- language toggle desktop -->
+    <div class="sm:hidden lg:flex items-center gap-9">
+      <a href="#">
+        <Facebook />
+      </a>
+      <a href="#">
+        <Instagram />
+      </a>
+      <div class="relative flex justify-center items-center font-secondary cursor-pointer lang-select">
+        <div class="flex justify-center items-center gap-1 rounded">
+          <span class="font-medium text-lg current-lang">UA</span>
+          <div class="origin-center transition-transform duration-300 arrow-lang transform">
+            <DropdownBlack />
+          </div>
+        </div>
+        <ul class="hidden top-full left-1/2 z-50 absolute flex flex-col items-center gap-1 bg-white drop-shadow shadow mt-2 p-2 rounded min-w-[60px] -translate-x-1/2 lang-menu">
+          <li class="hover:text-primary-orange hover:scale-105 transition duration-300" data-lang="UA">UA</li>
+          <li class="hover:text-primary-orange hover:scale-105 transition duration-300" data-lang="EN">EN</li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- hamburger -->
+    <div id="burger" class="lg:hidden top-6 right-6 z-[10000] fixed sm:flex flex-col justify-between space-y-[0.3rem] w-[1.875rem] h-[1.25rem] burger">
+      <span class="bg-black rounded-[0.125rem] w-full h-[0.1875rem] transition-all duration-300"></span>
+      <span class="bg-black rounded-[0.125rem] w-full h-[0.1875rem] transition-all duration-300"></span>
+      <span class="bg-black rounded-[0.125rem] w-full h-[0.1875rem] transition-all duration-300"></span>
+    </div>
+  </div>
+
+  <!-- ===== navigation bottom block ===== -->
+  <div id="mobile-menu" class="mobile-menu_active:[@media(max-width:1239px)]:visible [@media(max-width:1239px)]:top-[--logo-menu-height] [@media(max-width:1239px)]:left-0 [@media(max-width:1239px)]:z-40 [@media(max-width:1239px)]:fixed [@media(max-width:1239px)]:flex [@media(max-width:1239px)]:flex-col [@media(max-width:1239px)]:justify-center [@media(max-width:1239px)]:items-center [@media(max-width:1239px)]:bg-white lg:bg-primary-green mobile-menu_active:[@media(max-width:1239px)]:bg-white mobile-menu_active:[@media(max-width:1239px)]:opacity-100 [@media(max-width:1239px)]:w-full [@media(max-width:1239px)]:h-[calc(100vh-var(--logo-menu-height))] mobile-menu_active:[@media(max-width:1239px)]:translate-x-0 mobile-menu">
+    <nav class="flex [@media(max-width:1239px)]:flex [@media(max-width:1239px)]:flex-col justify-between [@media(max-width:1239px)]:justify-start items-center lg:py-nav-btm [@media(max-width:1239px)]:pt-[41px] [@media(max-width:1239px)]:h-full font-secondary container">
+      <ul class="flex [@media(max-width:1239px)]:flex-col gap-9 [@media(max-width:1239px)]:gap-[0.8rem] sm:mb-20 lg:mb-0 text-white [@media(max-width:1239px)]:text-black [@media(max-width:1239px)]:text-center mobile-ul">
+
+        <li class="lg:hidden">
+          <a href="#" class="font-normal [@media(max-width:1239px)]:font-semibold [@media(max-width:1239px)]:text-base text-lg mobile-link">головна</a>
+        </li>
+
+        <li>
+          <a href="#" class="font-normal [@media(max-width:1239px)]:font-semibold [@media(max-width:1239px)]:text-base text-lg mobile-link">про нас</a>
+        </li>
+
+        <!-- course toggle -->
+        <div id="course-select" class="relative cursor-pointer">
+          <div class="flex justify-center items-center gap-1">
+            <span class="hidden lg:block font-normal text-lg">навчання</span>
+            <span class="lg:hidden font-normal [@media(max-width:1239px)]:font-semibold [@media(max-width:1239px)]:text-base text-lg mobile-link">напрямки</span>
+            <div id="course-arrow" class="origin-center transition-transform duration-300 transform">
+              <span class="lg:hidden block">
+                <DropdownBlack />
+              </span>
+              <span class="hidden lg:block">
+                <DropdownWhite />
+              </span>
+            </div>
+          </div>
+          <ul id="course-menu" class="hidden left-1/2 z-50 lg:absolute flex flex-col items-center [@media(max-width:1239px)]:gap-2 bg-white lg:drop-shadow lg:shadow lg:mt-2 lg:p-2 rounded lg:w-52 lg:-translate-x-1/2 course-ul">
+            <li class="lg:px-2 sm:py-0 lg:py-1 cursor-pointer">
+              <a href="#" class="text-black hover:text-primary-orange hover:scale-105 transition duration-300">IT-Заняття</a>
+            </li>
+            <li class="lg:px-2 sm:py-0 lg:py-1 cursor-pointer">
+              <a href="#" class="text-black hover:text-primary-orange hover:scale-105 transition duration-300">Англійська</a>
+            </li>
+            <li class="lg:px-2 sm:py-0 lg:py-1 cursor-pointer">
+              <a href="#" class="text-black hover:text-primary-orange hover:scale-105 transition duration-300">Заняття онлайн</a>
+            </li>
+          </ul>
+        </div>
+
+        <li>
+          <a href="#" class="font-normal [@media(max-width:1239px)]:font-semibold [@media(max-width:1239px)]:text-base text-lg mobile-link">IT-табори</a>
+        </li>
+
+        <li>
+          <a href="#" class="font-normal [@media(max-width:1239px)]:font-semibold [@media(max-width:1239px)]:text-base text-lg mobile-link">блог</a>
+        </li>
+
+        <li>
+          <a href="#" class="font-normal [@media(max-width:1239px)]:font-semibold [@media(max-width:1239px)]:text-base text-lg mobile-link">франшиза</a>
+        </li>
+
+        <li>
+          <a href="#" class="font-normal [@media(max-width:1239px)]:font-semibold [@media(max-width:1239px)]:text-base text-lg mobile-link">контакти</a>
+        </li>
+
+        <!-- language toggle mobile -->
+        <div class="lg:hidden relative flex justify-center items-center font-secondary cursor-pointer lang-select">
+          <div class="flex justify-center items-center gap-1 rounded">
+            <span class="font-medium text-primary-orange current-lang">UA</span>
+            <div class="origin-center transition-transform duration-300 arrow-lang transform">
+              <DropdownBlack />
+            </div>
+          </div>
+          <ul class="hidden top-full left-1/2 z-50 absolute flex flex-col items-center gap-1 bg-white drop-shadow shadow mt-1 p-2 rounded min-w-[100px] -translate-x-1/2 lang-menu">
+            <li class="text-primary-orange" data-lang="UA">UA</li>
+            <li class="text-primary-orange" data-lang="EN">EN</li>
+          </ul>
+        </div>
+
+      </ul>
+
+      <!-- social links -->
+      <div class="lg:hidden flex gap-9 mb-4">
+        <a href="#">
+          <Facebook class="w-[1.75rem] h-[1.75rem]" />
+        </a>
+        <a href="#">
+          <Telegram class="w-[1.75rem] h-[1.75rem]" />
+        </a>
+        <a href="#">
+          <Telegram class="w-[1.75rem] h-[1.75rem]" />
+        </a>
+      </div>
+
+      <!-- free lesson btn -->
+      <button class="bg-primary-orange px-4 py-1 rounded-lg [@media(max-width:1239px)]:w-full [@media(max-width:1239px)]:h-[3.75rem] font-normal [@media(max-width:1239px)]:font-medium text-black text-lg">
+        Безкоштовний урок
+      </button>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+  import { setupToggleArrow } from '../scripts/languageToggle';
+  import { setupCourseToggle } from '../scripts/courseToggle';
+  import { setupBurgerToggle } from '../scripts/hamburger';
+
+  setupToggleArrow();
+  setupCourseToggle();
+  setupBurgerToggle();
+</script>
