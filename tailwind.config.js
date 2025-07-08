@@ -3,25 +3,21 @@ import defaultTheme from 'tailwindcss/defaultTheme';
 
 module.exports = {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
-  theme: { 
+  theme: {
     screens: {
-      sm: '320px',
-      lg: '1240px',
-      xl: '1920px',
+      ...defaultTheme.screens,
+      sm: '20rem',
+      lg: '77.5rem',
+      xl: '120rem',
     },
     container: {
-      center: true, 
-      padding: '0', 
+      center: true,
+      padding:  '1rem',
       screens: {
-        DEFAULT: '100%', 
-        sm: '100%', 
-        lg: '1240px', 
-        xl: '1920px', 
+        DEFAULT: '100%',
+        sm: '100%',
+        lg: '77.5rem',
       },
-        padding: {
-        DEFAULT: '1rem', 
-        lg: '0rem',      
-  },
     },
     colors: {
       'primary-green': '#01A49A',

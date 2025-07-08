@@ -6,6 +6,17 @@ import Instagram from './public/instagram.svg';
 import DropdownBlack from './public/dropdown-black.svg';
 import DropdownWhite from './public/dropdown-white.svg';
 import Telegram from './public/telegram.svg';
+
+// TODO: hamburger func here
+const burger = 'burger' in window ? window.burger as HTMLElement : null; // ?.
+
+if (burger) {
+  burger.addEventListener('click', (e) => {
+    // TODO: https://v3.tailwindcss.com/docs/hover-focus-and-other-states#styling-based-on-parent-state
+    // e.currentTarget.classList.toggle("active");
+    // document.burger.classList.toggle("active");
+  });
+}
 ---
 
 <header class="relative">
@@ -39,7 +50,7 @@ import Telegram from './public/telegram.svg';
             <DropdownBlack />
           </div>
         </div>
-        <ul class="hidden top-full left-1/2 z-50 absolute flex flex-col items-center gap-1 bg-white drop-shadow shadow mt-2 p-2 rounded min-w-[60px] -translate-x-1/2 lang-menu">
+        <ul class="lg:hidden top-full left-1/2 z-50 absolute flex flex-col items-center gap-1 bg-white drop-shadow shadow mt-2 p-2 rounded min-w-[60px] -translate-x-1/2 lang-menu">
           <li class="hover:text-primary-orange hover:scale-105 transition duration-300" data-lang="UA">UA</li>
           <li class="hover:text-primary-orange hover:scale-105 transition duration-300" data-lang="EN">EN</li>
         </ul>

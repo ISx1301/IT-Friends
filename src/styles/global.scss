@@ -1,7 +1,6 @@
 @use "fonts";
-@use "vars";
-@use "functions";
-@use "style";
+@use "vars" as *;
+@use "functions" as *;
 
 @tailwind base;
 @tailwind components;
@@ -10,8 +9,8 @@
 @layer base {
   :root {
     font-size: theme('fontSize.base');
-    @media screen and (min-width: vars.$width-vw) { 
-      font-size: functions.get-vw(vars.$base-value, vars.$width-vw);
+    @media screen and (min-width: $width-vw) { 
+      font-size: get-vw($base-value, $width-vw);
     }
   }
   a {
@@ -54,3 +53,9 @@ body {
 	-webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+// article {
+//   p {
+//     @apply mb-6;
+//   }
+// }
