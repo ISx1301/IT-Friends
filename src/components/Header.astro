@@ -1,22 +1,22 @@
 ---
-import Logo from './public/logo.svg';
-import Mobile from './public/mobile.svg';
-import Facebook from './public/facebook.svg';
-import Instagram from './public/instagram.svg';
-import DropdownBlack from './public/dropdown-black.svg';
-import DropdownWhite from './public/dropdown-white.svg';
-import Telegram from './public/telegram.svg';
+import Logo from '@images/logo.svg'
+import Mobile from '@images/mobile.svg';
+import Facebook from '@images/facebook.svg';
+import Instagram from '@images/instagram.svg';
+import DropdownBlack from '@images/dropdown-black.svg';
+import DropdownWhite from '@images/dropdown-white.svg';
+import Telegram from '@images/telegram.svg';
 
 // TODO: hamburger func here
-const burger = 'burger' in window ? window.burger as HTMLElement : null; // ?.
+// const burger = 'burger' in window ? window.burger as HTMLElement : null; // ?.
 
-if (burger) {
-  burger.addEventListener('click', (e) => {
+// if (burger) {
+//   burger.addEventListener('click', (e) => {
     // TODO: https://v3.tailwindcss.com/docs/hover-focus-and-other-states#styling-based-on-parent-state
     // e.currentTarget.classList.toggle("active");
     // document.burger.classList.toggle("active");
-  });
-}
+//   });
+// }
 ---
 
 <header class="relative">
@@ -146,7 +146,7 @@ if (burger) {
           <Telegram class="w-[1.75rem] h-[1.75rem]" />
         </a>
         <a href="#">
-          <Telegram class="w-[1.75rem] h-[1.75rem]" />
+          <Instagram class="w-[1.75rem] h-[1.75rem]" />
         </a>
       </div>
 
