@@ -37,7 +37,10 @@ module.exports = {
     extend: {
       padding: {
         'nav-top': '.4rem',
-        'nav-btm': '1.4rem'
+        'nav-btm': '1.4rem',
+        'footer-btn': '2.875rem',
+        'custom-padding-btn': '1.43rem',
+        'custom-padding-btn2': '.9rem'
       },
       aspectRatio: {
         '11/9': '11 / 9',
