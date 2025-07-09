@@ -6,6 +6,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .orange-btn {
+    @apply bg-primary-orange border border-black border-solid rounded-md font-normal text-base;
+    @media (max-width: 79.49rem) {
+      @apply w-full font-medium text-lg;
+    }
+  }
+}
+
 @layer base {
   :root {
     font-size: theme('fontSize.base');
