@@ -13,8 +13,7 @@
       "@components/*": ["src/components/*"],
       "@layouts/*": ["src/layouts/*"],
       "@images/*": ["public/*"],
-      "@": ["src/*"],
-      "~": ["src/*"],
+      "@/*": ["src/*"],
     }
   },
   "include": ["src"],
