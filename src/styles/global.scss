@@ -68,3 +68,30 @@ body {
 	-webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+// article {
+//   h1 {
+//     @apply lg:hidden inline mb-3 font-primary font-normal text-lg leading-custom1;
+//   }
+//   h2 {
+//     @apply lg:hidden inline mb-3 font-primary font-normal text-lg leading-custom1;
+//   }
+//   h3 {
+//     @apply lg:hidden inline mb-3 font-primary font-normal text-lg leading-custom1;
+//   }
+//   p {
+//     @apply lg:hidden inline mb-3 font-primary font-normal text-lg leading-custom1;
+
+//     @at-root {
+//       &.text-sm {
+//         font-size: 18px;
+//       }
+//     }
+//   }
+//   ul {
+//     @apply lg:hidden inline mb-3 font-primary font-normal text-lg leading-custom1;
+//     li {
+//       @apply lg:hidden inline mb-3 font-primary font-normal text-lg leading-custom1;
+//     }
+//   }
+// }

@@ -8,14 +8,14 @@ import { Image } from "astro:assets";
 const title = `${SITE_TITLE}`;
 const description = `${SITE_DESCRIPTION}`;
 ---
-
+<!-- Sanity (Server Side Rendering) -> JSON (GROQ) -> ASTRO (?) -->
 <DefaultLayout title={title} description={description}>
   <section class="lg:py-section-top-bottom-padding bg-gray py-12">
     <div class="container">
       <div class="flex justify-center mb-6 lg:mb-11 basis-1/12">
         <h2 class="font-secondary text-2xl lg:text-4xl-custom">Напрямки</h2>
       </div>
-
+      
       <div class="flex lg:flex-row flex-col gap-5 mb-12">
         <!-- Card 1 -->
         <div
@@ -27,16 +27,15 @@ const description = `${SITE_DESCRIPTION}`;
             format="webp"
             alt="It-Friends logo"
           />
+          <!-- TODO: wtf, screen and question to a designer -->
+          <!-- TODO: dry/die - Clean principle -->
           <h3
-            class="hidden lg:inline mb-4 font-secondary font-semibold text-3xl-custom"
+            class="mb-5 lg:mb-4 font-secondary font-semibold text-xl lg:text-3xl-custom text-center"
           >
-            IT Заняття
+            <span class="hidden lg:inline">IT Заняття</span>
+            <span class="lg:hidden">IT для дітей</span>
           </h3>
-          <h3
-            class="lg:hidden inline mb-5 font-secondary font-semibold text-xl text-center"
-          >
-            IT для дітей
-          </h3>
+          <!-- TODO: create component Article.astro -->
           <span
             class="hidden lg:inline bg-span-gray mb-6 px-4 py-1-custom rounded-lg text-white"
             >діти від 7-8 років</span
@@ -71,9 +70,10 @@ const description = `${SITE_DESCRIPTION}`;
             розвивали як творчість, так і технічні навички
             <span class="inline" id="dots-1">...</span>
             <span class="hidden" id="dot-1">.</span>
+            <!-- TODO: Security issue - escaping chars (html entities, bracers etc.) -->
             <span
               class="lg:hidden inline font-semibold read-more"
-              id="readMore-1">читати більше &gt</span
+              id="readMore-1">читати більше &gt;</span
             >
             <span class="hidden" id="hiddenText-1"
               >Кожен може спробувати себе в різному напрямку.</span
@@ -136,15 +136,16 @@ const description = `${SITE_DESCRIPTION}`;
               class="lg:hidden inline mb-4 py-2 w-full font-secondary font-medium text-lg orange-btn"
               type="button">Безкоштовний урок</button
             >
-            <button type="button" class="py-2 transparent-btn"
-              >Дізнатися більше</button
+            <button type="button" class="py-2 transparent-btn">
+              Дізнатися більше
+            </button
             >
           </div>
         </div>
 
         <!-- Card 3 -->
         <div
-          class="flex flex-col lg:items-center bg-white shadow-lg px-8 pt-10 lg:pt-4 pb-9-custom rounded-lg w-full basis-1/4 lg:basis-4/12"
+          class="flex flex-col lg:items-center bg-white shadow-lg px-8 pt-10 lg:pt-4 pb-9 rounded-lg w-full basis-1/4 lg:basis-4/12"
         >
           <Image
             class="mx-auto pb-5"
@@ -224,6 +225,8 @@ const description = `${SITE_DESCRIPTION}`;
     </div>
   </section>
 
+  <!-- TODO: text "read more" move to dedicated component ReadMore.astro -->
+  <!-- TODO: Component Article.astro inside ReadMore.astro (slots) -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const readMoreElements = document.querySelectorAll(".read-more");
