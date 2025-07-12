@@ -6,21 +6,21 @@ module.exports = {
   theme: {
     screens: {
       ...defaultTheme.screens,
-      sm: '20rem',
-      // sm: '22rem',
-      lg: '77.5rem',
-      // lg: '79.5rem',
-      xl: '120rem',
-      // xl: '122rem',
+      // sm: '20rem',      
+      sm: '22rem',
+      // lg: '77.5rem',
+      lg: '79.5rem',
+      // xl: '120rem',
+      xl: '122rem',
     },
     container: {
       center: true,
-      padding:  '1rem',
+      padding: '1rem',
       screens: {
         DEFAULT: '100%',
         sm: '100%',
-        lg: '77.5rem',
-        // lg: '79.5rem',
+        // lg: '77.5rem',
+        lg: '79.5rem',
       },
     },
     colors: {
@@ -37,11 +37,14 @@ module.exports = {
       'span-gray': '#9C9C9C',
       'span-sand': '#FFC16A',
       'span-mint': '#09D7CA',
-      'transparent-btn-hover-bg': '#D9D9D9'
+      'transparent-btn-hover-bg': '#D9D9D9',
+      'gradient-from': '#FFD394',
+      'gradient-to': '#FFC36C',
     },
     fontFamily: {
       primary: ['Montserrat', 'sans-serif', ...defaultTheme.fontFamily.sans],
-      secondary: ['Montserrat Alternates', 'sans-serif', ...defaultTheme.fontFamily.sans]
+      secondary: ['Montserrat Alternates', 'sans-serif', ...defaultTheme.fontFamily.sans],
+      play: ['Play', 'sans-serif', ...defaultTheme.fontFamily.sans]
     },
     extend: {
       fontSize: {
@@ -52,12 +55,6 @@ module.exports = {
         'nav-top': '.4rem',
         'nav-btm': '1.4rem',
         'section-top-bottom-padding': '3.95rem',
-        '9-custom': '2.375rem',
-        '1-custom': '0.26rem',
-        '20-custom': '5.375rem'
-      },
-      margin: {
-        '11custom': '2.625rem'
       },
       lineHeight: {
         'custom1': '1.4rem'
@@ -65,16 +62,10 @@ module.exports = {
       aspectRatio: {
         '11/9': '11 / 9',
         '4/11': '4 / 11',
+        '38/29': '38 / 29',
+        '80/113': '80 / 113'
       },
     },
   },
-  plugins: [
-    function ({ addUtilities }) {
-      addUtilities({
-        '.expanded > .hidden': {
-          'display': 'inline',
-        },
-      });
-    },
-  ],
+  plugins: [],
 }

@@ -1,222 +1,127 @@
 ---
-import { SITE_TITLE } from "@/constants.ts";
-import { SITE_DESCRIPTION } from "@/constants.ts";
+import { SITE_TITLE, SITE_DESCRIPTION } from "@/constants.ts";
 import DefaultLayout from "@layouts/Default.astro";
-
+import Article from "@components/Article.astro";
 import { Image } from "astro:assets";
 
 const title = `${SITE_TITLE}`;
 const description = `${SITE_DESCRIPTION}`;
 ---
-<!-- Sanity (Server Side Rendering) -> JSON (GROQ) -> ASTRO (?) -->
+
 <DefaultLayout title={title} description={description}>
+  <section>
+    <div class="bg-primary-green h-[787px]"></div>
+  </section>
+
+  <!-- Areas of study -->
+
   <section class="lg:py-section-top-bottom-padding bg-gray py-12">
     <div class="container">
-      <div class="flex justify-center mb-6 lg:mb-11 basis-1/12">
-        <h2 class="font-secondary text-2xl lg:text-4xl-custom">Напрямки</h2>
+      <div class="flex justify-center mb-6 lg:mb-11 basis-1/4 lg:basis-1/12">
+        <h2 class="font-secondary text-2xl lg:text-3xl">Напрямки</h2>
       </div>
-      
-      <div class="flex lg:flex-row flex-col gap-5 mb-12">
-        <!-- Card 1 -->
-        <div
-          class="flex flex-col lg:items-center bg-white shadow-lg px-8 pt-10 lg:pt-6 pb-9-custom rounded-lg w-full basis-1/4 lg:basis-4/12"
-        >
+
+      <div
+        class="flex lg:flex-row flex-col gap-5 mb-11 lg basis-1/4 lg:basis-1/12"
+      >
+        <div class="flex flex-col items-center bg-white shadow-2xl px-4 sm:px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full aspect-80/113 lg:basis-4/12">
           <Image
-            class="mx-auto pb-5"
-            src={import("@images/logo-friends-section.jpg")}
+            class="mb-3"
+            src={import("@images/logo-it-friends.jpg")}
             format="webp"
-            alt="It-Friends logo"
+            alt="IT Friends logo"
           />
-          <!-- TODO: wtf, screen and question to a designer -->
-          <!-- TODO: dry/die - Clean principle -->
-          <h3
-            class="mb-5 lg:mb-4 font-secondary font-semibold text-xl lg:text-3xl-custom text-center"
-          >
-            <span class="hidden lg:inline">IT Заняття</span>
-            <span class="lg:hidden">IT для дітей</span>
-          </h3>
-          <!-- TODO: create component Article.astro -->
-          <span
-            class="hidden lg:inline bg-span-gray mb-6 px-4 py-1-custom rounded-lg text-white"
+          <h3 class="mb-4 font-secondary font-semibold text-2xl">IT Заняття</h3>
+          <span class="bg-span-gray mb-4 px-4 py-1 rounded-lg text-white"
             >діти від 7-8 років</span
           >
-          <span
-            class="lg:hidden inline bg-span-sand mx-auto mb-6 px-4 py-1-custom rounded-lg text-black text-center"
-            >діти від 9-16 років</span
-          >
-          <p
-            class="hidden lg:inline mb-3 font-primary font-normal text-lg leading-custom1"
-          >
-            Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та
-            технологій. Ми вчимо через гру: програмуємо персонажів, розв’язуємо
-            логічні задачі, створюємо прості історії.
-          </p>
-          <p
-            class="hidden lg:inline mb-11 font-primary font-normal text-lg leading-custom1"
-          >
-            Діти навчаються з цікавістю, без стресу й тиску.
-          </p>
-          <p
-            class="lg:hidden inline mb-3 font-primary font-normal text-lg leading-custom1"
-          >
-            На цьому курсі учні створюють свої перші сайти, ігри, застосунки та
-            дизайн-проєкти.
-          </p>
-          <p
-            id="mobileText-1"
-            class="lg:hidden inline mb-10 font-primary font-normal text-lg line-clamp-5 leading-custom1"
-          >
-            Ми комбінуємо візуальне мислення з основами програмування, щоб діти
-            розвивали як творчість, так і технічні навички
-            <span class="inline" id="dots-1">...</span>
-            <span class="hidden" id="dot-1">.</span>
-            <!-- TODO: Security issue - escaping chars (html entities, bracers etc.) -->
-            <span
-              class="lg:hidden inline font-semibold read-more"
-              id="readMore-1">читати більше &gt;</span
-            >
-            <span class="hidden" id="hiddenText-1"
-              >Кожен може спробувати себе в різному напрямку.</span
-            >
-          </p>
+          <Article blockId="1">
+            <div slot="description"></div>
+            <div slot="advantages" class="content-advantages">
+              Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та
+              технологій. Ми вчимо через гру: програмуємо персонажів,
+              розв’язуємо логічні задачі, створюємо прості історії.
+            </div>
+            <div slot="advantages" class="content-advantages">
+              Діти навчаються з цікавістю, без стресу й тиску.
+            </div>
+          </Article>
           <button
-            class="lg:hidden inline mb-4 py-2 w-full font-secondary font-medium text-lg orange-btn"
+            class="lg:hidden inline-block mb-3 py-2 border w-full orange-btn"
             type="button">Безкоштовний урок</button
           >
-          <button type="button" class="py-2 w-full transparent-btn"
+          <button class="py-2 border w-full transparent-btn" type="button"
             >Дізнатися більше</button
           >
         </div>
 
-        <!-- Card 2 -->
-        <div
-          class="flex flex-col lg:items-center bg-white shadow-lg px-8 lg:px-4 pt-10 lg:pt-4 pb-9-custom rounded-lg w-full lg: basis-1/4 lg:basis-4/12"
-        >
+        <div class="flex flex-col items-center bg-white shadow-2xl px-4 sm:px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full aspect-80/113 lg:basis-4/12">
           <Image
-            class="mx-auto pb-4"
-            src={import("@images/english-friends-logo.jpg")}
+            class="mb-3"
+            src={import("@images/logo-english-friends.jpg")}
             format="webp"
-            alt="English-Friends logo"
+            alt="English friends logo"
           />
-          <h3
-            class="mb-5 font-secondary font-semibold text-3xl-custom text-center"
-          >
+          <h3 class="mb-4 font-secondary font-semibold text-2xl">
             Англійська для дітей
           </h3>
-          <span
-            class="lg:hidden inline bg-span-mint mx-auto mb-4 px-4 py-1-custom rounded-lg text-black"
-            >діти від 7-16 років</span
-          >
-          <span
-            class="hidden lg:inline bg-span-sand mx-auto mb-5 px-4 py-1-custom rounded-lg text-black text-center"
+          <span class="bg-span-sand mb-4 px-4 py-1 rounded-lg text-black"
             >діти від 9-16 років</span
           >
-          <p class="mb-3 font-primary font-normal text-lg leading-custom1">
-            На цьому курсі учні створюють свої перші сайти, ігри, застосунки та
-            дизайн-проєкти.
-          </p>
-          <p
-            id="mobileText-2"
-            class="mb-11custom w-full font-primary font-normal text-lg line-clamp-7 leading-custom1"
-          >
-            Ми комбінуємо візуальне мислення з основами програмування, щоб діти
-            розвивали як творчість, так і технічні навички
-            <span class="lg:hidden inline" id="dots-2">...</span>
-            <span class="hidden lg:inline" id="dot-2">.</span>
-            <span
-              class="lg:hidden inline font-semibold read-more"
-              id="readMore-2">читати більше &gt</span
-            >
-            <span class="hidden lg:inline leading-custom1" id="hiddenText-2"
-              >Кожен може спробувати себе в різному напрямку.</span
-            >
-          </p>
-          <div class="flex flex-col lg:justify-center px-0 lg:px-4 w-full">
-            <button
-              class="lg:hidden inline mb-4 py-2 w-full font-secondary font-medium text-lg orange-btn"
-              type="button">Безкоштовний урок</button
-            >
-            <button type="button" class="py-2 transparent-btn">
-              Дізнатися більше
-            </button
-            >
-          </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div
-          class="flex flex-col lg:items-center bg-white shadow-lg px-8 pt-10 lg:pt-4 pb-9 rounded-lg w-full basis-1/4 lg:basis-4/12"
-        >
-          <Image
-            class="mx-auto pb-5"
-            src={import("@images/logo-tour-friends.jpg")}
-            format="webp"
-            alt="It-Friends logo"
-          />
-          <h3
-            class="hidden lg:inline mb-4 font-secondary font-semibold text-3xl-custom"
-          >
-            IT Табори
-          </h3>
-          <h3
-            class="lg:hidden inline mb-5 font-secondary font-semibold text-xl text-center"
-          >
-            Табори для дітей
-          </h3>
-          <span
-            class="hidden lg:inline bg-span-mint mb-5 px-4 py-1-custom rounded-lg text-black"
-            >діти від 7-16 років</span
-          >
-          <span
-            class="lg:hidden inline bg-span-gray mx-auto mb-6 px-4 py-1-custom rounded-lg text-white text-center"
-            >діти від 7-16 років</span
-          >
-          <p
-            class="hidden lg:inline mb-3 font-primary font-normal text-lg leading-custom1"
-          >
-            Англійська — це не нудні правила, а цікава практика. Ми працюємо з
-            сучасними темами, які цікавлять дітей: технології, ігри, спілкування
-            онлайн.
-          </p>
-          <p
-            class="hidden lg:inline mb-11 font-primary font-normal text-lg leading-custom1"
-          >
-            Заняття проходять легко, у дружній атмосфері, без страху зробити
-            помилку.
-          </p>
-          <p
-            class="lg:hidden inline mb-3 font-primary font-normal text-lg leading-custom1"
-          >
-            На цьому курсі учні створюють свої перші сайти, ігри, застосунки та
-            дизайн-проєкти.
-          </p>
-          <p
-            id="mobileText-3"
-            class="lg:hidden inline mb-10 font-primary font-normal text-lg line-clamp-5 leading-custom1"
-          >
-            Ми комбінуємо візуальне мислення з основами програмування, щоб діти
-            розвивали як творчість, так і технічні навички
-            <span class="inline" id="dots-3">...</span>
-            <span class="hidden" id="dot-3">.</span>
-            <span
-              class="lg:hidden inline font-semibold read-more"
-              id="readMore-3">читати більше &gt</span
-            >
-            <span class="hidden" id="hiddenText-3"
-              >Кожен може спробувати себе в різному напрямку.</span
-            >
-          </p>
+          <Article blockId="1">
+            <div slot="description"></div>
+            <div slot="advantages" class="content-advantages">
+              На цьому курсі учні створюють свої перші сайти, ігри, застосунки
+              та дизайн-проєкти.
+            </div>
+            <div slot="advantages" class="content-advantages">
+              Ми комбінуємо візуальне мислення з основами програмування, щоб
+              діти розвивали як творчість, так і технічні навички. Кожен може
+              спробувати себе в різному напрямку.
+            </div>
+          </Article>
           <button
-            class="lg:hidden inline mb-4 py-2 w-full font-secondary font-medium text-lg orange-btn"
+            class="lg:hidden inline-block mb-3 py-2 border w-full orange-btn"
             type="button">Безкоштовний урок</button
           >
-          <button type="button" class="py-2 w-full transparent-btn"
+          <button class="py-2 border w-full transparent-btn" type="button"
+            >Дізнатися більше</button
+          >
+        </div>
+
+        <div class="flex flex-col items-center bg-white shadow-2xl px-4 sm:px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full aspect-80/113 lg:basis-4/12">
+          <Image
+            class="mb-3"
+            src={import("@images/logo-tour-friends.jpg")}
+            format="webp"
+            alt="Tour friends logo"
+          />
+          <h3 class="mb-4 font-secondary font-semibold text-2xl">IT Табори</h3>
+          <span class="bg-span-mint mb-4 px-4 py-1 rounded-lg text-black"
+            >діти від 7-16 років</span
+          >
+          <Article blockId="1">
+            <div slot="description"></div>
+            <div slot="advantages" class="content-advantages">
+              Англійська — це не нудні правила, а цікава практика. Ми працюємо з
+              сучасними темами, які цікавлять дітей: технології, ігри,
+              спілкування онлайн.
+            </div>
+            <div slot="advantages" class="content-advantages">
+              Заняття проходять легко, у дружній атмосфері, без страху зробити
+              помилку.
+            </div>
+          </Article>
+          <button
+            class="lg:hidden inline-block mb-3 py-2 border w-full orange-btn"
+            type="button">Безкоштовний урок</button
+          >
+          <button class="py-2 border w-full transparent-btn" type="button"
             >Дізнатися більше</button
           >
         </div>
       </div>
-
-      <div class="hidden lg:flex justify-center basis1/12">
+      <div class="hidden lg:flex justify-center basis-1/4 lg:basis-1/12">
         <button
           class="px-5 py-4 font-secondary font-medium text-lg orange-btn"
           type="button">Безкоштовний урок</button
@@ -225,36 +130,77 @@ const description = `${SITE_DESCRIPTION}`;
     </div>
   </section>
 
-  <!-- TODO: text "read more" move to dedicated component ReadMore.astro -->
-  <!-- TODO: Component Article.astro inside ReadMore.astro (slots) -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const readMoreElements = document.querySelectorAll(".read-more");
-      readMoreElements.forEach((readMore) => {
-        const blockId = readMore.id.replace("readMore-", "");
-        const dots = document.getElementById(
-          `dots-${blockId}`
-        ) as HTMLElement | null;
-        const dot = document.getElementById(
-          `dot-${blockId}`
-        ) as HTMLElement | null;
-        if (readMore && dots && dot) {
-          readMore.addEventListener("click", function () {
-            const textContainer = document.getElementById(
-              `mobileText-${blockId}`
-            ) as HTMLElement | null;
-            const hiddenText = document.getElementById(
-              `hiddenText-${blockId}`
-            ) as HTMLElement | null;
-            if (textContainer && hiddenText) {
-              textContainer.classList.add("expanded");
-              (readMore as HTMLElement).style.display = "none";
-              (dots as HTMLElement).style.display = "none";
-              (dot as HTMLElement).style.display = "inline";
-            }
-          });
-        }
-      });
-    });
-  </script>
+  <!-- About us -->
+
+  <section class="py-20 lg:py-32">
+    <div class="container">
+      <div class="mb-8 basis-1/4 lg:basis1/12">
+        <h2 class="font-secondary font-medium text-2xl lg:text-3xl">Про нас</h2>
+      </div>
+      <div class="flex lg:flex-row flex-col gap-8 basis-1/4 lg:basis1/12">
+        <div class="lg:basis-6/12 basis-1/4">
+          <Image
+            src={import("@images/about-us-image.jpg")}
+            format="webp"
+            alt="about us"
+          />
+        </div>
+        <div class="lg:basis-6/12 basis-1/4">
+          <h3 class="mb-5 font-secondary font-semibold text-xl lg:text-3xl">
+            Віримо в кожну дитину <br /> І вона починає вірити в себе
+          </h3>
+          <div class="flex flex-col gap-4 mb-16 basis-1/4">
+            <div class="flex gap-6">
+              <span
+                class="px-0 lg:px-6 py-1 lg:py-2 border border-span-mint rounded-3xl w-full lg:w-auto font-play font-normal text-xl text-center"
+                >індивідуально</span
+              >
+              <span
+                class="px-0 lg:px-7 py-1 lg:py-2 border border-span-mint rounded-3xl w-full lg:w-auto font-play font-normal text-xl text-center"
+                >інтерактивно</span
+              >
+            </div>
+            <div class="flex gap-4">
+              <span
+                class="px-0 lg:px-11 py-1 lg:py-2 border border-span-mint rounded-3xl w-full lg:w-auto font-play font-normal text-xl text-center"
+                >з любов’ю</span
+              >
+              <span
+                class="px-0 lg:px-16 py-1 lg:py-2 border border-span-mint rounded-3xl w-full lg:w-auto font-play font-normal text-xl text-center"
+                >гнучко</span
+              >
+            </div>
+          </div>
+          <Article blockId="section-2">
+            <div slot="description" class="content-description">
+              Не просто курси — місце для зростання
+            </div>
+            <div slot="advantages" class="content-advantages">
+              Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут
+              кожен учень — важливий.
+            </div>
+            <div slot="advantages" class="content-advantages">
+              Ми віримо, що найкращі результати приходять не через тиск, а через
+              цікавість, довіру та повагу до темпу дитини.
+            </div>
+            <div slot="advantages" class="content-advantages">
+              У нашій школі можна пробувати, помилятись, змінювати напрям і
+              знову шукати своє — без страху бути «не таким».
+            </div>
+          </Article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Peculiarities -->
+
+  <section class="bg-gradient-to-b from-gradient-from to-gradient-to py-20">
+    <div class="container">
+      <div class="basis-1/4 lg:basis1/12">
+        <h2 class="text-center">Що робить нашу школу особливою</h2>
+      </div>
+    </div>
+  </section>
+
 </DefaultLayout>

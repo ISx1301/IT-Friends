@@ -151,7 +151,7 @@ import Telegram from '@images/telegram.svg';
       </div>
 
       <!-- free lesson btn -->
-      <button class="bg-primary-orange px-4 py-1 rounded-lg [@media(max-width:1239px)]:w-full [@media(max-width:1239px)]:h-[3.75rem] font-normal [@media(max-width:1239px)]:font-medium text-black text-lg">
+      <button type="button" class="bg-primary-orange px-4 py-1 rounded-lg [@media(max-width:1239px)]:w-full [@media(max-width:1239px)]:h-[3.75rem] font-normal [@media(max-width:1239px)]:font-medium text-black text-lg">
         Безкоштовний урок
       </button>
 
@@ -160,9 +160,9 @@ import Telegram from '@images/telegram.svg';
 </header>
 
 <script>
-  import { setupToggleArrow } from '../scripts/languageToggle';
-  import { setupCourseToggle } from '../scripts/courseToggle';
-  import { setupBurgerToggle } from '../scripts/hamburger';
+  import { setupToggleArrow } from '@scripts/languageToggle';
+  import { setupCourseToggle } from '@scripts/courseToggle';
+  import { setupBurgerToggle } from '@scripts/hamburger';
 
   setupToggleArrow();
   setupCourseToggle();

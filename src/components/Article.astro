@@ -1,0 +1,20 @@
+---
+import "@styles/article.sass";
+---
+
+<article class="content">
+  <div class="content-description">
+    <slot name="description" />
+  </div>
+
+  <div id={`mobileText-${Astro.props.blockId}`} class="content-advantages">
+    <div class="line-clamp-6 lg:line-clamp-none content-advantages-text">
+      <slot name="advantages" />
+    </div>
+  </div>
+</article>
+
+<script>
+  import { setupReadMoreLogic } from "@scripts/readMore";
+  setupReadMoreLogic();
+</script>

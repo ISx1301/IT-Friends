@@ -8,18 +8,22 @@
 
 @layer components {
   .orange-btn {
-    @apply bg-primary-orange hover:bg-[transparent] border border-primary-orange hover:border-primary-orange border-solid rounded-md font-normal hover:text-primary-orange text-base;
+    @apply bg-primary-orange hover:bg-[transparent] border border-primary-orange hover:border-primary-orange border-solid rounded-md font-normal hover:text-primary-orange text-base transition-colors duration-300;
+    
     @media (max-width: 79.49rem) {
       @apply w-full font-medium text-lg;
     }
   }
+
   .transparent-btn {
-    @apply bg-[transparent] hover:bg-transparent-btn-hover-bg border border-transparent-btn-border rounded-lg font-normal text-lg; 
+    @apply bg-[transparent] hover:bg-transparent-btn-hover-bg border border-transparent-btn-border rounded-lg font-normal text-lg transition-colors duration-300;
+    
     @media (max-width: 79.49rem) {
       @apply w-full font-medium text-lg;
+    }
   }
 }
-}
+
 
 @layer base {
   :root {
