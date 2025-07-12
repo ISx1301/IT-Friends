@@ -1,17 +1,21 @@
 ---
 import "@styles/article.sass";
----
 
+const { class: className } = Astro.props;
+---
+<!-- TODO: read about aria-content (aria-attrs*) -->
 <article class="content">
   <div class="content-description">
     <slot name="description" />
   </div>
-
-  <div id={`mobileText-${Astro.props.blockId}`} class="content-advantages">
+<!-- TODO: delete -->
+  <div class="content-advantages">
     <div class="line-clamp-6 lg:line-clamp-none content-advantages-text">
       <slot name="advantages" />
     </div>
   </div>
+
+  <slot />
 </article>
 
 <script>

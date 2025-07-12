@@ -1,0 +1,43 @@
+---
+import "@styles/article.sass";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props {
+  anchor: string;
+  wordLength: number;
+  class?: HTMLAttributes<"div">;
+  only?: "desktop" | "mobile";
+  textLength?: number;
+}
+
+const { 
+  class: className, 
+  anchor, 
+  only, 
+  wordLength, 
+  textLength 
+} = Astro.props;
+
+const html = await Astro.slots.render('default');
+
+const username = 'Igor'; // variable example usage
+
+// excerpt component, props: textLength/wordLength
+let excerptedHtml = '';
+excerptedHtml = html.split(' ').slice(0, wordLength).join(' ');
+if (textLength) {
+  // if textLength present ->  delete all tags in html via RegExp -> 
+  excerptedHtml = html.split(' ').slice(0, textLength).join(' ');
+}
+---
+
+<!-- TODO: read about aria-content (aria-attrs*) -->
+{only === 'desktop' && (<Fragment set:html={excerptedHtml} />)}
+{only === 'mobile' && (<p>{username}!</p>)}
+...
+<a href={anchor}>Read more</a>
+
+<script>
+  import { setupReadMoreLogic } from "@scripts/readMore";
+  setupReadMoreLogic();
+</script>

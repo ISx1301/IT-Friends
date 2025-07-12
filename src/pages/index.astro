@@ -2,6 +2,7 @@
 import { SITE_TITLE, SITE_DESCRIPTION } from "@/constants.ts";
 import DefaultLayout from "@layouts/Default.astro";
 import Article from "@components/Article.astro";
+import Excerpt from "@components/Excerpt.astro";
 import { Image } from "astro:assets";
 
 const title = `${SITE_TITLE}`;
@@ -24,7 +25,9 @@ const description = `${SITE_DESCRIPTION}`;
       <div
         class="flex lg:flex-row flex-col gap-5 mb-11 lg basis-1/4 lg:basis-1/12"
       >
-        <div class="flex flex-col items-center bg-white shadow-2xl px-4 sm:px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full aspect-80/113 lg:basis-4/12">
+        <div
+          class="flex flex-col items-center bg-white shadow-2xl px-4 sm:px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full aspect-80/113 lg:basis-4/12"
+        >
           <Image
             class="mb-3"
             src={import("@images/logo-it-friends.jpg")}
@@ -54,10 +57,12 @@ const description = `${SITE_DESCRIPTION}`;
             >Дізнатися більше</button
           >
         </div>
-
-        <div class="flex flex-col items-center bg-white shadow-2xl px-4 sm:px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full aspect-80/113 lg:basis-4/12">
+        <div
+          class="flex flex-col items-center bg-white shadow-2xl px-4 sm:px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full aspect-80/113 lg:basis-4/12"
+        >
+        <!-- Height -->
           <Image
-            class="mb-3"
+            class="mb-3 max-h-28"
             src={import("@images/logo-english-friends.jpg")}
             format="webp"
             alt="English friends logo"
@@ -89,7 +94,9 @@ const description = `${SITE_DESCRIPTION}`;
           >
         </div>
 
-        <div class="flex flex-col items-center bg-white shadow-2xl px-4 sm:px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full aspect-80/113 lg:basis-4/12">
+        <div
+          class="flex flex-col items-center bg-white shadow-2xl px-4 sm:px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full aspect-80/113 lg:basis-4/12"
+        >
           <Image
             class="mb-3"
             src={import("@images/logo-tour-friends.jpg")}
@@ -171,7 +178,7 @@ const description = `${SITE_DESCRIPTION}`;
               >
             </div>
           </div>
-          <Article blockId="section-2">
+          <!-- <Article blockId="section-2">
             <div slot="description" class="content-description">
               Не просто курси — місце для зростання
             </div>
@@ -187,6 +194,17 @@ const description = `${SITE_DESCRIPTION}`;
               У нашій школі можна пробувати, помилятись, змінювати напрям і
               знову шукати своє — без страху бути «не таким».
             </div>
+          </Article> -->
+
+          <Article>
+            <Excerpt wordLength={20} anchor={""} only="desktop">
+              <p>
+              Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та
+              технологій. Ми вчимо через гру: програмуємо персонажів,
+              розв’язуємо логічні задачі, створюємо прості історії.
+              </p>
+              <p>Діти навчаються з цікавістю, без стресу й тиску.</p>
+            </Excerpt>
           </Article>
         </div>
       </div>
@@ -202,5 +220,4 @@ const description = `${SITE_DESCRIPTION}`;
       </div>
     </div>
   </section>
-
 </DefaultLayout>
