@@ -7,6 +7,11 @@ import { Image } from "astro:assets";
 
 const title = `${SITE_TITLE}`;
 const description = `${SITE_DESCRIPTION}`;
+
+
+import { client } from '../lib/sanityClient';
+
+const data = await client.fetch(`*[_type == "test"][0]{ heading }`);
 ---
 
 <DefaultLayout title={title} description={description}>
@@ -19,7 +24,7 @@ const description = `${SITE_DESCRIPTION}`;
   <section class="lg:py-section-top-bottom-padding bg-gray py-12">
     <div class="container">
       <div class="flex justify-center mb-6 lg:mb-11 basis-1/4 lg:basis-1/12">
-        <h2 class="font-secondary text-2xl lg:text-3xl">Напрямки</h2>
+        <h2 class="font-secondary text-2xl lg:text-3xl">{data.heading}</h2>
       </div>
 
       <div
