@@ -7,7 +7,7 @@ export default defineConfig({
   name: 'default',
   title: 'IT Friends CMS',
 
-  projectId: 'ulciq70j',
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID ?? '',
   dataset: 'production',
 
   plugins: [structureTool(), visionTool()],

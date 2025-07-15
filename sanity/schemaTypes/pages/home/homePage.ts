@@ -2,7 +2,13 @@ import { defineType, defineField } from 'sanity'
 import { head } from '../../shared/head'
 import { header } from '../../shared/header';
 import { footer } from '../../shared/footer'
+import { LOCALE } from '../../../constants';
 
+// uk_UA
+// en_GB
+// de_DE
+// de_AU
+// locale_Region
 export default defineType({
   name: 'homePage',
   title: 'Головна сторінка',
@@ -14,17 +20,17 @@ export default defineType({
       type: 'string',
       options: {
         list: [
-          { title: 'Українська', value: 'uk' },
-          { title: 'English', value: 'en' }
+          { title: 'Українська', value: LOCALE.Uk },
+          { title: 'English', value: LOCALE.En }
         ],
         layout: 'radio',
       },
-      initialValue: 'uk',
+      initialValue: LOCALE.Uk,
       validation: Rule => Rule.required(),
     }),
     defineField(head),
-    defineField(header),
-    defineField(footer),
+    defineField(header), // move to Global settings 
+    defineField(footer), // move to Global settings 
     defineField({
       name: 'sections',
       title: 'Секції сторінки',

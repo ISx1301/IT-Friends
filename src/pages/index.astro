@@ -7,9 +7,28 @@ import { Image } from "astro:assets";
 
 const title = `${SITE_TITLE}`;
 const description = `${SITE_DESCRIPTION}`;
+
+// const data = {
+//   sections: [
+//         { name: 'heroSection' },
+//         { name: 'directionsSection' },
+//         { name: 'aboutUsSection' },
+//         { name: 'reviewsSection' },
+//         { name: 'featuresSection' },
+//         { name: 'teamSection' },
+//         { name: 'newSchoolSection' },
+//         { name: 'faqSection' },
+//       ]
+// };
 ---
 
 <DefaultLayout title={title} description={description}>
+
+  <!-- {
+    for (let index = 0; index < data.sections.length; index++) {
+     <Fragment name={data.sections[index].name} params={data.sections[index]} />
+    }
+  } -->
   <section>
     <div class="bg-primary-green h-[787px]"></div>
   </section>

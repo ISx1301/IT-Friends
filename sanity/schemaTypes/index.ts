@@ -16,6 +16,17 @@ import { newSchoolSection } from './pages/home/newSchoolSection';
 import { teamSection } from './pages/home/teamSection';
 import { faqSection } from './pages/home/faqSection';
 
+// TODO: process of creation links
+/**
+ * page entity - если пустое поле slug, ошибка валидации, 
+ * или можна заполнить вручную (и валидировать RegExp, формат slug)
+ * 
+ * https://regex101.com/ - курс regexp
+ * 
+ * главная страница - селект в Главных настройках 
+ * ...или - поле switch/checkbox, является ли страница главной на любой странице (проверить, среди всех других)
+ * Задача: разобраться с Санити, есть ли глобальное состояние (global state) (if not - local storage / session storage)
+ */
 
 export const schemaTypes = [
   // Shared
