@@ -232,10 +232,70 @@ const description = `${SITE_DESCRIPTION}`;
 
   <!-- Peculiarities -->
 
-  <section class="bg-gradient-to-b from-gradient-from to-gradient-to py-20">
+  <section class="bg-gradient-to-b from-gradient-from to-gradient-to py-11 lg:py-16">
     <div class="container">
-      <div class="basis-1/4 lg:basis1/12">
-        <h2 class="text-center">Що робить нашу школу особливою</h2>
+      <div class="basis-1/4 lg:basis-1/12">
+        <h2 class="mb-9 lg:mb-14 text-3xl lg:text-4xl text-center">Що робить нашу школу особливою</h2>
+      </div>
+      <div class="flex lg:flex-row flex-col gap-5 basis-1/4 lg:basis-1/12">
+        <div class="w-full">
+          <div class="bg-white mb-5 px-5 py-7 rounded-md w-full">
+            <Image
+              class="mb-4 max-h"
+              src={import("@images/peculiarities-img1.jpg")}
+              format="webp"
+              alt="peculiarities"
+            />
+            <h3 class="mb-1 font-semibold text-lg lg:text-xl">Індивідуальний підхід</h3>
+            <p class="mb-0 font-normal text-base lg:text-lg leading-tight">Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
+          </div>
+          <div class="bg-white px-5 py-7 rounded-md w-full">
+            <Image
+              class="mb-4 max-h-12"
+              src={import("@images/peculiarities-img2.jpg")}
+              format="webp"
+              alt="peculiarities"
+            />
+            <h3 class="mb-1 font-semibold text-lg lg:text-xl">Тепла атмосфера</h3>
+            <p class="mb-0 font-normal text-base lg:text-lg leading-tight">Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
+          </div>
+        </div>
+        <div class="w-full">
+          <Image
+            class="hidden lg:block rounded-md min-h-full"
+            src={import("@images/peculiarities-central-image.jpg")}
+            format="webp"
+            alt="peculiarities"
+          />
+          <Image
+            class="lg:hidden block rounded-md w-full"
+            src={import("@images/perciliarities-mobile.jpg")}
+            format="webp"
+            alt="peculiarities"
+          />
+        </div>
+        <div class="w-full">
+          <div class="bg-white mb-5 px-5 py-7 rounded-md w-full">
+            <Image
+              class="mb-4 max-h"
+              src={import("@images/peculiarities-img3.jpg")}
+              format="webp"
+              alt="peculiarities"
+            />
+            <h3 class="mb-1 font-semibold text-lg lg:text-xl">Жива підтримка</h3>
+            <p class="mb-0 font-normal text-base lg:text-lg leading-tight">Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
+          </div>
+          <div class="bg-white px-5 py-7 rounded-md w-full">
+            <Image
+              class="mb-4 max-h-12"
+              src={import("@images/peculiarities-img4.jpg")}
+              format="webp"
+              alt="peculiarities"
+            />
+            <h3 class="mb-1 font-semibold text-lg lg:text-xl">Вільний вибір</h3>
+            <p class="mb-0 font-normal text-base lg:text-lg leading-tight">Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
+          </div>
+        </div>      
       </div>
     </div>
   </section>
