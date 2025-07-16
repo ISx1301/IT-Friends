@@ -48,6 +48,7 @@ module.exports = {
     },
     extend: {
       fontSize: {
+        '5xl-custom': '2.375rem',
         '4xl-custom': '2.125rem',
         '3xl-custom': '1.375rem'
       },

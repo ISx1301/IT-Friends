@@ -9,7 +9,7 @@
 @layer components {
   .orange-btn {
     @apply bg-primary-orange hover:bg-[transparent] border border-primary-orange hover:border-primary-orange border-solid rounded-md font-normal hover:text-primary-orange text-base transition-colors duration-300;
-    
+
     @media (max-width: 79.49rem) {
       @apply w-full font-medium text-lg;
     }
@@ -17,18 +17,17 @@
 
   .transparent-btn {
     @apply bg-[transparent] hover:bg-transparent-btn-hover-bg border border-transparent-btn-border rounded-lg font-normal text-lg transition-colors duration-300;
-    
+
     @media (max-width: 79.49rem) {
       @apply w-full font-medium text-lg;
     }
   }
 }
 
-
 @layer base {
   :root {
-    font-size: theme('fontSize.base');
-    @media screen and (min-width: $width-vw) { 
+    font-size: theme("fontSize.base");
+    @media screen and (min-width: $width-vw) {
       font-size: get-vw($base-value, $width-vw);
     }
   }
@@ -36,7 +35,8 @@
     text-underline-offset: 0.25em;
     text-decoration: none;
   }
-  input, textarea {
+  input,
+  textarea {
     outline: none;
   }
   input[type="number"]::-webkit-inner-spin-button,
@@ -44,32 +44,37 @@
     -webkit-appearance: none;
     margin: 0;
   }
-	input[type=number] {
+  input[type="number"] {
     -moz-appearance: textfield;
-	}
-  h1, h2, h3, h4, h5, h6 {
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-medium;
     @apply leading-tight;
     hyphens: auto;
-    @media screen and (min-width: theme('screens.xl')) { 
+    @media screen and (min-width: theme("screens.xl")) {
       hyphens: none;
     }
   }
 }
 
 body {
-	font-family: theme('fontFamily.primary');
-	font-size: inherit;
-	font-weight: theme('fontWeight.normal');
-	margin: auto;
-	padding: 0;
-	line-height: 1.5 !important;
-	color: theme('colors.black');
-	text-align: left;
-	background-color: theme('colors.white');
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	-webkit-font-smoothing: antialiased;
+  font-family: theme("fontFamily.primary");
+  font-size: inherit;
+  font-weight: theme("fontWeight.normal");
+  margin: auto;
+  padding: 0;
+  line-height: 1.5 !important;
+  color: theme("colors.black");
+  text-align: left;
+  background-color: theme("colors.white");
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
@@ -99,3 +104,21 @@ body {
 //     }
 //   }
 // }
+
+@keyframes marquee-to-top {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-70%);
+  }
+}
+
+@keyframes marquee-to-bottom {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(70%);
+  }
+}

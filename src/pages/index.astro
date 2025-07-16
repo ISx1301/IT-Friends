@@ -29,8 +29,268 @@ const description = `${SITE_DESCRIPTION}`;
      <Fragment name={data.sections[index].name} params={data.sections[index]} />
     }
   } -->
-  <section>
-    <div class="bg-primary-green h-[787px]"></div>
+  <section class="flex items-stretch min-h-80 lg:min-h-[80vh]">
+    <div class="container">
+      <div class="flex lg:flex-row flex-col justify-between items-center gap-5">
+        <div class="order-1 lg:order-0 basis-1/2">
+          <h1 class="mb-5 font-secondary font-medium text-4xl-custom">Знайди свій напрям в IT Спробуй, змінюй, розвивайся</h1>
+
+          <Article class="hidden lg:block mb-9">
+            <p>Кожна дитина чи підліток може обрати напрям навчання IT за бажанням.</p>
+            <p>Ми підберемо зручний для вас графік навчання у групі</p>
+          </Article>
+          
+          <a class="group inline-flex items-center bg-black hover:bg-opacity-0 px-10 py-4 border border-black rounded-lg text-white hover:text-black text-lg transition duration-300" href="#">
+            Всі курси
+            <Image
+              class="group-hover:brightness-0 group-hover:invert-1 ml-2"
+              src={import("@images/arrow-outline.svg")}
+              format="svg"
+              alt="IT Friends logo"
+            />
+          </a>
+          <!-- TODO: make ot responsive -->
+          <div class="mt-14">
+            <div class="flex lg:flex-row flex-col -mx-7 divide-x divide-primary-green">
+              <div class="px-7 text-center will-change-transform">
+                <p class="font-secondary font-bold text-primary-green text-3xl">20+</p>
+                <p class="font-secondary text-xl">напрямків <br> offline i online</p>
+              </div>
+              <div class="px-7 text-center">
+                <p class="font-secondary font-bold text-primary-green text-3xl">5</p>
+                <p class="font-secondary text-xl">адрес в Києві</p>
+              </div>
+              <div class="px-7 text-center">
+                <p class="font-secondary font-bold text-primary-green text-3xl">7+</p>
+                <p class="font-secondary text-xl">років навчаємо</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="order-0 lg:order-1 lg:basis-5/12">
+          <div class="flex gap-x-4 lg:gap-x-5 max-h-80 lg:max-h-[80vh] overflow-hidden">
+            <div class="flex flex-col gap-y-4 lg:gap-y-5 h-fit animate-[marquee-to-top_90000ms_linear_alternate_infinite] basic-1/4 lg:basis-1/3">
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+            </div>
+            <div class="flex flex-col self-end gap-y-4 lg:gap-y-5 h-fit animate-[marquee-to-bottom_110000ms_linear_alternate_infinite] basic-1/4 lg:basis-1/3">
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+            </div>
+            <div class="flex flex-col gap-y-4 lg:gap-y-5 h-fit animate-[marquee-to-top_90000ms_linear_alternate_infinite] basic-1/4 lg:basis-1/3">
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+            </div>
+            <div class="lg:hidden flex flex-col self-end gap-y-4 h-fit animate-[marquee-to-bottom_100000ms_linear_alternate_infinite] basic-1/4">
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                <Image
+                  class="w-full h-full object-cover"
+                  src={import("@images/peculiarities-central-image.jpg")}
+                  format="webp"
+                  alt="peculiarities"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Areas of study -->
@@ -234,12 +494,12 @@ const description = `${SITE_DESCRIPTION}`;
 
   <section class="bg-gradient-to-b from-gradient-from to-gradient-to py-11 lg:py-16">
     <div class="container">
-      <div class="basis-1/4 lg:basis-1/12">
+      <div class="w-full">
         <h2 class="mb-9 lg:mb-14 text-3xl lg:text-4xl text-center">Що робить нашу школу особливою</h2>
       </div>
-      <div class="flex lg:flex-row flex-col gap-5 basis-1/4 lg:basis-1/12">
-        <div class="flex flex-col justify-between w-full">
-          <div class="bg-white mb-5 px-5 py-7 rounded-md w-full">
+      <div class="flex lg:flex-row flex-col gap-5">
+        <div class="flex flex-col gap-y-5 basis-full lg:basis-1/3">
+          <div class="bg-white px-5 py-7 rounded-md w-full basis-full">
             <Image
               class="mb-4 max-h"
               src={import("@images/peculiarities-img1.jpg")}
@@ -249,7 +509,7 @@ const description = `${SITE_DESCRIPTION}`;
             <h3 class="mb-1 font-semibold text-lg lg:text-xl">Індивідуальний підхід</h3>
             <p class="mb-0 font-normal text-base lg:text-lg lg:leading-5">Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
           </div>
-          <div class="bg-white px-5 py-7 rounded-md w-full">
+          <div class="bg-white px-5 py-7 rounded-md w-full basis-full">
             <Image
               class="mb-4 max-h-12"
               src={import("@images/peculiarities-img2.jpg")}
@@ -260,16 +520,18 @@ const description = `${SITE_DESCRIPTION}`;
             <p class="mb-0 font-normal text-base lg:text-lg lg:leading-5">Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
           </div>
         </div>
-        <div class="w-full max-h-56 lg:max-h-full overflow-hidden">
-          <Image
-            class="rounded-md w-full h-full object-center object-cover"
-            src={import("@images/peculiarities-central-image.jpg")}
-            format="webp"
-            alt="peculiarities"
-          />
+        <div class="flex flex-col gap-y-5 basis-full lg:basis-1/3">
+          <div class="rounded-md h-52 lg:h-full overflow-hidden">
+            <Image
+              class="w-full h-full object-cover"
+              src={import("@images/peculiarities-central-image.jpg")}
+              format="webp"
+              alt="peculiarities"
+            />
+          </div>
         </div>
-        <div class="flex flex-col justify-between w-full">
-          <div class="bg-white mb-5 px-5 py-7 rounded-md w-full">
+        <div class="flex flex-col gap-y-5 basis-full lg:basis-1/3">
+          <div class="bg-white px-5 py-7 rounded-md w-full basis-full">
             <Image
               class="mb-4 max-h"
               src={import("@images/peculiarities-img3.jpg")}
@@ -279,7 +541,7 @@ const description = `${SITE_DESCRIPTION}`;
             <h3 class="mb-1 font-semibold text-lg lg:text-xl">Жива підтримка</h3>
             <p class="mb-0 font-normal text-base lg:text-lg lg:leading-5">Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
           </div>
-          <div class="bg-white px-5 py-7 rounded-md w-full">
+          <div class="bg-white px-5 py-7 rounded-md w-full basis-full">
             <Image
               class="mb-4 max-h-12"
               src={import("@images/peculiarities-img4.jpg")}
