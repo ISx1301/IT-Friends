@@ -563,9 +563,36 @@ const description = `${SITE_DESCRIPTION}`;
 
   <!-- New school -->
 
-  <section>
+  <section class="overflow-hidden">
     <div class="container">
       <h2 class="text-center">Незабаром відкритя шостої адреси нашої школи</h2>
+    </div>
+    <div class="px-0 w-full container">
+      <!-- grid -->
+      <div class="flex items-stretch">
+        <div class="col basis-1/5">
+        </div>
+        <div class="col basis-1/3">
+          <div class="rounded-lg h-100">
+            <Image
+              class="w-full h-full object-cover"
+              src={import("@images/peculiarities-img4.jpg")}
+              format="svg"
+              alt="IT Friends logo"
+            />
+          </div>
+        </div>
+        <div class="col basis-1/4">
+          <div class="rounded-lg h-100">
+            <Image
+              class="w-full h-full object-cover"
+              src={import("@images/peculiarities-img4.jpg")}
+              format="svg"
+              alt="IT Friends logo"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </DefaultLayout>
