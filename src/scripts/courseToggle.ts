@@ -1,11 +1,9 @@
 export function setupCourseToggle(): void {
-  const courseContainer = document.getElementById("course-select");
-  const arrow = document.getElementById("course-arrow");
-  const menu = document.getElementById("course-menu");
+  const courseContainer = document.querySelector(".course-select") as HTMLElement;
+  const arrow = courseContainer?.querySelector(".course-arrow") as HTMLElement;
+  const menu = courseContainer?.querySelector(".course-menu") as HTMLElement;
 
-  if (!courseContainer || !arrow || !menu) {
-    return;
-  }
+  if (!courseContainer || !arrow || !menu) return;
 
   courseContainer.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -14,8 +12,8 @@ export function setupCourseToggle(): void {
   });
 
   document.addEventListener("click", (e) => {
-    const target = e.target as HTMLElement | null;
-    if (target && !courseContainer.contains(target)) {
+    const target = e.target as HTMLElement;
+    if (!courseContainer.contains(target)) {
       menu.classList.add("hidden");
       arrow.classList.remove("-rotate-180");
     }
