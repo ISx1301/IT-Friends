@@ -19,7 +19,7 @@
     @apply bg-[transparent] hover:bg-transparent-btn-hover-bg border border-transparent-btn-border rounded-lg font-normal text-lg transition-colors duration-300;
 
     @media (max-width: 79.49rem) {
-      @apply w-full font-medium text-lg;
+      @apply font-medium text-lg;
     }
   }
 }
@@ -122,3 +122,22 @@ body {
     transform: translateY(70%);
   }
 }
+
+@keyframes marquee-to-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-70%);
+  }
+}
+
+
+.is-active {
+  color: #F9AE43;
+}
+
+
+
+
+
