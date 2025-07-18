@@ -6,12 +6,12 @@ module.exports = {
   theme: {
     screens: {
       ...defaultTheme.screens,
-      // sm: '20rem',      
-      sm: '22rem',
-      // lg: '77.5rem',
-      lg: '79.5rem',
-      // xl: '120rem',
-      xl: '122rem',
+      sm: '20rem',      
+      // sm: '22rem',
+      lg: '77.5rem',
+      // lg: '79.5rem',
+      xl: '120rem',
+      // xl: '122rem',
     },
     container: {
       center: true,
@@ -19,8 +19,8 @@ module.exports = {
       screens: {
         DEFAULT: '100%',
         sm: '100%',
-        // lg: '77.5rem',
-        lg: '79.5rem',
+        lg: '77.5rem',
+        // lg: '79.5rem',
       },
     },
     colors: {
@@ -40,6 +40,7 @@ module.exports = {
       'transparent-btn-hover-bg': '#D9D9D9',
       'gradient-from': '#FFD394',
       'gradient-to': '#FFC36C',
+      'section-white' : '#FEFEFE'
     },
     fontFamily: {
       primary: ['Montserrat', 'sans-serif', ...defaultTheme.fontFamily.sans],
@@ -64,7 +65,8 @@ module.exports = {
         '11/9': '11 / 9',
         '4/11': '4 / 11',
         '38/29': '38 / 29',
-        '80/113': '80 / 113'
+        '80/113': '80 / 113',
+        '59/84': '59 / 84'
       },
     },
   },
