@@ -1,0 +1,43 @@
+// Active burger
+
+.burger {
+  span {
+    transition: all 0.3s ease-in-out;
+    transform-origin: center;
+  }
+
+  &.active {
+    span:nth-child(1) {
+      transform: rotate(45deg) translate(0.25rem, 0.5rem);
+    }
+    span:nth-child(2) {
+      opacity: 0;
+    }
+    span:nth-child(3) {
+      transform: rotate(-45deg) translate(0.25rem, -0.5rem);
+    }
+  }
+}
+
+// Active top header block bg
+
+.header-bg {
+    &.menu-active {
+    @apply bg-gray;
+  }
+}
+
+// Active hidden burger menu
+
+.hidden-menu {
+  @apply fixed top-[74px] left-0 z-20 w-full h-screen  
+         transition-transform duration-300 ease-in-out -translate-x-full;
+
+  &.menu-active {
+    @apply translate-x-0;
+  }
+
+  @media (min-width: 1240px) {
+    @apply static w-auto h-auto transform-none transition-none;
+  }
+}
