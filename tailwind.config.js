@@ -6,12 +6,12 @@ module.exports = {
   theme: {
     screens: {
       ...defaultTheme.screens,
-      sm: '20rem',      
-      // sm: '22rem',
-      lg: '77.5rem',
-      // lg: '79.5rem',
-      xl: '120rem',
-      // xl: '122rem',
+      // sm: '20rem',      
+      sm: '22rem',
+      // lg: '77.5rem',
+      lg: '79.5rem',
+      // xl: '120rem',
+      xl: '122rem',
     },
     container: {
       center: true,
@@ -19,8 +19,8 @@ module.exports = {
       screens: {
         DEFAULT: '100%',
         sm: '100%',
-        lg: '77.5rem',
-        // lg: '79.5rem',
+        // lg: '77.5rem',
+        lg: '79.5rem',
       },
     },
     colors: {
@@ -66,7 +66,8 @@ module.exports = {
         '4/11': '4 / 11',
         '38/29': '38 / 29',
         '80/113': '80 / 113',
-        '59/84': '59 / 84'
+        '59/84': '59 / 84',
+        '40/17': '40 / 17'
       },
     },
   },
