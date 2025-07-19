@@ -137,7 +137,20 @@ body {
   color: #F9AE43;
 }
 
+@keyframes zoomPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 
-
+.animate-zoom-pulse {
+  animation: zoomPulse 50s ease-in-out infinite;
+}
 
 
