@@ -1,11 +1,613 @@
 ---
-// TODO: how to deal with named exports, astro ts plugin
-// import {  } from "@/constants.ts";
-
+import { Image } from "astro:assets";
 import DefaultLayout from "@layouts/Default.astro";
+import Tab from "@components/Tab.astro";
+import Article from "@components/Article.astro";
+
+
+import { SITE_TITLE, SITE_DESCRIPTION } from "@/constants.ts";
+const title = `${SITE_TITLE}`;
+const description = `${SITE_DESCRIPTION}`;
 ---
 
-<DefaultLayout title="IT courses" description="It-school, courses">
-<!-- Something -->
- it courses
+<DefaultLayout title={title} description={description}>
+
+  <!-- Hero section -->
+
+  <section class="mt-11 lg:mt-16">
+    <div class="container">
+
+      <div class="flex justify-center bg-transparent-btn-hover-bg mx-auto mb-6 lg:mb-8 py-0.5 w-[21.56rem]">
+        <p>Більше, ніж уроки — досвід спілкування</p>
+      </div>
+      
+      <div>
+        <h1 class="mb-6 lg:mb-7 font-secondary font-medium text-2xl lg:text-4xl text-center">IT‑заняття для дітей і підлітків</h1>
+      </div>
+
+      <div class="mx-auto mb-6 lg:mb-11 max-w-sm">
+        <p class="font-normal text-lg text-center">Вчимо створювати, а не лише користуватися</p>
+      </div>
+
+
+      <div class="mb-6 lg:mb-0 rounded-xl w-full h-full aspect-40/17 overflow-hidden">
+        <Image
+          class="brightness-75 w-full h-full object-cover animate-zoom-pulse"
+          src={import("@images/it-courses-main.png")}
+          format="webp"
+          alt="image"
+        />
+      </div>
+
+      <div class="lg:hidden justify-center basis-1/4 lg:basis-1/12">
+        <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn" type="button">Безкоштовний урок</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Target audience section -->
+
+  <section class="my-20 lg:my-28">
+    <div class="container">
+
+      <div class="flex justify-center mx-auto mb-6 lg:mb-8 py-0.5">
+        <h2 class="mb-6 lg:mb-7 font-secondary font-medium text-2xl lg:text-4xl text-center">Для кого підходять заняття</h2>
+      </div>
+
+      <div class="flex lg:flex-row flex-col items-center gap-5">
+
+        <div class="flex flex-col items-center gap-7 shadow-lg px-8 lg:px-6 py-10 rounded-lg basis-1/4 lg:basis-3/12">
+          <Image
+            src={import("@images/target-pic.png")}
+            format="webp"
+            alt="image"
+          />
+          <p class="font-medium text-base lg:text-lg text-center">Діти 7–9 років, які роблять перші кроки в IT</p>
+        </div>
+
+        <div class="flex flex-col items-center gap-7 shadow-lg px-8 lg:px-6 py-10 rounded-lg basis-5/6 lg:basis-3/12">
+          <Image
+            src={import("@images/target-pic.png")}
+            format="webp"
+            alt="image"
+          />
+          <p class="font-medium text-base lg:text-lg text-center">Підлітки 10–14 років, що цікавляться технологіями</p>
+        </div>
+
+        <div class="flex flex-col items-center gap-7 shadow-lg px-8 lg:px-8 py-10 rounded-lg basis-5/6 lg:basis-3/12">
+          <Image
+            src={import("@images/target-pic.png")}
+            format="webp"
+            alt="image"
+          />
+          <p class="font-medium text-base lg:text-lg text-center">Ті, хто хоче навчитися створювати ігри, сайти чи анімації</p>
+        </div>
+
+        <div class="flex flex-col items-center gap-7 shadow-lg px-8 lg:px-6 py-10 rounded-lg basis-5/6 lg:basis-3/12">
+          <Image
+            src={import("@images/target-pic.png")}
+            format="webp"
+            alt="image"
+          />
+          <p class="font-medium text-base lg:text-lg text-center">Діти, яким важливі практичні результати та командна робота</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Courses section -->
+
+  <section>
+    <div class="container">
+      <div class="mx-auto mb-16 max-w-md">
+        <h2 class="font-secondary font-medium text-2xl lg:text-4xl text-center">Що саме ми вивчаємо</h2>
+      </div>
+    </div>
+    <Tab />
+  </section>
+
+  <!-- Peculiarities section-->
+
+  <section class="bg-gray py-11 lg:py-16">
+    <div class="container">
+      <div class="w-full">
+        <h2 class="mb-9 lg:mb-14 text-3xl lg:text-4xl text-center">Що робить нашу школу особливою</h2>
+      </div>
+      <div class="flex lg:flex-row flex-col gap-5">
+        <div class="flex flex-col gap-y-5 basis-full lg:basis-1/3">
+          <div class="bg-white px-5 py-7 rounded-md w-full basis-full">
+            <Image
+              class="mb-4 max-h"
+              src={import("@images/peculiarities-img1.jpg")}
+              format="webp"
+              alt="peculiarities"
+            />
+            <h3 class="mb-1 font-semibold text-lg lg:text-xl">Індивідуальний підхід</h3>
+            <p class="mb-0 font-normal text-base lg:text-lg lg:leading-5">Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
+          </div>
+          <div class="bg-white px-5 py-7 rounded-md w-full basis-full">
+            <Image
+              class="mb-4 max-h-12"
+              src={import("@images/peculiarities-img2.jpg")}
+              format="webp"
+              alt="peculiarities"
+            />
+            <h3 class="mb-1 font-semibold text-lg lg:text-xl">Тепла атмосфера</h3>
+            <p class="mb-0 font-normal text-base lg:text-lg lg:leading-5">Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
+          </div>
+        </div>
+        <div class="flex flex-col gap-y-5 basis-full lg:basis-1/3">
+          <div class="rounded-md h-52 lg:h-full overflow-hidden">
+            <Image
+              class="w-full h-full object-cover"
+              src={import("@images/peculiarities-central-image.jpg")}
+              format="webp"
+              alt="peculiarities"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col gap-y-5 basis-full lg:basis-1/3">
+          <div class="bg-white px-5 py-7 rounded-md w-full basis-full">
+            <Image
+              class="mb-4 max-h"
+              src={import("@images/peculiarities-img3.jpg")}
+              format="webp"
+              alt="peculiarities"
+            />
+            <h3 class="mb-1 font-semibold text-lg lg:text-xl">Жива підтримка</h3>
+            <p class="mb-0 font-normal text-base lg:text-lg lg:leading-5">Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
+          </div>
+          <div class="bg-white px-5 py-7 rounded-md w-full basis-full">
+            <Image
+              class="mb-4 max-h-12"
+              src={import("@images/peculiarities-img4.jpg")}
+              format="webp"
+              alt="peculiarities"
+            />
+            <h3 class="mb-1 font-semibold text-lg lg:text-xl">Вільний вибір</h3>
+            <p class="mb-0 font-normal text-base lg:text-lg lg:leading-5">Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
+          </div>
+        </div>      
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews section-->
+  <section class="bg-section-white py-16 lg:py-32 overflow-hidden" id="reviews">
+    <div class="container">
+      <div class="flex lg:flex-row flex-col justify-between">
+        <div class="py-14 basis-4/12">
+          <h2 class="mb-8 font-secondary font-medium text-2xl lg:text-3xl lg:text-left text-center">Що про нас говорять</h2>
+          <Article class="mb-11 lg:text-left text-center">
+            <p>Відгуки наших учнів та їхніх батьків — це найцінніше підтвердження того, що ми на правильному шляху.</p>
+            <p>Саме ці слова мотивують нас ставати ще кращими щодня.</p>
+          </Article>
+          <button type="button" class="hidden lg:inline-block px-7 py-3 leading-none transparent-btn">Дивитися відевідгуки</button>
+        </div>
+        <div class="flex flex-row lg:flex-col justify-between gap-5 lg:overflow-visible overflow-x-auto scroll-smooth snap-mandatory snap-x lg:snap-none basis-6/12">
+
+          <!-- first card -->
+          <div class="flex lg:flex-row flex-col lg:justify-between items-center gap-5 lg:gap-0 bg-white shadow-none lg:shadow-md ml-auto border border-gray lg:border-none rounded-md w-[31rem] min-w-full lg:min-w-0 snap-center">
+            <div class="bg-primary-green rounded-md w-full lg:w-2 h-2 lg:h-full"></div>
+            <div class="my-3">
+              <Image
+                class="rounded-full w-16 h-16 object-cover"
+                src={import("@images/user-logo.jpg")}
+                format="webp"
+                alt="IT Friends logo"
+              />
+              <p class="font-normal">Ольга О.</p>
+            </div>
+            <div class="max-w-xs">
+              <p class="font-normal text-base lg:text-left text-center">Мій син із нетерпінням чекає кожного заняття! Нарешті зʼявилось середовище, де його справді чують і підтримують</p>
+            </div>
+            <button type="button" class="lg:hidden my-6 px-28 py-5 border-black leading-none transparent-btn">Відеовідгук</button>
+          </div>
+
+          <!-- second card -->
+          <div class="flex lg:flex-row flex-col lg:justify-between items-center gap-5 lg:gap-0 bg-white shadow-none lg:shadow-md border border-gray lg:border-none rounded-md w-[31rem] min-w-full lg:min-w-0 snap-center">
+            <div class="bg-primary-orange mr-0 lg:mr-7 rounded-md w-full lg:w-2 h-2 lg:h-full"></div>
+            <div class="my-3 mr-0 lg:mr-10">
+              <Image
+                class="rounded-full w-16 h-16 object-cover"
+                src={import("@images/user-logo.jpg")}
+                format="webp"
+                alt="IT Friends logo"
+              />
+              <p class="font-normal">Ольга О.</p>
+            </div>
+            <div class="max-w-xs">
+              <p class="font-normal text-base lg:text-left text-center">Мій син із нетерпінням чекає кожного заняття! Нарешті зʼявилось середовище, де його справді чують і підтримують</p>
+            </div>
+            <button type="button" class="lg:hidden my-6 px-28 py-5 border-black leading-none transparent-btn">Відеовідгук</button>
+          </div>
+
+          <!-- third card -->
+          <div class="flex lg:flex-row flex-col lg:justify-between items-center gap-5 lg:gap-0 bg-white shadow-none lg:shadow-md ml-auto border border-gray lg:border-none rounded-md w-[31rem] min-w-full lg:min-w-0 snap-center">
+            <div class="bg-span-gray mr-0 lg:mr-7 rounded-md w-full lg:w-2 h-2 lg:h-full"></div>
+            <div class="my-3 mr-0 lg:mr-10">
+              <Image
+                class="rounded-full w-16 h-16 object-cover"
+                src={import("@images/user-logo.jpg")}
+                format="webp"
+                alt="IT Friends logo"
+              />
+              <p class="font-normal">Ольга О.</p>
+            </div>
+            <div class="max-w-xs">
+              <p class="font-normal text-base lg:text-left text-center">Мій син із нетерпінням чекає кожного заняття! Нарешті зʼявилось середовище, де його справді чують і підтримують</p>
+            </div>
+            <button type="button" class="lg:hidden my-6 px-28 py-5 border-black leading-none transparent-btn">Відеовідгук</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+ <!-- Team section -->
+
+  <section class="py-16 lg:py-32 w-full overflow-hidden">
+    <div class="container">
+      <div class="m-auto mb-16 max-w-lg">
+        <h2 class="mb-8 font-secondary font-medium text-2xl lg:text-4xl text-center">Наші викладачі</h2>
+        <p class="font-normal text-base text-center">Наші викладачі не просто навчають — вони надихають, пояснюють складне простими словами та допомагають кожній дитині розкрити свій потенціал.</p>
+      </div>
+
+      <div class="flex gap-4 lg:gap-5 pb-4 lg:overflow-hidden overflow-x-auto scroll-smooth snap-mandatory snap-x lg:snap-none">
+
+        <div class="flex flex-col gap-6 min-w-full lg:min-w-0 snap-center basis-full lg:basis-1/3">
+          <div class="rounded-full aspect-59/84">
+            <Image
+              class="rounded-full w-full h-full object-cover"
+              src={import("@images/teacher.png")}
+              format="webp"
+              alt="IT Friends logo"
+            />
+          </div>
+          <div class="flex flex-col items-center">
+            <h3 class="font-medium text-lg">Ірина Маринова</h3>
+            <p class="text-base">Вчителька англійської</p>
+            <a href="#">
+              <Image
+                class="w-7 h-7"
+                src={import("@images/facebook.svg")}
+                alt="Facebook picture"
+              />
+            </a>
+          </div>
+        </div>
+        
+        <div class="flex flex-col lg:flex-col-reverse gap-6 pt-0 lg:pt-16 min-w-full lg:min-w-0 snap-center basis-full lg:basis-1/3">
+          <div class="rounded-full aspect-59/84">
+            <Image
+              class="rounded-full w-full h-full object-cover"
+              src={import("@images/teacher.png")}
+              format="webp"
+              alt="IT Friends logo"
+            />
+          </div>
+          <div class="flex flex-col items-center">
+            <h3 class="font-medium text-lg">Ірина Маринова</h3>
+            <p class="text-base">Вчителька англійської</p>
+            <a href="#">
+              <Image
+                class="w-7 h-7"
+                src={import("@images/facebook.svg")}
+                alt="Facebook picture"
+              />
+            </a>
+          </div>
+        </div>
+        
+        <div class="flex flex-col gap-6 min-w-full lg:min-w-0 snap-center basis-full lg:basis-1/3">
+          <div class="rounded-full aspect-59/84">
+            <Image
+              class="rounded-full w-full h-full object-cover"
+              src={import("@images/teacher.png")}
+              format="webp"
+              alt="Facebook picture"
+            />
+          </div>
+          <div class="flex flex-col items-center">
+            <h3 class="font-medium text-lg">Ірина Маринова</h3>
+            <p class="text-base">Вчителька англійської</p>
+            <a href="#">
+              <Image
+                class="w-7 h-7"
+                src={import("@images/facebook.svg")}
+                alt="Facebook picture"
+              />
+            </a>
+          </div>
+        </div>
+        
+        <div class="flex flex-col lg:flex-col-reverse gap-6 pt-0 lg:pt-16 min-w-full lg:min-w-0 snap-center basis-full lg:basis-1/3">
+          <div class="rounded-full aspect-59/84">
+            <Image
+              class="rounded-full w-full h-full object-cover"
+              src={import("@images/teacher.png")}
+              format="webp"
+              alt="Facebook picture"
+            />
+          </div>
+          <div class="flex flex-col items-center">
+            <h3 class="font-medium text-lg">Ірина Маринова</h3>
+            <p class="text-base">Вчителька англійської</p>
+            <a href="#">
+              <Image
+                class="w-7 h-7"
+                src={import("@images/facebook.svg")}
+                alt="Facebook picture"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FAQ section -->
+
+  <section class="bg-primary-turquoise py-16" id='faq'>
+    <div class="container">
+      <div class="flex lg:flex-row flex-col justify-between">
+        <div class="lg:py-14 basis-4/12">
+          <div class="m-auto lg:mx-0 mb-6 max-w-xs">
+            <h2 class="mb-8 font-secondary font-medium text-2xl lg:text-3xl lg:text-left text-center">Популярні запитання
+            </h2>
+          </div>
+          <Article class="m-auto lg:mx-0 mb-9 max-w-xs lg:text-left text-center">
+            <p>Щоб вам було спокійніше й зрозуміліше, ми зібрали відповіді на найпопулярніші питання про навчання в нашій
+              школі.</p>
+          </Article>
+          <button type="button" class="hidden lg:inline-block px-7 py-3 leading-none transparent-btn">Задати своє
+            питання</button>
+        </div>
+
+        <!-- Accordion -->
+
+        <div class="space-y-4 accordion basis-6/12">
+
+          <!-- First block -->
+
+          <div class="border rounded-md overflow-hidden accordion-item">
+            <h2 class="accordion-header">
+              <button type="button"
+                class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
+                aria-expanded="false">
+                <span>З якого віку можна навчатись у школі?</span>
+                <span class="accordion-icon">
+                  <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M256 80v352M80 256h352" />
+                  </svg>
+                  <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M80 256h352" />
+                  </svg>
+                </span>
+              </button>
+            </h2>
+            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
+              <div class="p-5 border-t">
+                <Article>
+                  <p class="mb-2">Наші заняття проходять офлайн у Києві за п’ятьма зручними адресами:</p>
+                  <p>📍 вул. Хрещатик, 25, просп. Перемоги, 45, вул. Драгоманова, 12, вул. Михайла Ломоносова, 18, вул. Генерала Алмазова, 6Обирайте найближчу до вас локацію — усі класи
+                  обладнані сучасною технікою та створені спеціально для навчання дітей і підлітків. 🌱</p>
+                </Article>
+              </div>
+            </div>
+          </div>
+
+          <!-- Second block -->
+
+          <div class="border rounded-md overflow-hidden accordion-item">
+            <h2 class="accordion-header">
+              <button type="button"
+                class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
+                aria-expanded="false">
+                <span>Чи можна приєднатись посеред навчального року?</span>
+                <span class="accordion-icon">
+                  <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M256 80v352M80 256h352" />
+                  </svg>
+                  <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M80 256h352" />
+                  </svg>
+                </span>
+              </button>
+            </h2>
+            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
+              <div class="p-5 border-t">
+                <Article>
+                  <p class="mb-2">Наші заняття проходять офлайн у Києві за п’ятьма зручними адресами:</p>
+                  <p>📍 вул. Хрещатик, 25, просп. Перемоги, 45, вул. Драгоманова, 12, вул. Михайла Ломоносова, 18, вул. Генерала Алмазова, 6Обирайте найближчу до вас локацію — усі класи
+                  обладнані сучасною технікою та створені спеціально для навчання дітей і підлітків. 🌱</p>
+                </Article>
+              </div>
+            </div>
+          </div>
+
+          <!-- Third block -->
+
+          <div class="border rounded-md overflow-hidden accordion-item">
+            <h2 class="accordion-header">
+              <button type="button"
+                class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
+                aria-expanded="false">
+                <span>Скільки дітей у групі?</span>
+                <span class="accordion-icon">
+                  <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M256 80v352M80 256h352" />
+                  </svg>
+                  <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M80 256h352" />
+                  </svg>
+                </span>
+              </button>
+            </h2>
+            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
+              <div class="p-5 border-t">
+                <Article>
+                  <p class="mb-2">Наші заняття проходять офлайн у Києві за п’ятьма зручними адресами:</p>
+                  <p>📍 вул. Хрещатик, 25, просп. Перемоги, 45, вул. Драгоманова, 12, вул. Михайла Ломоносова, 18, вул. Генерала Алмазова, 6Обирайте найближчу до вас локацію — усі класи
+                  обладнані сучасною технікою та створені спеціально для навчання дітей і підлітків. 🌱</p>
+                </Article>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fourth block -->
+
+          <div class="border rounded-md overflow-hidden accordion-item">
+            <h2 class="accordion-header">
+              <button type="button"
+                class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
+                aria-expanded="false">
+                <span>Чи можна спочатку спробувати?</span>
+                <span class="accordion-icon">
+                  <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M256 80v352M80 256h352" />
+                  </svg>
+                  <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M80 256h352" />
+                  </svg>
+                </span>
+              </button>
+            </h2>
+            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
+              <div class="p-5 border-t">
+                <Article>
+                  <p class="mb-2">Наші заняття проходять офлайн у Києві за п’ятьма зручними адресами:</p>
+                  <p>📍 вул. Хрещатик, 25, просп. Перемоги, 45, вул. Драгоманова, 12, вул. Михайла Ломоносова, 18, вул. Генерала Алмазова, 6Обирайте найближчу до вас локацію — усі класи
+                  обладнані сучасною технікою та створені спеціально для навчання дітей і підлітків. 🌱</p>
+                </Article>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fifth block -->
+
+          <div class="border rounded-md overflow-hidden accordion-item">
+            <h2 class="accordion-header">
+              <button type="button"
+                class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
+                aria-expanded="false">
+                <span>Де саме проходять заняття?</span>
+                <span class="accordion-icon">
+                  <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M256 80v352M80 256h352" />
+                  </svg>
+                  <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M80 256h352" />
+                  </svg>
+                </span>
+              </button>
+            </h2>
+            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
+              <div class="p-5 border-t">
+                <Article>
+                  <p class="mb-2">Наші заняття проходять офлайн у Києві за п’ятьма зручними адресами:</p>
+                  <p>📍 вул. Хрещатик, 25, просп. Перемоги, 45, вул. Драгоманова, 12, вул. Михайла Ломоносова, 18, вул. Генерала Алмазова, 6Обирайте найближчу до вас локацію — усі класи
+                  обладнані сучасною технікою та створені спеціально для навчання дітей і підлітків. 🌱</p>
+                </Article>
+              </div>
+            </div>
+          </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Interesting things section -->
+
+  <section class="py-20 lg:py-32">
+    <div class="container">
+
+      <div class="mx-auto mb-5 lg:mb-11 max-w-xs lg:max-w-2xl">
+        <h2 class="font-secondary font-medium text-2xl lg:text-4xl text-center">Що ще вас може зацікавити</h2>
+      </div>
+
+      <div class="flex lg:flex-row flex-col gap-11 lg:gap-5">
+
+        <!-- left side -->
+
+        <div class="basis-full lg:basis-1/2">
+
+          <div class="mb-7">
+            <Image
+              class="object-cover"
+              src={import("@images/picture.jpg")}
+              format="webp"
+              alt="IT Friends logo"
+            />
+          </div>
+
+          <div class="mb-6 max-w-xs">
+            <h3 class="font-bold text-xl">Англійська для дітей від 6 до 16 років, 5 адрес в Києві</h3>
+          </div>
+
+          <Article class="mb-9 max-w-sm text-base lg:text-lg text-left">
+            <p>Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
+          </Article>
+
+          <button type="button" class="px-16 py-3 transparent-btn">Детальніше</button>
+
+        </div>
+
+        <!-- right side -->
+
+        <div class="basis-full lg:basis-1/2">
+
+          <div class="mb-7">
+            <Image
+              class="object-cover"
+              src={import("@images/picture.jpg")}
+              format="webp"
+              alt="IT Friends logo"
+            />
+          </div>
+
+          <div class="mb-6 max-w-md">
+            <h3 class="font-bold text-xl">Табори для дітей у будь-яку пору року!  Карпати, море, Україна, закордон</h3>
+          </div>
+
+          <Article class="mb-9 max-w-sm text-base lg:text-lg text-left">
+            <p>Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
+          </Article>
+
+          <button type="button" class="px-16 py-3 transparent-btn">Детальніше</button>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+<!-- This import will be sent to the accordion component when it is ready. -->
+<script>
+  import '../scripts/accordion.ts';
+</script>
+
+</DefaultLayout>
+</DefaultLayout>
+</DefaultLayout>
 </DefaultLayout>
