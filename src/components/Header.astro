@@ -107,23 +107,20 @@ import NavLink from "@components/NavLink.astro";
           <!-- Course toggle -->
 
           <div class="relative cursor-pointer course-select">
-            <div class="flex justify-center items-center gap-1">
-              <span class="hidden lg:inline-block font-secondary font-normal hover:text-primary-orange text-lg transition duration-300">навчання</span>
-              <span class="lg:hidden font-secondary lg:font-normal font-semibold hover:text-primary-orange text-base first-letter:uppercase transition duration-300 mobile-link">напрямки</span>
+            <div class="group flex justify-center items-center gap-1">
+              <span class="hidden lg:inline-block font-secondary font-normal group-hover:text-primary-orange text-lg transition duration-300">навчання</span>
+              <span class="lg:hidden font-secondary lg:font-normal font-semibold group-hover:text-primary-orange text-base first-letter:uppercase transition duration-300 mobile-link">напрямки</span>
               <div class="origin-center transition-transform duration-300 course-arrow transform">
                 <span class="lg:hidden block">
-                  <Image
-                    src={import("@images/dropdown-black.svg")}
-                    format="svg"
-                    alt="IT Friends logo"
-                  />
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="group-hover:stroke-primary-orange w-6 h-6 text-black transition duration-300" fill="none" stroke="currentColor">
+                    <path d="M10 30 L50 70 L90 30" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" />
+                  </svg>
                 </span>
+
                 <span class="hidden lg:block">
-                  <Image
-                    src={import("@images/dropdown-white.svg")}
-                    format="svg"
-                    alt="IT Friends logo"
-                  />
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="group-hover:stroke-primary-orange w-6 h-6 text-white transition duration-300" fill="none" stroke="currentColor">
+                    <path d="M10 30 L50 70 L90 30" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" />
+                  </svg>
                 </span>
               </div>
             </div>

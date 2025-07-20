@@ -1,11 +1,116 @@
 ---
-// TODO: how to deal with named exports, astro ts plugin
-// import {  } from "@/constants.ts";
-
+import { Image } from "astro:assets";
 import DefaultLayout from "@layouts/Default.astro";
+import Article from "@components/Article.astro";
 ---
 
 <DefaultLayout title="Camps" description="It-school, courses">
-<!-- Something -->
- camps
+
+  <!-- Hero section -->
+
+  <section class="mt-11 lg:mt-16">
+    <div class="container">
+
+      <div class="mb-auto">
+        <Image
+          class="mx-auto"
+          src={import("@images/logo-tour-friends.jpg")}
+          format="webp"
+          alt="image"
+        />
+      </div>
+
+      <div class="flex justify-center bg-transparent-btn-hover-bg mx-auto mb-6 lg:mb-8 py-0.5 w-[21.56rem]">
+        <p>Відпочинок з користю та відкриттями</p>
+      </div>
+      
+      <div class="mx-auto max-w-2xl">
+        <h1 class="mb-6 lg:mb-7 font-secondary font-medium text-2xl lg:text-4xl text-center">Незабутні поїздки та кемпи для дітей та шкіл</h1>
+      </div>
+
+      <div class="mx-auto mb-6 lg:mb-11 max-w-xl">
+        <p class="font-normal text-lg text-center">Обирайте індивідуальні поїздки чи групові тури для шкіл. Канікули в Україні та за кордоном у будь-яку пору року</p>
+      </div>
+
+      <div class="hidden lg:flex justify-center mb-11 basis-1/4 lg:basis-1/12">
+        <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn" type="button">Забронювати місце</button>
+      </div>
+
+
+      <div class="mb-9 lg:mb-0 rounded-xl w-full h-full aspect-40/17 overflow-hidden">
+        <Image
+          class="brightness-75 w-full h-full object-cover animate-zoom-pulse"
+          src={import("@images/camps-main.jpg")}
+          format="webp"
+          alt="image"
+        />
+      </div>
+
+      <div class="lg:hidden flex justify-center mb-11 basis-1/4 lg:basis-1/12">
+        <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn" type="button">Забронювати місце</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- About us section-->
+
+  <section class="py-20 lg:py-32">
+    <div class="container">
+      <div class="mb-8 basis-1/4 lg:basis1/12">
+        <h2 class="font-secondary font-medium text-2xl lg:text-3xl">Про нас</h2>
+      </div>
+      <div class="flex lg:flex-row flex-col gap-8 basis-1/4 lg:basis1/12">
+        <div class="lg:basis-6/12 basis-1/4">
+          <Image
+            src={import("@images/about-us-image.jpg")}
+            format="webp"
+            alt="about us"
+          />
+        </div>
+        <div class="flex flex-col justify-between lg:basis-6/12 basis-1/4">
+
+          <h3 class="font-secondary font-semibold text-xl lg:text-3xl">
+            Подорожі, друзі та відкриття – кемпи для кожного сезону
+          </h3>
+          
+          <Article>
+            <p>У наших кемпах кожна дитина відкриває світ по‑новому: через подорожі, творчість, спорт і спілкування з однолітками. Ми створюємо програми, що не лише розважають, а й розвивають — допомагають знайти нові інтереси, стати впевненішими та навчитися працювати в команді.</p>
+            <p>Ви можете обрати індивідуальний тур для своєї дитини або групову поїздку для класу, спортивної секції чи гуртка. Ми подбаємо про все: безпечні маршрути, досвідчених супроводжуючих та насичену програму, яка залишить приємні спогади.</p>
+          </Article>
+
+          <div class="flex flex-col gap-4 basis-1/4">
+            <div class="flex gap-6">
+
+              <div class="bg-gradient-to-b from-gradient-from to-gradient-to p-[2px] rounded-3xl w-full max-w-[11.37rem]">
+                <span class="block bg-white px-6 py-2 rounded-3xl font-play font-normal text-black text-xl text-center">
+                  враження
+                </span>
+              </div>
+
+                <div class="bg-gradient-to-b from-gradient-from to-gradient-to p-[2px] rounded-3xl w-full max-w-[11.37rem]">
+                  <span class="block bg-white px-6 py-2 rounded-3xl font-play font-normal text-black text-xl text-center">
+                    розвиток
+                  </span>
+                </div>
+              </div>
+            <div class="flex gap-6">
+              <div class="bg-gradient-to-b from-gradient-from to-gradient-to p-[2px] rounded-3xl w-full max-w-[11.37rem]">
+                <span class="block bg-white px-6 py-2 rounded-3xl font-play font-normal text-black text-xl text-center">
+                  друзі
+                </span>
+              </div>
+              <div class="bg-gradient-to-b from-gradient-from to-gradient-to p-[2px] rounded-3xl w-full max-w-[11.37rem]">
+                <span class="block bg-white px-6 py-2 rounded-3xl font-play font-normal text-black text-xl text-center">
+                  пригоди
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
 </DefaultLayout>
