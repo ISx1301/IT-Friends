@@ -1,19 +1,27 @@
 export function setupTabs(): void {
   document.addEventListener("DOMContentLoaded", () => {
-    const tabsRoot = document.querySelector(".tab-container") as HTMLElement;
+    const tabsRoot = document.querySelector(".tab-container") as HTMLElement | null;
     if (!tabsRoot) return;
 
     const triggers = Array.from(tabsRoot.querySelectorAll<HTMLButtonElement>(".tab-trigger"));
     const panels = Array.from(tabsRoot.querySelectorAll<HTMLElement>(".tab-panel"));
 
+    function removeColorClasses(element: HTMLElement) {
+      element.classList.remove("bg-transparent-btn-hover-bg", "bg-primary-sand");
+    }
+
     const activeTrigger = triggers.find((trigger) => trigger.getAttribute("aria-selected") === "true");
     if (activeTrigger) {
       const target = activeTrigger.getAttribute("data-tab");
-      activeTrigger.classList.add("bg-transparent-btn-hover-bg");
+      const colorClass = activeTrigger.getAttribute("data-color");
+      if (colorClass) activeTrigger.classList.add(colorClass);
+
       panels.forEach((panel) => {
         const contentId = panel.getAttribute("data-content");
         if (contentId === target) {
           panel.classList.remove("hidden");
+        } else {
+          panel.classList.add("hidden");
         }
       });
 
@@ -33,10 +41,13 @@ export function setupTabs(): void {
         triggers.forEach((btn) => {
           const isActive = btn === trigger;
           btn.setAttribute("aria-selected", String(isActive));
+          removeColorClasses(btn);
+
           if (isActive) {
-            btn.classList.add("bg-transparent-btn-hover-bg");
-          } else {
-            btn.classList.remove("bg-transparent-btn-hover-bg");
+            const colorClass = btn.getAttribute("data-color");
+            if (colorClass) {
+              btn.classList.add(colorClass);
+            }
           }
         });
 
@@ -47,7 +58,7 @@ export function setupTabs(): void {
 }
 
 export function setupCardManager(): void {
-  const activePanel = document.querySelector(".tab-panel:not(.hidden)") as HTMLElement;
+  const activePanel = document.querySelector(".tab-panel:not(.hidden)") as HTMLElement | null;
   if (!activePanel) return;
 
   const cardBlocks = activePanel.querySelectorAll(".card-block");
