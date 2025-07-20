@@ -51,46 +51,51 @@ export function setupCardManager(): void {
   if (!activePanel) return;
 
   const cardBlocks = activePanel.querySelectorAll(".card-block");
+
   cardBlocks.forEach((block) => {
     const cards = Array.from(block.querySelectorAll(".card")) as HTMLElement[];
     const showMoreButton = block.nextElementSibling?.querySelector(".show-more-btn") as HTMLButtonElement | null;
 
-    if (!showMoreButton) return; 
+    if (!showMoreButton) return;
 
-  
-    const isFullyExpanded = block.getAttribute("data-state") === "fully-expanded";
+    const totalCards = cards.length;
 
-    if (!isFullyExpanded) {
-      cards.forEach((card, index) => {
-        if (index >= 6) {
-          card.classList.add("hidden");
-        } else {
-          card.classList.remove("hidden");
-        }
-      });
-      showMoreButton.classList.remove("hidden");
+    if (totalCards < 4) {
+      cards.forEach(card => card.classList.remove("hidden"));
+      showMoreButton.classList.add("hidden");
+      return;
     }
+
+    cards.forEach((card, index) => {
+      if (index < 3) {
+        card.classList.remove("hidden");
+      } else {
+        card.classList.add("hidden");
+      }
+    });
+
+    showMoreButton.classList.remove("hidden");
 
     const newShowMoreButton = showMoreButton.cloneNode(true) as HTMLButtonElement;
     showMoreButton.parentNode?.replaceChild(newShowMoreButton, showMoreButton);
 
     newShowMoreButton.addEventListener("click", () => {
-      let visibleCount = cards.filter(card => !card.classList.contains("hidden")).length;
-      let hiddenCards = cards.filter(card => card.classList.contains("hidden"));
-
-      const cardsToShow = Math.min(3, hiddenCards.length);
-      for (let i = 0; i < cardsToShow; i++) {
-        if (hiddenCards[i]) {
-          hiddenCards[i].classList.remove("hidden");
-        }
-      }
-
-      visibleCount = cards.filter(card => !card.classList.contains("hidden")).length;
-      hiddenCards = cards.filter(card => card.classList.contains("hidden"));
+      const hiddenCards = cards.filter(card => card.classList.contains("hidden"));
 
       if (hiddenCards.length === 0) {
         newShowMoreButton.classList.add("hidden");
-        block.setAttribute("data-state", "fully-expanded");
+        return;
+      }
+
+      const cardsToShow = Math.min(3, hiddenCards.length);
+      for (let i = 0; i < cardsToShow; i++) {
+        hiddenCards[i].classList.remove("hidden");
+      }
+
+      const remaining = cards.filter(card => card.classList.contains("hidden")).length;
+
+      if (remaining === 0) {
+        newShowMoreButton.classList.add("hidden");
       }
     });
   });
