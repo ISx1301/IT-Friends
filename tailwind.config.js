@@ -6,11 +6,8 @@ module.exports = {
   theme: {
     screens: {
       ...defaultTheme.screens,
-      // sm: '20rem',      
       sm: '22rem',
-      // lg: '77.5rem',
       lg: '79.5rem',
-      // xl: '120rem',
       xl: '122rem',
     },
     container: {
@@ -19,7 +16,6 @@ module.exports = {
       screens: {
         DEFAULT: '100%',
         sm: '100%',
-        // lg: '77.5rem',
         lg: '79.5rem',
       },
     },
@@ -68,6 +64,20 @@ module.exports = {
         '80/113': '80 / 113',
         '59/84': '59 / 84',
         '40/17': '40 / 17'
+      },
+      keyframes: {
+        'marquee-to-top': {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(-50%)' },
+        },
+        'marquee-to-bottom': {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(50%)' },
+        },
+      },
+      animation: {
+        'marquee-to-top-90000ms': 'marquee-to-top 90s linear infinite alternate',
+        'marquee-to-bottom-110000ms': 'marquee-to-bottom 110s linear infinite alternate',
       },
     },
   },

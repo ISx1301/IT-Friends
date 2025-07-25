@@ -1,0 +1,147 @@
+---
+import Article from "@components/Article.astro";
+import { Image } from "astro:assets";
+
+type CardItem = {
+  image: ImageMetadata;
+  title: string;
+  ageRange: string;
+  description: string[];
+  spanBg: string;
+  spanColor: string;
+  visibleCardButtonText: string;
+  hiddenCardButtonText: string;
+};
+
+type Props = {
+  sectionStyle: 'withPaddings' | 'withoutPaddings';
+  title: string;
+  cards: CardItem[];
+  mainButtonText: string;
+};
+
+const {
+  sectionStyle,
+  title,
+  cards,
+  mainButtonText
+} = Astro.props;
+
+const sectionClassMap = {
+  withPaddings: 'py-16',
+  withoutPaddings: 'py-0',
+};
+---
+
+<section class={` bg-gray ${sectionClassMap[sectionStyle]}`}>
+  <div class="container">
+    <div class="flex justify-center mb-6 lg:mb-11 basis-1/4 lg:basis-1/12">
+      <h2 class="font-secondary text-2xl lg:text-3xl">{title}</h2>
+    </div>
+
+    <!-- Cards -->
+    <div class="flex lg:flex-row flex-col gap-5 mb-11 basis-1/4 lg:basis-1/12">
+      {cards.map((card) => (
+        <div class="flex flex-col items-center bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full min-h-[42.125rem] lg:min-h-[35.31rem] lg:basis-4/12">
+          <Image
+            class="mb-3 max-h-28"
+            src={card.image}
+            format="webp"
+            alt={`${card.title} logo`}
+          />
+          <h3 class="mb-4 font-secondary font-semibold text-2xl">{card.title}</h3>
+          <span class={`${card.spanBg} mb-auto px-4 py-1 rounded-lg ${card.spanColor}`}>{card.ageRange}</span>
+          <Article class="mb-auto">
+            {card.description.map((paragraph) => <p>{paragraph}</p>)}
+          </Article>
+          <button class="lg:hidden inline-block mb-3 py-2 border w-full orange-btn" type="button">{card.hiddenCardButtonText}</button>
+          <button class="py-2 border w-full transparent-btn" type="button">{card.visibleCardButtonText}</button>
+        </div>
+      ))}
+    </div>
+
+    <div class="hidden lg:flex justify-center basis-1/4 lg:basis-1/12">
+      <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn" type="button">{mainButtonText}</button>
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- Areas of study section -->
+
+  <!-- <section class="lg:py-section-top-bottom-padding bg-gray py-12">
+    <div class="container">
+
+      <div class="flex justify-center mb-6 lg:mb-11 basis-1/4 lg:basis-1/12">
+        <h2 class="font-secondary text-2xl lg:text-3xl">Напрямки</h2>
+      </div>
+
+
+      <div class="flex lg:flex-row flex-col gap-5 mb-11 lg basis-1/4 lg:basis-1/12">
+
+
+        <div class="flex flex-col items-center bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full min-h-[42.125rem] lg:min-h-[35.31rem] lg:basis-4/12">
+          <Image
+            class="mb-3"
+            src={import("@images/logo-it-friends.jpg")}
+            format="webp"
+            alt="IT Friends logo"
+          />
+          <h3 class="mb-4 font-secondary font-semibold text-2xl">IT Заняття</h3>
+          <span class="bg-span-gray mb-auto px-4 py-1 rounded-lg text-white">діти від 7-8 років</span>
+          <Article class='mb-auto'>
+            <p>Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та технологій. Ми вчимо через гру: програмуємо персонажів, розв’язуємо логічні задачі, створюємо прості історії.</p>
+            <p>Діти навчаються з цікавістю, без стресу й тиску.</p>
+          </Article>
+          <button class="lg:hidden inline-block mb-3 py-2 border w-full orange-btn" type="button">Безкоштовний урок</button>
+          <button class="py-2 border w-full transparent-btn" type="button">Дізнатися більше</button>
+        </div>
+
+
+        <div class="flex flex-col items-center bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full min-h-[42.125rem] lg:min-h-[35.31rem] lg:basis-4/12">
+          <Image
+            class="mb-3 max-h-28"
+            src={import("@images/logo-english-friends.jpg")}
+            format="webp"
+            alt="English friends logo"
+          />
+          <h3 class="mb-4 font-secondary font-semibold text-2xl">
+            Англійська для дітей
+          </h3>
+          <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black"
+            >діти від 9-16 років</span
+          >
+          <Article class='mb-auto'>
+            <p>Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та технологій. Ми вчимо через гру: програмуємо персонажів, розв’язуємо логічні задачі, створюємо прості історії. </p>
+            <p>Діти навчаються з цікавістю, без стресу й тиску.</p>
+          </Article>
+          <button class="lg:hidden inline-block mb-3 py-2 border w-full orange-btn" type="button">Безкоштовний урок</button>
+          <button class="py-2 border w-full transparent-btn" type="button">Дізнатися більше</button>
+        </div>
+
+
+        <div class="flex flex-col items-center bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full min-h-[42.125rem] lg:min-h-[35.31rem] lg:basis-4/12">
+          <Image
+            class="mb-3"
+            src={import("@images/logo-tour-friends.jpg")}
+            format="webp"
+            alt="Tour friends logo"
+          />
+          <h3 class="mb-4 font-secondary font-semibold text-2xl">IT Табори</h3>
+          <span class="bg-span-mint mb-auto px-4 py-1 rounded-lg text-black">діти від 7-16 років</span>
+          <Article class='mb-auto'>
+            <p>Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та технологій. Ми вчимо через гру: програмуємо персонажів, розв’язуємо логічні задачі, створюємо прості історії. </p>
+            <p>Діти навчаються з цікавістю, без стресу й тиску.</p>
+          </Article>
+          <button class="lg:hidden inline-block mb-3 py-2 border w-full orange-btn" type="button">Безкоштовний урок</button>
+          <button class="py-2 border w-full transparent-btn" type="button">Дізнатися більше</button>
+        </div>
+      </div>
+
+      <div class="hidden lg:flex justify-center basis-1/4 lg:basis-1/12">
+        <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn" type="button">Безкоштовний урок</button>
+      </div>
+      
+    </div>
+  </section> -->

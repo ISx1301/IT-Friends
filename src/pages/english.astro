@@ -2,6 +2,81 @@
 import { Image } from "astro:assets";
 import DefaultLayout from "@layouts/Default.astro";
 import Article from "@components/Article.astro";
+
+import userLogo from '@images/user-logo.jpg'
+
+
+
+import ReviewsSection from "@components/sharedSections/ReviewsSection.astro";
+
+
+
+
+// Reviews section data 
+type ImageReviewsType = {
+  src: ImageMetadata;
+  alt?: string;
+};
+
+type cardItem = {
+  divBg: 'orange' | 'green' | 'gray';
+  image: ImageReviewsType;
+  name: string;
+  description: string;
+  videoReview: string;
+}
+
+type reviewsSectionProps = {
+  sectionPaddingsStyle: 'withPaddings' | 'withoutPaddings';
+  sectionBgStyle: 'white' | 'gray';
+  titleText: string;
+  reviewsDescription: string[];
+  videoReview: string;
+  cards: cardItem[]
+}
+
+const reviewsSectionData: reviewsSectionProps = {
+  sectionPaddingsStyle: 'withPaddings',
+  sectionBgStyle: 'gray',
+  titleText: 'Відгуки про уроки',
+  reviewsDescription: [
+    'Відгуки наших учнів та їхніх батьків — це найцінніше підтвердження того, що ми на правильному шляху.',
+    'Саме ці слова мотивують нас ставати ще кращими щодня.'
+  ],
+  videoReview: 'Дивитись відеовідгуки',
+  cards: [
+    {
+      divBg: 'green',
+      image: {
+        src: userLogo,
+        alt: 'qwerty'
+      },
+      name: 'Ольга О.',
+      description: 'Мій син із нетерпінням чекає кожного заняття! Нарешті зʼявилось середовище, де його справді чують і підтримують',
+      videoReview: 'Відеовідгук'
+    },
+        {
+      divBg: 'orange',
+      image: {
+        src: userLogo,
+        alt: 'qwerty'
+      },
+      name: 'Світлана К.',
+      description: 'Доньці подобається, що можна спробувати різні напрямки. А я спокійна, бо бачу її зацікавленість і прогрес',
+      videoReview: 'Відеовідгук'
+    },
+    {
+      divBg: 'gray',
+      image: {
+        src: userLogo,
+        alt: 'qwerty'
+      },
+      name: 'Ірина Д.',
+      description: 'Дуже вдячні викладачам за індивідуальний підхід. У сина раніше були труднощі з навчанням, а тут він розкрився',
+      videoReview: 'Відеовідгук'
+    },
+  ]
+}
 ---
 
 <DefaultLayout title="English courses" description="It-school, courses">
@@ -105,79 +180,7 @@ import Article from "@components/Article.astro";
     </div>
   </section>
 
-  <!-- Reviews section-->
-
-  <section class="bg-gray py-12 overflow-hidden" id="reviews">
-    <div class="container">
-      <div class="flex lg:flex-row flex-col justify-between">
-        <div class="py-14 basis-4/12">
-          <h2 class="mb-8 font-secondary font-medium text-2xl lg:text-3xl lg:text-left text-center">Відгуки про уроки</h2>
-          <Article class="mb-11 lg:text-left text-center">
-            <p>Відгуки наших учнів та їхніх батьків — це найцінніше підтвердження того, що ми на правильному шляху.</p>
-            <p>Саме ці слова мотивують нас ставати ще кращими щодня.</p>
-          </Article>
-          <button type="button" class="hidden lg:inline-block px-7 py-3 leading-none transparent-btn">Дивитися відевідгуки</button>
-        </div>
-        <div class="flex flex-row lg:flex-col justify-between gap-5 lg:overflow-visible overflow-x-auto scroll-smooth snap-mandatory snap-x lg:snap-none basis-6/12">
-
-          <!-- first card -->
-          <div class="flex lg:flex-row flex-col lg:justify-between items-center gap-5 lg:gap-0 bg-white shadow-none lg:shadow-md ml-auto border border-gray lg:border-none rounded-md w-[31rem] min-w-full lg:min-w-0 snap-center">
-            <div class="bg-primary-green rounded-md w-full lg:w-2 h-2 lg:h-full"></div>
-            <div class="my-3">
-              <Image
-                class="rounded-full w-16 h-16 object-cover"
-                src={import("@images/user-logo.jpg")}
-                format="webp"
-                alt="IT Friends logo"
-              />
-              <p class="font-normal">Ольга О.</p>
-            </div>
-            <div class="max-w-xs">
-              <p class="font-normal text-base lg:text-left text-center">Мій син із нетерпінням чекає кожного заняття! Нарешті зʼявилось середовище, де його справді чують і підтримують</p>
-            </div>
-            <button type="button" class="lg:hidden my-6 px-28 py-5 border-black leading-none transparent-btn">Відеовідгук</button>
-          </div>
-
-          <!-- second card -->
-          <div class="flex lg:flex-row flex-col lg:justify-between items-center gap-5 lg:gap-0 bg-white shadow-none lg:shadow-md border border-gray lg:border-none rounded-md w-[31rem] min-w-full lg:min-w-0 snap-center">
-            <div class="bg-primary-orange mr-0 lg:mr-7 rounded-md w-full lg:w-2 h-2 lg:h-full"></div>
-            <div class="my-3 mr-0 lg:mr-10">
-              <Image
-                class="rounded-full w-16 h-16 object-cover"
-                src={import("@images/user-logo.jpg")}
-                format="webp"
-                alt="IT Friends logo"
-              />
-              <p class="font-normal">Ольга О.</p>
-            </div>
-            <div class="max-w-xs">
-              <p class="font-normal text-base lg:text-left text-center">Мій син із нетерпінням чекає кожного заняття! Нарешті зʼявилось середовище, де його справді чують і підтримують</p>
-            </div>
-            <button type="button" class="lg:hidden my-6 px-28 py-5 border-black leading-none transparent-btn">Відеовідгук</button>
-          </div>
-
-          <!-- third card -->
-          <div class="flex lg:flex-row flex-col lg:justify-between items-center gap-5 lg:gap-0 bg-white shadow-none lg:shadow-md ml-auto border border-gray lg:border-none rounded-md w-[31rem] min-w-full lg:min-w-0 snap-center">
-            <div class="bg-span-gray mr-0 lg:mr-7 rounded-md w-full lg:w-2 h-2 lg:h-full"></div>
-            <div class="my-3 mr-0 lg:mr-10">
-              <Image
-                class="rounded-full w-16 h-16 object-cover"
-                src={import("@images/user-logo.jpg")}
-                format="webp"
-                alt="IT Friends logo"
-              />
-              <p class="font-normal">Ольга О.</p>
-            </div>
-            <div class="max-w-xs">
-              <p class="font-normal text-base lg:text-left text-center">Мій син із нетерпінням чекає кожного заняття! Нарешті зʼявилось середовище, де його справді чують і підтримують</p>
-            </div>
-            <button type="button" class="lg:hidden my-6 px-28 py-5 border-black leading-none transparent-btn">Відеовідгук</button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </section>
+  <ReviewsSection {...reviewsSectionData} />
 
   <!-- Team section -->
 

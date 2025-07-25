@@ -105,24 +105,6 @@ body {
 //   }
 // }
 
-@keyframes marquee-to-top {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-70%);
-  }
-}
-
-@keyframes marquee-to-bottom {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(70%);
-  }
-}
-
 @keyframes marquee-to-left {
   0% {
     transform: translateX(0);

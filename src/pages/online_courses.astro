@@ -1,0 +1,58 @@
+---
+import DefaultLayout from '@layouts/Default.astro';
+import Article from '@components/Article.astro';
+import aboutUsImage from '@images/about-us-image.jpg';
+import AboutSection from '@components/sharedSections/AboutSection.astro';
+
+// About section data 
+type ImageAboutType = {
+  src: ImageMetadata;
+  alt?: string;
+};
+
+type aboutSectionProps = {
+  sectionPaddingsStyle: 'withPaddings' | 'withoutPaddings';
+  layoutStyle: 'primary' | 'secondary';
+  borderStyle: 'primary' | 'secondary';
+  titleStyle: 'default' | 'secondary'
+  heading: string;
+  subheading?: string;
+  image: ImageAboutType;
+  spanRows: string[][];
+  paragraphs: string[];
+  finalTitle?: string;
+  contentSequence?: ('subheading' | 'spanRows' | 'finalTitle' | 'paragraphs')[];
+};
+
+const aboutSectionData: aboutSectionProps = {
+  sectionPaddingsStyle: 'withPaddings',
+  layoutStyle: 'secondary',
+  borderStyle: 'primary',
+  titleStyle: 'secondary',
+  heading: 'Чому це працює',
+  image: {
+    src: aboutUsImage,
+    alt: 'qwerty'
+  },
+  spanRows: [
+    ['індивідуально', 'інтерактивно'],
+    ["з любов'ю", 'гнучко']
+  ],
+  finalTitle: 'Не просто курси — місце для зростання',
+  paragraphs: [
+    'Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий',
+    'Ми віримо, що найкращі результати приходять не через тиск, а через цікавість, довіру та повагу до темпу дитини.',
+    'У нашій школі можна пробувати, помилятись, змінювати напрям і знову шукати своє — без страху'
+  ],
+  contentSequence: ['finalTitle', 'paragraphs', 'spanRows'],
+};
+// ==================================================================
+
+---
+
+<DefaultLayout title='Online courses' description='It-school, courses'>
+  
+  <!-- About us section-->
+  <AboutSection {...aboutSectionData} />
+
+</DefaultLayout>

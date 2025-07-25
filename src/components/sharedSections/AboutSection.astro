@@ -1,0 +1,166 @@
+---
+import { Image } from 'astro:assets';
+import Article from '@components/Article.astro';
+
+type ImageAboutType = {
+  src: ImageMetadata;
+  alt?: string;
+};
+
+type Props = {
+  sectionPaddingsStyle: 'withPaddings' | 'withoutPaddings';
+  layoutStyle: 'primary' | 'secondary';
+  borderStyle: 'primary' | 'secondary';
+  titleStyle: 'default' | 'secondary'
+  heading: string;
+  subheading?: string;
+  image: ImageAboutType;
+  spanRows: string[][];
+  paragraphs: string[];
+  finalTitle?: string;
+  contentSequence?: ('subheading' | 'spanRows' | 'finalTitle' | 'paragraphs')[];
+};
+
+const {
+  sectionPaddingsStyle,
+  layoutStyle,
+  borderStyle,
+  heading,
+  subheading,
+  titleStyle,
+  image,
+  spanRows,
+  paragraphs,
+  finalTitle,
+  contentSequence = ['subheading', 'spanRows', 'finalTitle', 'paragraphs'],
+} = Astro.props;
+
+const titleClassMap = {
+  default: 'text-start',
+  secondary: 'text-center'
+}
+
+const sectionClassMap = {
+  withPaddings: 'py-20 lg:py-32',
+  withoutPaddings: 'py-0',
+};
+
+const layoutClassMap = {
+  primary: 'flex lg:flex-row flex-col gap-8',
+  secondary: 'flex lg:flex-row-reverse flex-col gap-8',
+};
+
+const borderClassMap = {
+  primary: 'border border-span-mint',
+  secondary: 'border border-span-sand',
+};
+---
+
+<section class={sectionClassMap[sectionPaddingsStyle]}>
+  <div class="container">
+    <div class="mb-8 basis-1/4 lg:basis1/12">
+      <h2 class={`${titleClassMap[titleStyle]} font-secondary font-medium text-2xl lg:text-3xl`}>{heading}</h2>
+    </div>
+
+    <div class={layoutClassMap[layoutStyle]}>
+      <div class="lg:basis-6/12 basis-1/4">
+        <Image
+          src={image.src}
+          format="webp"
+          alt={image.alt || 'about image'}
+          class="w-full h-full object-cover"
+        />
+      </div>
+
+      <div class="flex flex-col lg:basis-6/12 basis-1/4">
+        {contentSequence.map((key) => {
+          if (key === 'subheading') {
+            return <h3 class="mb-5 font-secondary font-semibold text-xl lg:text-3xl">{subheading}</h3>;
+          }
+          if (key === 'spanRows') {
+            return (
+              <div class="flex flex-col gap-4 mb-12 lg:mb-auto basis-1/4">
+                {spanRows.map((row) => (
+                  <div class="flex gap-6">
+                    {row.map((text) => (
+                      <span
+                        class={`${borderClassMap[borderStyle]} rounded-3xl py-2 w-[10.8rem] lg:w-[11.3rem] font-play font-normal text-xl text-center`}
+                      >
+                        {text}
+                      </span>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            );
+          }
+          if (key === 'finalTitle' && finalTitle) {
+            return <h3 class="mt-auto mb-4 font-bold text-2xl">{finalTitle}</h3>;
+          }
+          if (key === 'paragraphs') {
+            return (
+              <Article>
+                {paragraphs.map((p) => (
+                  <p>{p}</p>
+                ))}
+              </Article>
+            );
+          }
+          return null;
+        })}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+<!-- About us section-->
+<!-- 
+  <section class="py-20 lg:py-32">
+    <div class="container">
+      <div class="mb-8 basis-1/4 lg:basis1/12">
+        <h2 class="font-secondary font-medium text-2xl lg:text-3xl">Про нас</h2>
+      </div>
+      <div class="flex lg:flex-row flex-col gap-8 basis-1/4 lg:basis1/12">
+        <div class="lg:basis-6/12 basis-1/4">
+          <Image
+            src={import("@images/about-us-image.jpg")}
+            format="webp"
+            alt="about us"
+          />
+        </div>
+        <div class="flex flex-col lg:basis-6/12 basis-1/4">
+          <h3 class="mb-5 font-secondary font-semibold text-xl lg:text-3xl">
+            Віримо в кожну дитину <br /> І вона починає вірити в себе
+          </h3>
+
+          <div class="flex flex-col gap-4 mb-12 lg:mb-auto basis-1/4">
+            <div class="flex gap-6">
+              <span class="px-0 lg:px-6 py-1 lg:py-2 border border-span-mint rounded-3xl w-full lg:w-auto font-play font-normal text-xl text-center">індивідуально</span>
+              <span class="px-0 lg:px-7 py-1 lg:py-2 border border-span-mint rounded-3xl w-full lg:w-auto font-play font-normal text-xl text-center">інтерактивно</span>
+            </div>
+            <div class="flex gap-4">
+              <span class="px-0 lg:px-11 py-1 lg:py-2 border border-span-mint rounded-3xl w-full lg:w-auto font-play font-normal text-xl text-center">з любов’ю</span>
+              <span class="px-0 lg:px-16 py-1 lg:py-2 border border-span-mint rounded-3xl w-full lg:w-auto font-play font-normal text-xl text-center">гнучко</span>
+            </div>
+          </div>
+
+          <h3 class="mt-auto mb-4 font-bold text-2xl">Не просто курси — місце для зростання</h3>
+          
+          <Article>
+            <p>Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
+            <p>Ми віримо, що найкращі результати приходять не через тиск, а через цікавість, довіру та повагу до темпу дитини.</p>
+            <p>У нашій школі можна пробувати, помилятись, змінювати напрям і знову шукати своє — без страху бути «не таким». </p>
+          </Article>
+
+        </div>
+      </div>
+    </div>
+  </section> -->
