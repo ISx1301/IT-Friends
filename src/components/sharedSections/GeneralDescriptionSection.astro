@@ -1,0 +1,54 @@
+---
+import { Image } from "astro:assets";
+---
+
+<!-- General Description section -->
+
+  <section class="my-20 lg:my-28">
+    <div class="container">
+
+      <div class="flex justify-center mx-auto mb-6 lg:mb-8 py-0.5">
+        <h2 class="mb-6 lg:mb-7 font-secondary font-medium text-2xl lg:text-4xl text-center">Для кого підходять заняття</h2>
+      </div>
+
+      <div class="flex lg:flex-row flex-col items-center gap-5">
+
+        <div class="flex flex-col items-center gap-7 shadow-lg px-8 lg:px-6 py-10 rounded-lg basis-1/4 lg:basis-3/12">
+          <Image
+            src={import("@images/target-pic.png")}
+            format="webp"
+            alt="image"
+          />
+          <p class="font-medium text-base lg:text-lg text-center">Діти 7–9 років, які роблять перші кроки в IT</p>
+        </div>
+
+        <div class="flex flex-col items-center gap-7 shadow-lg px-8 lg:px-6 py-10 rounded-lg basis-5/6 lg:basis-3/12">
+          <Image
+            src={import("@images/target-pic.png")}
+            format="webp"
+            alt="image"
+          />
+          <p class="font-medium text-base lg:text-lg text-center">Підлітки 10–14 років, що цікавляться технологіями</p>
+        </div>
+
+        <div class="flex flex-col items-center gap-7 shadow-lg px-8 lg:px-8 py-10 rounded-lg basis-5/6 lg:basis-3/12">
+          <Image
+            src={import("@images/target-pic.png")}
+            format="webp"
+            alt="image"
+          />
+          <p class="font-medium text-base lg:text-lg text-center">Ті, хто хоче навчитися створювати ігри, сайти чи анімації</p>
+        </div>
+
+        <div class="flex flex-col items-center gap-7 shadow-lg px-8 lg:px-6 py-10 rounded-lg basis-5/6 lg:basis-3/12">
+          <Image
+            src={import("@images/target-pic.png")}
+            format="webp"
+            alt="image"
+          />
+          <p class="font-medium text-base lg:text-lg text-center">Діти, яким важливі практичні результати та командна робота</p>
+        </div>
+      </div>
+
+    </div>
+  </section>

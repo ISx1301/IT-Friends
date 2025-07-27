@@ -22,6 +22,14 @@
       @apply font-medium text-lg;
     }
   }
+
+  .contact-btn {
+    @apply border w-full font-medium text-lg text-center rounded-lg py-5 flex flex-col
+  }
+
+  .free-lesson-btn {
+    @apply bg-primary-orange px-20 lg:px-4 py-5 lg:py-1 rounded-lg font-primary lg:font-secondary lg:font-normal font-medium text-black text-lg transition duration-300 hover:bg-white
+  }
 }
 
 @layer base {

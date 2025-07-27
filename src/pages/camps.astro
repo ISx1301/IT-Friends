@@ -5,8 +5,11 @@ import Article from "@components/Article.astro";
 import aboutUsImage from '@images/about-us-image.jpg';
 import userLogo from '@images/user-logo.jpg'
 
-
+import HeroZoomImage from "@components/sharedSections/HeroZoomImage.astro";
 import AboutSection from '@components/sharedSections/AboutSection.astro';
+
+
+import GeneralDescriptionSection from "@components/sharedSections/GeneralDescriptionSection.astro";
 import ReviewsSection from "@components/sharedSections/ReviewsSection.astro";
 
 
@@ -127,51 +130,8 @@ const reviewsSectionData: reviewsSectionProps = {
 
   <!-- Hero section -->
 
-  <section class="mt-11 lg:mt-16">
-    <div class="container">
-
-      <div class="mb-auto">
-        <Image
-          class="mx-auto"
-          src={import("@images/logo-tour-friends.jpg")}
-          format="webp"
-          alt="image"
-        />
-      </div>
-
-      <div class="flex justify-center bg-transparent-btn-hover-bg mx-auto mb-6 lg:mb-8 py-0.5 w-[21.56rem]">
-        <p>Відпочинок з користю та відкриттями</p>
-      </div>
-      
-      <div class="mx-auto max-w-2xl">
-        <h1 class="mb-6 lg:mb-7 font-secondary font-medium text-2xl lg:text-4xl text-center">Незабутні поїздки та кемпи для дітей та шкіл</h1>
-      </div>
-
-      <div class="mx-auto mb-6 lg:mb-11 max-w-xl">
-        <p class="font-normal text-lg text-center">Обирайте індивідуальні поїздки чи групові тури для шкіл. Канікули в Україні та за кордоном у будь-яку пору року</p>
-      </div>
-
-      <div class="hidden lg:flex justify-center mb-11 basis-1/4 lg:basis-1/12">
-        <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn" type="button">Забронювати місце</button>
-      </div>
-
-
-      <div class="mb-9 lg:mb-0 rounded-xl w-full h-full aspect-40/17 overflow-hidden">
-        <Image
-          class="brightness-75 w-full h-full object-cover animate-zoom-pulse"
-          src={import("@images/camps-main.jpg")}
-          format="webp"
-          alt="image"
-        />
-      </div>
-
-      <div class="lg:hidden flex justify-center mb-11 basis-1/4 lg:basis-1/12">
-        <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn" type="button">Забронювати місце</button>
-      </div>
-
-    </div>
-  </section>
-
+  <HeroZoomImage />
+  
   <!-- About us section-->
   <AboutSection {...aboutSectionData} />
 
@@ -234,61 +194,8 @@ const reviewsSectionData: reviewsSectionProps = {
     </div>
   </section> -->
 
-
-  <!-- Our approach section -->
-
-  <section class="my-20 lg:my-32">
-    <div class="container">
-
-      <div class="mb-9">
-        <h2 class="font-secondary font-medium text-2xl lg:text-4xl text-center">Чому обирають нас</h2>
-      </div>
-
-      <!-- cards -->
-
-      <div class="flex lg:flex-row flex-col gap-x-5 gap-y-8 mb-11">
-
-        <div class="flex flex-col items-center gap-5 shadow-lg px-10 pt-12 pb-7 rounded-lg basis-full lg:basis-3/13">
-          <Image
-            src={import("@images/target-pic.png")}
-            format="webp"
-            alt="image"
-          />
-          <h3 class="font-semibold text-base lg:text-xl">Індивідуальний підхід</h3>
-          <Article class="max-w-xs font-normal text-center">
-            <p>Менше сухої теорії — більше спілкування, ігор і практичних завдань. Діти починають говорити англійською вже з перших уроків.</p>
-          </Article>
-        </div>
-
-        <div class="flex flex-col items-center gap-5 shadow-lg px-10 pt-12 pb-7 rounded-lg basis-full lg:basis-3/13">
-          <Image
-            src={import("@images/target-pic.png")}
-            format="webp"
-            alt="image"
-          />
-          <h3 class="font-semibold text-base lg:text-xl">Індивідуальний підхід</h3>
-          <Article class="max-w-xs font-normal text-center">
-            <p>Менше сухої теорії — більше спілкування, ігор і практичних завдань. Діти починають говорити англійською вже з перших уроків.</p>
-          </Article>
-        </div>
-
-        <div class="flex flex-col items-center gap-5 shadow-lg px-10 pt-12 pb-7 rounded-lg basis-full lg:basis-3/13">
-          <Image
-            src={import("@images/target-pic.png")}
-            format="webp"
-            alt="image"
-          />
-          <h3 class="font-semibold text-base lg:text-xl">Індивідуальний підхід</h3>
-          <Article class="max-w-xs font-normal text-center">
-            <p>Менше сухої теорії — більше спілкування, ігор і практичних завдань. Діти починають говорити англійською вже з перших уроків.</p>
-          </Article>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
+  <GeneralDescriptionSection />
+  
   <ReviewsSection {...reviewsSectionData} />
 
 

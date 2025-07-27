@@ -1,0 +1,100 @@
+---
+import { Image } from "astro:assets";
+---
+
+<div class="top-0 left-0 z-50 fixed flex justify-center items-center bg-white w-screen h-screen overflow-y-auto transition-transform -translate-x-full duration-300 ease-in-out transform form-slider">
+  <div class="container">
+
+    <div class="h-screen">
+
+      <div class="flex flex-row lg:flex-col justify-between mb-1 py-2 lg:py-0">
+
+        <div class="lg:mb-3">
+          <a href="/">
+            <Image
+              src={import("@images/logo.svg")}
+              format="svg"
+              alt="IT Friends logo"
+            />
+          </a>
+        </div>
+
+        <div>
+          <button type="button" class="group hidden lg:flex items-center form-close">
+            <svg xmlns="http://www.w3.org/2000/svg" class="group-hover:stroke-primary-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            <p class="font-secondary font-medium group-hover:text-primary-orange text-lg">Назад</p>
+          </button>
+        </div>
+        
+
+
+        <button type="button" class="lg:hidden form-close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-gray-700 hover:text-black transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+      </div>
+
+      <div class="flex justify-center items-center h-screen">
+        <form class="flex flex-col items-center lg:shadow-xl lg:px-14 py-9 rounded-lg free-lesson-form" action="#">
+          <h2 class="mb-4 font-secondary font-semibold text-primary-green text-xl text-center">Спробуйте безкоштовний урок!</h2>
+          <div class="mb-7 lg:max-w-md">
+            <p class="font-secondary text-center">Заповніть коротку форму — і ми підберемо для вашої дитини безкоштовне заняття з напрямку, який її цікавить.</p>
+          </div>
+
+          <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium" for="">
+            Ім’я*
+            <input class="pl-3 border focus:border-2 rounded-md h-10 form-input-name" type="text" />
+            <span class="hidden mt-1 text-red-error text-sm form-error">Поле обов’язкове</span>
+          </label>
+
+          <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium" for="">
+            Прізвище*
+            <input class="pl-3 border focus:border-2 rounded-md h-10 form-input-lastname" type="text" />
+            <span class="hidden mt-1 text-red-error text-sm form-error">Поле обов’язкове</span>
+          </label>
+
+          <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium" for="">
+            Вік дитини*
+            <input class="pl-3 border focus:border-2 rounded-md h-10 form-input-age" type="text" />
+            <span class="hidden mt-1 text-red-error text-sm form-error">Поле обов’язкове</span>
+          </label>
+
+          <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium" for="">
+            Номер телефону*
+            <input class="pl-3 border focus:border-2 rounded-md h-10 form-input-phone" type="text" />
+            <span class="hidden mt-1 text-red-error text-sm form-error">Введіть номер телефону</span>
+          </label>
+
+          <button class="px-8 py-4 font-secondary font-medium orange-btn" type="submit">Надіслати заявку</button>
+
+        </form>
+
+        <div class="hidden animate-fadeInUp form-success">
+          <div class="flex flex-col items-center gap-6 lg:gap-9 lg:w-96">
+            <h2 class="font-secondary font-semibold text-lg lg:text-2xl text-center">
+              Форма успішно надіслана! Дякуємо, ми зв’яжемось з вами протягом 24 годин
+            </h2>
+            <Image
+              src={import("@images/form-done.svg")}
+              format="svg"
+              alt="IT Friends logo"
+            />
+          </div>
+        </div>
+        
+
+      </div>
+      
+
+
+    </div>
+
+  </div>
+</div>
+
+<script src="@scripts/freeLessonForm"></script>
+

@@ -1,0 +1,49 @@
+---
+const {  containerClass = "" } = Astro.props;
+
+---
+
+<div class="embla">
+  <div class="embla__viewport" >
+    <div class={`embla__container ${containerClass}`}>
+      <slot name="slides" />
+    </div>
+  </div>
+
+  <div class="embla__controls">
+    <slot name="controls" />
+  </div>
+</div>
+
+<style>
+.embla {
+  overflow: hidden;
+
+}
+.embla__viewport {
+  overflow: hidden;
+
+}
+.embla__container {
+  display: flex;
+  gap: 1rem;
+}
+
+.embla__slide {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+
+@media (min-width: 1440px) {
+  .embla {
+    overflow: visible;
+  }
+  .embla__viewport {
+    overflow: visible;
+  }
+}
+</style>
+
+<script src="@scripts/embla"></script>
+

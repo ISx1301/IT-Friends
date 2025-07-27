@@ -1,11 +1,18 @@
 ---
-// TODO: how to deal with named exports, astro ts plugin
-// import {  } from "@/constants.ts";
-
 import DefaultLayout from "@layouts/Default.astro";
+
+
+import HeroZoomImage from "@components/sharedSections/HeroZoomImage.astro";
+import GeneralDescriptionSection from "@components/sharedSections/GeneralDescriptionSection.astro";
+
+
 ---
 
 <DefaultLayout title="Franchise" description="It-school, courses">
-<!-- Something -->
- franshise
+
+  <HeroZoomImage />
+
+  <GeneralDescriptionSection />
+
+  
 </DefaultLayout>

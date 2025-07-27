@@ -1,188 +1,36 @@
 ---
-import { Image } from 'astro:assets';
-import img1 from '@images/tab1.jpg';
-import Article from "@components/Article.astro";
+const {
+  type = 'tab',
+  isInner = true,
+  class: classname = ''
+} = Astro.props;
 
-interface Card {
-  title: string;
-  description: string[];
-  image: any;
-  imageAlt: string;
+let triggerClasses = '';
+
+switch (type) {
+  case 'pill':
+    triggerClasses += ' bg-red-error';
+    break;
+  case 'tab':
+  default:
+    triggerClasses += ' border border-red-error';
+    break;
 }
-
-const color1 = "bg-transparent-btn-hover-bg";
-const color2 = "bg-primary-sand";
-
-const colorMap = {
-  gray: color1,
-  sand: color2,
-} as const;
-
-type ColorKey = keyof typeof colorMap;
-
-interface Tab {
-  id: string;
-  label: string;
-  btnText: string;
-  colorKey: ColorKey;
-  cards: Card[];
-}
-
-
-
-const tabData: Tab[] = [
-  {
-    id: "main",
-    label: "7–8 років",
-    btnText: "Дивитись більше",
-    colorKey: 'gray',
-    cards: [
-      {
-        title: "IT-Beginner",
-        description: [
-          "Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та технологій. Ми вчимо через гру: програмуємо персонажів, розв’язуємо логічні задачі, створюємо прості історії.",
-          "Діти навчаються з цікавістю, без стресу й тиску.",
-        ],
-        image: img1,
-        imageAlt: "IT Beginner logo",
-      },
-      {
-        title: "IT-skills+",
-        description: [
-          "Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та технологій...",
-          "Діти навчаються з цікавістю, без стресу й тиску.",
-        ],
-        image: img1,
-        imageAlt: "IT Skills logo",
-      },
-      {
-        title: "курси графічного дизайну",
-        description: [
-          "Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та технологій. Ми вчимо через гру: програмуємо персонажів, розв’язуємо логічні задачі, створюємо прості історії.",
-          "Діти навчаються з цікавістю, без стресу й тиску.",
-        ],
-        image: img1,
-        imageAlt: "IT Beginner logo",
-      },
-      {
-        title: "IT-Beginner",
-        description: [
-          "Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та технологій. Ми вчимо через гру: програмуємо персонажів, розв’язуємо логічні задачі, створюємо прості історії.",
-          "Діти навчаються з цікавістю, без стресу й тиску.",
-        ],
-        image: img1,
-        imageAlt: "IT Beginner logo",
-      },
-      {
-        title: "IT-Beginner",
-        description: [
-          "Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та технологій. Ми вчимо через гру: програмуємо персонажів, розв’язуємо логічні задачі, створюємо прості історії.",
-          "Діти навчаються з цікавістю, без стресу й тиску.",
-        ],
-        image: img1,
-        imageAlt: "IT Beginner logo",
-      },
-      {
-        title: "IT-Beginner",
-        description: [
-          "Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та технологій. Ми вчимо через гру: програмуємо персонажів, розв’язуємо логічні задачі, створюємо прості історії.",
-          "Діти навчаються з цікавістю, без стресу й тиску.",
-        ],
-        image: img1,
-        imageAlt: "IT Beginner logo",
-      },
-      {
-        title: "IT-Beginner",
-        description: [
-          "Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та технологій. Ми вчимо через гру: програмуємо персонажів, розв’язуємо логічні задачі, створюємо прості історії.",
-          "Діти навчаються з цікавістю, без стресу й тиску.",
-        ],
-        image: img1,
-        imageAlt: "IT Beginner logo",
-      },
-    ],
-  },
-  {
-    id: "secondary",
-    label: "9–16 років",
-    btnText: "Дивитись більше",
-    colorKey: 'gray',
-    cards: [
-      {
-        title: "Курси графічного дизайну",
-        description: ["Діти навчаються з цікавістю, без стресу й тиску."],
-        image: img1,
-        imageAlt: "Design logo",
-      },
-    ],
-  },
-];
 ---
+{isInner ? (
+  <div class={`${classname}`}>
+    <div class={`${triggerClasses}`}>
+      <p>Внешний таб</p>
+    </div>
 
-
-<div class="tab-container">
-
-  <!-- Tab triggers -->
-  <div class="flex flex-wrap justify-center gap-10 font-secondary font-semibold text-base lg:text-lg text-center container" role="tablist">
-    {tabData.map((tab) => (
-      <button
-        class="inline-block px-3 lg:px-7 py-3 rounded-t-lg duration-300 tab-trigger"
-        role="tab"
-        data-tab={tab.id}
-        data-color={colorMap[tab.colorKey]}  
-        aria-selected={tab.id === "main" ? "true" : "false"}
-        type="button"
-      >
-        {tab.label}
-      </button>
-    ))}
+    <div class="">
+      <p>внутренний таб</p>
+      <slot />
+    </div>
   </div>
-
-
-  {tabData.map((tab) => (
-    <div class={`min-h-52 ${colorMap[tab.colorKey]} ${tab.id !== "main" ? "hidden" : ""}`}></div>
-  ))}
-
-  <!-- Tab panels -->
-  <div class="top-[-9rem] relative tab-content container">
-    {tabData.map((tab) => (
-      <div class={`tab-panel ${tab.id !== "main" ? "hidden" : ""}`} data-content={tab.id} role="tabpanel">
-        <div class="card-block flex lg:flex-row flex-col lg:flex-wrap justify-between gap-y-12 mb-11" data-state="">
-          {tab.cards.map((card) => (
-            <div class="flex flex-col bg-white shadow-2xl px-3 lg:px-6 pt-4 pb-9 rounded-lg max-w-[400px] min-h-[42.125rem] lg:min-h-[35.31rem] card lg:basis-4/12">
-              
-              <Image
-                class="mb-9 max-h-28"
-                src={card.image}
-                format="webp"
-                alt={card.imageAlt}
-              />
-
-              <h3 class="mb-7 font-secondary font-semibold text-ce text-2xl text-center whitespace-nowrap">{card.title}</h3>
-              <Article class="mb-auto">
-                {card.description.map((paragraph) => <p>{paragraph}</p>)}
-              </Article>
-              <button class="py-4 border w-full font-secondary font-medium text-lg orange-btn" type="button">
-                Записатись на урок
-              </button>
-            </div>
-          ))}
-        </div>
-
-        <div class="flex justify-center">
-
-        <button class="px-11 py-4 transparent-btn show-more-btn" type="button">
-          {tab.btnText}
-        </button>
-
-        </div>
-      </div>
-    ))}
-  </div>
-</div>
-
-<script>
-  import { setupTabs, setupCardManager } from "@scripts/tab";
-  setupTabs();
-  setupCardManager();
-</script>
+) : (
+    <div class="">
+      <p>внутренний таб</p>
+      <slot />
+    </div>
+)}

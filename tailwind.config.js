@@ -74,10 +74,15 @@ module.exports = {
           '0%': { transform: 'translateY(0)' },
           '100%': { transform: 'translateY(50%)' },
         },
+        'fadeInUp': {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
       },
       animation: {
-        'marquee-to-top-90000ms': 'marquee-to-top 90s linear infinite alternate',
-        'marquee-to-bottom-110000ms': 'marquee-to-bottom 110s linear infinite alternate',
+        'marquee-to-top-110000ms': 'marquee-to-top 100s linear infinite alternate',
+        'marquee-to-bottom-110000ms': 'marquee-to-bottom 100s linear infinite alternate',
+        'fadeInUp': 'fadeInUp 0.5s ease-out forwards',
       },
     },
   },

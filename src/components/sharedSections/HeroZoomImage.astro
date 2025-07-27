@@ -1,0 +1,37 @@
+---
+import { Image } from "astro:assets";
+---
+
+  <!-- Hero section -->
+
+  <section class="mt-11 lg:mt-16">
+    <div class="container">
+
+      <div class="flex justify-center bg-transparent-btn-hover-bg mx-auto mb-6 lg:mb-8 py-0.5 w-[21.56rem]">
+        <p>Більше, ніж уроки — досвід спілкування</p>
+      </div>
+      
+      <div>
+        <h1 class="mb-6 lg:mb-7 font-secondary font-medium text-2xl lg:text-4xl text-center">IT‑заняття для дітей і підлітків</h1>
+      </div>
+
+      <div class="mx-auto mb-6 lg:mb-11 max-w-sm">
+        <p class="font-normal text-lg text-center">Вчимо створювати, а не лише користуватися</p>
+      </div>
+
+
+      <div class="mb-6 lg:mb-0 rounded-xl w-full h-full aspect-40/17 overflow-hidden">
+        <Image
+          class="brightness-75 w-full h-full object-cover animate-zoom-pulse"
+          src={import("@images/it-courses-main.png")}
+          format="webp"
+          alt="image"
+        />
+      </div>
+
+      <div class="lg:hidden justify-center basis-1/4 lg:basis-1/12">
+        <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn form-open" type="button">Безкоштовний урок</button>
+      </div>
+
+    </div>
+  </section>

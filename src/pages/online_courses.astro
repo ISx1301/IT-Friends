@@ -2,7 +2,13 @@
 import DefaultLayout from '@layouts/Default.astro';
 import Article from '@components/Article.astro';
 import aboutUsImage from '@images/about-us-image.jpg';
+
+
+
+import HeroZoomImage from "@components/sharedSections/HeroZoomImage.astro";
 import AboutSection from '@components/sharedSections/AboutSection.astro';
+import GeneralDescriptionSection from "@components/sharedSections/GeneralDescriptionSection.astro";
+
 
 // About section data 
 type ImageAboutType = {
@@ -52,7 +58,10 @@ const aboutSectionData: aboutSectionProps = {
 
 <DefaultLayout title='Online courses' description='It-school, courses'>
   
-  <!-- About us section-->
+  <HeroZoomImage />
+
   <AboutSection {...aboutSectionData} />
+
+  <GeneralDescriptionSection />
 
 </DefaultLayout>

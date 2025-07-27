@@ -54,14 +54,14 @@ const sectionClassMap = {
           <Article class="mb-auto">
             {card.description.map((paragraph) => <p>{paragraph}</p>)}
           </Article>
-          <button class="lg:hidden inline-block mb-3 py-2 border w-full orange-btn" type="button">{card.hiddenCardButtonText}</button>
+          <button class="lg:hidden inline-block mb-3 py-2 border w-full orange-btn form-open" type="button">{card.hiddenCardButtonText}</button>
           <button class="py-2 border w-full transparent-btn" type="button">{card.visibleCardButtonText}</button>
         </div>
       ))}
     </div>
 
     <div class="hidden lg:flex justify-center basis-1/4 lg:basis-1/12">
-      <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn" type="button">{mainButtonText}</button>
+      <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn form-open" type="button">{mainButtonText}</button>
     </div>
   </div>
 </section>

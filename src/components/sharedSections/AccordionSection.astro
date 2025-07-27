@@ -1,0 +1,193 @@
+---
+import Article from "@components/Article.astro";
+
+---
+
+
+<!-- FAQ section -->
+
+  <section class="bg-primary-turquoise py-16" id='faq'>
+    <div class="container">
+      <div class="flex lg:flex-row flex-col justify-between">
+        <div class="lg:py-14 basis-4/12">
+          <div class="m-auto lg:mx-0 mb-6 max-w-xs">
+            <h2 class="mb-8 font-secondary font-medium text-2xl lg:text-3xl lg:text-left text-center">Популярні запитання
+            </h2>
+          </div>
+          <Article class="m-auto lg:mx-0 mb-9 max-w-xs lg:text-left text-center">
+            <p>Щоб вам було спокійніше й зрозуміліше, ми зібрали відповіді на найпопулярніші питання про навчання в нашій
+              школі.</p>
+          </Article>
+          <button type="button" class="hidden lg:inline-block px-7 py-3 leading-none transparent-btn">Задати своє
+            питання</button>
+        </div>
+
+        <!-- Accordion -->
+
+        <div class="space-y-4 accordion basis-6/12">
+
+          <!-- First block -->
+
+          <div class="border rounded-md overflow-hidden accordion-item">
+            <h2 class="accordion-header">
+              <button type="button"
+                class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
+                aria-expanded="false">
+                <span>З якого віку можна навчатись у школі?</span>
+                <span class="accordion-icon">
+                  <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M256 80v352M80 256h352" />
+                  </svg>
+                  <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M80 256h352" />
+                  </svg>
+                </span>
+              </button>
+            </h2>
+            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
+              <div class="p-5 border-t">
+                <Article>
+                  <p class="mb-2">Наші заняття проходять офлайн у Києві за п’ятьма зручними адресами:</p>
+                  <p>📍 вул. Хрещатик, 25, просп. Перемоги, 45, вул. Драгоманова, 12, вул. Михайла Ломоносова, 18, вул. Генерала Алмазова, 6Обирайте найближчу до вас локацію — усі класи
+                  обладнані сучасною технікою та створені спеціально для навчання дітей і підлітків. 🌱</p>
+                </Article>
+              </div>
+            </div>
+          </div>
+
+          <!-- Second block -->
+
+          <div class="border rounded-md overflow-hidden accordion-item">
+            <h2 class="accordion-header">
+              <button type="button"
+                class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
+                aria-expanded="false">
+                <span>Чи можна приєднатись посеред навчального року?</span>
+                <span class="accordion-icon">
+                  <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M256 80v352M80 256h352" />
+                  </svg>
+                  <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M80 256h352" />
+                  </svg>
+                </span>
+              </button>
+            </h2>
+            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
+              <div class="p-5 border-t">
+                <Article>
+                  <p class="mb-2">Наші заняття проходять офлайн у Києві за п’ятьма зручними адресами:</p>
+                  <p>📍 вул. Хрещатик, 25, просп. Перемоги, 45, вул. Драгоманова, 12, вул. Михайла Ломоносова, 18, вул. Генерала Алмазова, 6Обирайте найближчу до вас локацію — усі класи
+                  обладнані сучасною технікою та створені спеціально для навчання дітей і підлітків. 🌱</p>
+                </Article>
+              </div>
+            </div>
+          </div>
+
+          <!-- Third block -->
+
+          <div class="border rounded-md overflow-hidden accordion-item">
+            <h2 class="accordion-header">
+              <button type="button"
+                class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
+                aria-expanded="false">
+                <span>Скільки дітей у групі?</span>
+                <span class="accordion-icon">
+                  <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M256 80v352M80 256h352" />
+                  </svg>
+                  <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M80 256h352" />
+                  </svg>
+                </span>
+              </button>
+            </h2>
+            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
+              <div class="p-5 border-t">
+                <Article>
+                  <p class="mb-2">Наші заняття проходять офлайн у Києві за п’ятьма зручними адресами:</p>
+                  <p>📍 вул. Хрещатик, 25, просп. Перемоги, 45, вул. Драгоманова, 12, вул. Михайла Ломоносова, 18, вул. Генерала Алмазова, 6Обирайте найближчу до вас локацію — усі класи
+                  обладнані сучасною технікою та створені спеціально для навчання дітей і підлітків. 🌱</p>
+                </Article>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fourth block -->
+
+          <div class="border rounded-md overflow-hidden accordion-item">
+            <h2 class="accordion-header">
+              <button type="button"
+                class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
+                aria-expanded="false">
+                <span>Чи можна спочатку спробувати?</span>
+                <span class="accordion-icon">
+                  <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M256 80v352M80 256h352" />
+                  </svg>
+                  <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M80 256h352" />
+                  </svg>
+                </span>
+              </button>
+            </h2>
+            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
+              <div class="p-5 border-t">
+                <Article>
+                  <p class="mb-2">Наші заняття проходять офлайн у Києві за п’ятьма зручними адресами:</p>
+                  <p>📍 вул. Хрещатик, 25, просп. Перемоги, 45, вул. Драгоманова, 12, вул. Михайла Ломоносова, 18, вул. Генерала Алмазова, 6Обирайте найближчу до вас локацію — усі класи
+                  обладнані сучасною технікою та створені спеціально для навчання дітей і підлітків. 🌱</p>
+                </Article>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fifth block -->
+
+          <div class="border rounded-md overflow-hidden accordion-item">
+            <h2 class="accordion-header">
+              <button type="button"
+                class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
+                aria-expanded="false">
+                <span>Де саме проходять заняття?</span>
+                <span class="accordion-icon">
+                  <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M256 80v352M80 256h352" />
+                  </svg>
+                  <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="48" d="M80 256h352" />
+                  </svg>
+                </span>
+              </button>
+            </h2>
+            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
+              <div class="p-5 border-t">
+                <Article>
+                  <p class="mb-2">Наші заняття проходять офлайн у Києві за п’ятьма зручними адресами:</p>
+                  <p>📍 вул. Хрещатик, 25, просп. Перемоги, 45, вул. Драгоманова, 12, вул. Михайла Ломоносова, 18, вул. Генерала Алмазова, 6Обирайте найближчу до вас локацію — усі класи
+                  обладнані сучасною технікою та створені спеціально для навчання дітей і підлітків. 🌱</p>
+                </Article>
+              </div>
+            </div>
+          </div>
+
+      </div>
+    </div>
+  </section>
+
+<script src="@scripts/accordion"></script>
