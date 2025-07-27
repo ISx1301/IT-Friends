@@ -1,14 +1,72 @@
 export function setupTabs(): void {
+  function removeColorClasses(element: HTMLElement) {
+    element.classList.remove("bg-transparent-btn-hover-bg", "bg-primary-sand");
+  }
+
+  // new version start
+  document.addEventListener("DOMContentLoaded", () => {
+    const tabsRoot = document.querySelectorAll("[data-tabs]") as unknown as HTMLCollection;
+    
+    [...tabsRoot].forEach((root) => {
+      /*
+      '[data-tabs]' > .tab-trigger
+      '[data-tabs]' > .tab-panel
+      '[data-tabs]' > '[data-tabs]' > .tab-trigger - not needed to select
+      '[data-tabs]' > '[data-tabs]' > .tab-panel - not needed to select
+      */
+      const triggers = Array.from(root.querySelectorAll<HTMLButtonElement>(":scope > .tab-triggers .tab-trigger"));
+      const panels = Array.from(root.querySelectorAll<HTMLElement>(":scope > .tab-content > .tab-panel"));
+      
+      const activeTrigger = triggers.find((trigger) => trigger.getAttribute("aria-selected") === "true");
+      if (activeTrigger) {
+        const target = activeTrigger.getAttribute("data-tab");
+        const colorClass = activeTrigger.getAttribute("data-color");
+        if (colorClass) activeTrigger.classList.add(colorClass);
+  
+        panels.forEach((panel) => {
+          const contentId = panel.getAttribute("data-content");
+          if (contentId === target) {
+            panel.classList.remove("hidden");
+          } else {
+            panel.classList.add("hidden");
+          }
+        });
+      }
+      triggers.forEach((trigger) => {
+        trigger.addEventListener("click", () => {
+          const target = trigger.getAttribute("data-tab");
+          if (!target) return;
+  
+          panels.forEach((panel) => {
+            const contentId = panel.getAttribute("data-content");
+            panel.classList.toggle("hidden", contentId !== target);
+          });
+  
+          triggers.forEach((btn) => {
+            const isActive = btn === trigger;
+            btn.setAttribute("aria-selected", String(isActive));
+            removeColorClasses(btn);
+  
+            if (isActive) {
+              const colorClass = btn.getAttribute("data-color");
+              if (colorClass) {
+                btn.classList.add(colorClass);
+              }
+            }
+          });
+        });
+      });
+    });
+  });
+  // new version end
+  
+  // old version
   document.addEventListener("DOMContentLoaded", () => {
     const tabsRoot = document.querySelector(".tab-container") as HTMLElement | null;
     if (!tabsRoot) return;
 
     const triggers = Array.from(tabsRoot.querySelectorAll<HTMLButtonElement>(".tab-trigger"));
     const panels = Array.from(tabsRoot.querySelectorAll<HTMLElement>(".tab-panel"));
-
-    function removeColorClasses(element: HTMLElement) {
-      element.classList.remove("bg-transparent-btn-hover-bg", "bg-primary-sand");
-    }
 
     const activeTrigger = triggers.find((trigger) => trigger.getAttribute("aria-selected") === "true");
     if (activeTrigger) {

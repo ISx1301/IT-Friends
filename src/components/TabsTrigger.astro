@@ -1,0 +1,33 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'button'> {
+  id: string;
+  colorKey: keyof typeof colorMap;
+}
+
+const { 
+  id,
+  colorKey,
+  class: classes
+} = Astro.props;
+
+const color1 = "bg-transparent-btn-hover-bg";
+const color2 = "bg-primary-sand";
+
+const colorMap = {
+  gray: color1,
+  sand: color2,
+} as const;
+---
+
+<button
+  class:list={["tab-trigger inline-block px-3 lg:px-7 py-3 rounded-t-lg duration-300", (id.slice(-1) === '1' ? colorMap[colorKey] : '') , classes]}
+  role="tab"
+  data-tab={id}
+  data-color={colorMap[colorKey]}  
+  aria-selected={id.slice(-1) === '1' ? 'true' : 'false'}
+  type="button"
+>
+   <slot />
+</button>

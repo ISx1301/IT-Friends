@@ -1,0 +1,46 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div"> {
+  colorKey: keyof typeof colorMap;
+  divider?: boolean;
+  triggerType?: "pill" | "tab";
+}
+
+const { divider = true, triggerType = 'tab', class: classes, colorKey } = Astro.props;
+
+const color1 = "bg-transparent-btn-hover-bg";
+const color2 = "bg-primary-sand";
+
+const colorMap = {
+  gray: color1,
+  sand: color2,
+} as const;
+---
+
+<div class:list={["tabs", classes]} data-tabs role="tablist">
+  <!-- TODO: make a change with triggerType -->
+  <div
+    class="flex flex-wrap justify-center gap-10 font-secondary font-semibold text-base lg:text-lg text-center container tab-triggers"
+    role="tablist"
+  >
+    <slot name="triggers" />
+  </div>
+
+  {divider && <div class:list={["min-h-52", colorMap[colorKey]]} />}
+
+  <div
+    class:list={[
+      "relative tab-content container",
+      divider ? "top-[-9rem]" : "",
+    ]}
+  >
+    <slot name="content" />
+  </div>
+</div>
+
+<script>
+  import { setupTabs, setupCardManager } from "@scripts/tab";
+  setupTabs();
+  setupCardManager();
+</script>
