@@ -1,0 +1,17 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+  id: string;
+}
+
+const { id, class: classes } = Astro.props;
+---
+
+<div
+  class:list={['tab-panel', (id.slice(-1) === '1' ? '' : 'hidden'), classes]}
+  data-content={id}
+  role="tabpanel"
+>
+  <slot />
+</div>
