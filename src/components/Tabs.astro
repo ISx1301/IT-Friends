@@ -18,25 +18,33 @@ const colorMap = {
 } as const;
 ---
 
-<div class:list={["tabs", classes]} data-tabs role="tablist">
-  <!-- TODO: make a change with triggerType -->
-  <div
-    class="flex flex-wrap justify-center gap-10 font-secondary font-semibold text-base lg:text-lg text-center container tab-triggers"
+<div class:list={["tabs  ", classes]} data-tabs role="tablist">
+  
+    <div
+    class:list={[
+      "flex justify-center gap-10 font-secondary font-semibold text-base lg:text-lg text-center container tab-triggers",
+      triggerType === 'pill' ? 'bg-gradient-pills-to from-gradient-pills-from to-gradient-pills-to p-2 gap-5 w-11/12 lg:max-w-max rounded-full mb-14' : ''
+    ]}
     role="tablist"
   >
     <slot name="triggers" />
   </div>
+  
 
   {divider && <div class:list={["min-h-52", colorMap[colorKey]]} />}
 
   <div
     class:list={[
-      "relative tab-content container",
+      "relative tab-content ",
       divider ? "top-[-9rem]" : "",
     ]}
   >
-    <slot name="content" />
+    
+  <slot name="content" />
+  
+  
   </div>
+
 </div>
 
 <script>

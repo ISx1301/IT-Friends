@@ -1,0 +1,28 @@
+---
+import PostCard from '@components/PostCard.astro';
+import postImage from '@images/post-image.png';
+
+export interface Post {
+  slug: string;
+  title: string;
+  image: typeof postImage;  
+  content: string;
+  date: string;
+}
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props as Props;
+---
+
+<section class="py-14">
+  <div class="container">
+    <div class="gap-6 grid grid-cols-1 lg:grid-cols-3">
+      {posts.map(post => (
+        <PostCard post={post} key={post.slug} />
+      ))}
+    </div>
+  </div>
+</section>

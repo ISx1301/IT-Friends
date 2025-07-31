@@ -1,0 +1,18 @@
+---
+import { Image } from "astro:assets";
+---
+
+<section class="relative">
+  <div class="aspect-33/49 lg:aspect-11/3">
+    <Image
+      class="w-full h-full object-cover"
+      src={import("@images/blog-hero.png")}
+      format="webp"
+      alt="image"
+    />  
+    <div class="top-1/2 left-1/2 absolute w-full lg:max-w-[25rem] -translate-x-1/2 -translate-y-1/2">
+      <h1 class="mb-4 lg:mb-5 font-secondary font-medium text-white text-2xl lg:text-4xl text-center">Наш блог</h1>
+      <p class="font-normal text-white text-center">Розповідаємо про навчання, розвиток та цікаві події в нашій школі. Тут ви знайдете натхнення й корисні поради для дітей та батьків.</p>
+    </div>
+  </div>
+</section>

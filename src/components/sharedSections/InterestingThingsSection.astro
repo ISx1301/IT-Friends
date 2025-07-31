@@ -1,0 +1,69 @@
+---
+import { Image } from "astro:assets";
+import Article from "@components/Article.astro";
+
+---
+
+<!-- Interesting things section -->
+
+  <section class="py-20 lg:py-32">
+    <div class="container">
+
+      <div class="mx-auto mb-5 lg:mb-11 max-w-xs lg:max-w-2xl">
+        <h2 class="font-secondary font-medium text-2xl lg:text-4xl text-center">Що ще вас може зацікавити</h2>
+      </div>
+
+      <div class="flex lg:flex-row flex-col gap-11 lg:gap-5">
+
+
+        <div class="basis-full lg:basis-1/2">
+
+          <div class="mb-7">
+            <Image
+              class="object-cover"
+              src={import("@images/picture.jpg")}
+              format="webp"
+              alt="IT Friends logo"
+            />
+          </div>
+
+          <div class="mb-6 max-w-xs">
+            <h3 class="font-bold text-xl">Англійська для дітей від 6 до 16 років, 5 адрес в Києві</h3>
+          </div>
+
+          <Article class="mb-9 max-w-sm text-base lg:text-lg text-left">
+            <p>Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
+          </Article>
+
+          <button type="button" class="px-16 py-3 transparent-btn">Детальніше</button>
+
+        </div>
+
+
+        <div class="basis-full lg:basis-1/2">
+
+          <div class="mb-7">
+            <Image
+              class="object-cover"
+              src={import("@images/picture.jpg")}
+              format="webp"
+              alt="IT Friends logo"
+            />
+          </div>
+
+          <div class="mb-6 max-w-md">
+            <h3 class="font-bold text-xl">Табори для дітей у будь-яку пору року!  Карпати, море, Україна, закордон</h3>
+          </div>
+
+          <Article class="mb-9 max-w-sm text-base lg:text-lg text-left">
+            <p>Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
+          </Article>
+
+          <button type="button" class="px-16 py-3 transparent-btn">Детальніше</button>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>

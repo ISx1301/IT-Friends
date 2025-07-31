@@ -1,5 +1,6 @@
 ---
 import Article from "@components/Article.astro";
+import Excerpt from "@components/Excerpt.astro";
 import { Image } from "astro:assets";
 
 type CardItem = {
@@ -42,7 +43,7 @@ const sectionClassMap = {
     <!-- Cards -->
     <div class="flex lg:flex-row flex-col gap-5 mb-11 basis-1/4 lg:basis-1/12">
       {cards.map((card) => (
-        <div class="flex flex-col items-center bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full min-h-[42.125rem] lg:min-h-[35.31rem] lg:basis-4/12">
+        <div class="flex flex-col items-center bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full lg:basis-4/12">
           <Image
             class="mb-3 max-h-28"
             src={card.image}
@@ -50,9 +51,11 @@ const sectionClassMap = {
             alt={`${card.title} logo`}
           />
           <h3 class="mb-4 font-secondary font-semibold text-2xl">{card.title}</h3>
-          <span class={`${card.spanBg} mb-auto px-4 py-1 rounded-lg ${card.spanColor}`}>{card.ageRange}</span>
+          <span class={`${card.spanBg} mb-6 px-4 py-1 rounded-lg ${card.spanColor}`}>{card.ageRange}</span>
           <Article class="mb-auto">
-            {card.description.map((paragraph) => <p>{paragraph}</p>)}
+            <Excerpt wordLength={20}>
+              {card.description.map((paragraph) => <p>{paragraph}</p>)}
+            </Excerpt>
           </Article>
           <button class="lg:hidden inline-block mb-3 py-2 border w-full orange-btn form-open" type="button">{card.hiddenCardButtonText}</button>
           <button class="py-2 border w-full transparent-btn" type="button">{card.visibleCardButtonText}</button>

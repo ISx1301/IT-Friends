@@ -1,33 +1,45 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
+const tabColorMap = {
+  gray: "bg-transparent-btn-hover-bg",
+  sand: "bg-primary-sand",
+} as const;
+
 interface Props extends HTMLAttributes<'button'> {
   id: string;
-  colorKey: keyof typeof colorMap;
+  colorKey: keyof typeof tabColorMap;
+  triggerType?: 'pill' | 'tab';
 }
 
-const { 
+const {
   id,
   colorKey,
+  triggerType = 'tab',
   class: classes
 } = Astro.props;
 
-const color1 = "bg-transparent-btn-hover-bg";
-const color2 = "bg-primary-sand";
+// const inactiveTextColor = triggerType === 'pill' ? 'text-white' : 'text-black';
+// const activeTextColor = 'text-black';
 
-const colorMap = {
-  gray: color1,
-  sand: color2,
-} as const;
+const isActive = id.slice(-1) === '1'; 
 ---
 
 <button
-  class:list={["tab-trigger inline-block px-3 lg:px-7 py-3 rounded-t-lg duration-300", (id.slice(-1) === '1' ? colorMap[colorKey] : '') , classes]}
+  class:list={[
+    "tab-trigger inline-block px-3 lg:px-7 py-3 duration-300",
+    triggerType === 'pill' ? 'rounded-full w-full' : 'rounded-t-lg',
+    isActive
+      ? (triggerType === 'pill' ? 'bg-white text-black' : `${tabColorMap[colorKey]} text-black`)
+      : (triggerType === 'pill' ? 'bg-[transparent] text-white' : 'bg-[transparent] text-black'),
+    classes
+  ]}
   role="tab"
   data-tab={id}
-  data-color={colorMap[colorKey]}  
-  aria-selected={id.slice(-1) === '1' ? 'true' : 'false'}
+  data-trigger-type={triggerType}
+  data-color={tabColorMap[colorKey]} 
+  aria-selected={isActive}
   type="button"
 >
-   <slot />
+  <slot />
 </button>

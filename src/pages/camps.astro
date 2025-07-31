@@ -7,11 +7,12 @@ import userLogo from '@images/user-logo.jpg'
 
 import HeroZoomImage from "@components/sharedSections/HeroZoomImage.astro";
 import AboutSection from '@components/sharedSections/AboutSection.astro';
-
-
+import WithNestedTabsCampsSection from "@components/pages/camps/WithNestedTabsCampsSection.astro";
 import GeneralDescriptionSection from "@components/sharedSections/GeneralDescriptionSection.astro";
 import ReviewsSection from "@components/sharedSections/ReviewsSection.astro";
-
+import VideoCampsSection from "@components/pages/camps/VideoCampsSection.astro";
+import AccordionSection from '@components/sharedSections/AccordionSection.astro'
+import InterestingThingsSection from '@components/sharedSections/InterestingThingsSection.astro'
 
 
 // About section data 
@@ -128,75 +129,20 @@ const reviewsSectionData: reviewsSectionProps = {
 
 <DefaultLayout title="Camps" description="It-school, courses">
 
-  <!-- Hero section -->
-
   <HeroZoomImage />
   
-  <!-- About us section-->
   <AboutSection {...aboutSectionData} />
 
-
-  <!-- <section class="py-20 lg:py-32">
-    <div class="container">
-      <div class="mb-8 basis-1/4 lg:basis1/12">
-        <h2 class="font-secondary font-medium text-2xl lg:text-3xl">Про нас</h2>
-      </div>
-      <div class="flex lg:flex-row flex-col gap-8 basis-1/4 lg:basis1/12">
-        <div class="lg:basis-6/12 basis-1/4">
-          <Image
-            src={import("@images/about-us-image.jpg")}
-            format="webp"
-            alt="about us"
-          />
-        </div>
-        <div class="flex flex-col justify-between lg:basis-6/12 basis-1/4">
-
-          <h3 class="font-secondary font-semibold text-xl lg:text-3xl">
-            Подорожі, друзі та відкриття – кемпи для кожного сезону
-          </h3>
-          
-          <Article>
-            <p>У наших кемпах кожна дитина відкриває світ по‑новому: через подорожі, творчість, спорт і спілкування з однолітками. Ми створюємо програми, що не лише розважають, а й розвивають — допомагають знайти нові інтереси, стати впевненішими та навчитися працювати в команді.</p>
-            <p>Ви можете обрати індивідуальний тур для своєї дитини або групову поїздку для класу, спортивної секції чи гуртка. Ми подбаємо про все: безпечні маршрути, досвідчених супроводжуючих та насичену програму, яка залишить приємні спогади.</p>
-          </Article>
-
-          <div class="flex flex-col gap-4 basis-1/4">
-            <div class="flex gap-6">
-
-              <div class="bg-gradient-to-b from-gradient-from to-gradient-to p-[2px] rounded-3xl w-full max-w-[11.37rem]">
-                <span class="block bg-white px-6 py-2 rounded-3xl font-play font-normal text-black text-xl text-center">
-                  враження
-                </span>
-              </div>
-
-                <div class="bg-gradient-to-b from-gradient-from to-gradient-to p-[2px] rounded-3xl w-full max-w-[11.37rem]">
-                  <span class="block bg-white px-6 py-2 rounded-3xl font-play font-normal text-black text-xl text-center">
-                    розвиток
-                  </span>
-                </div>
-              </div>
-            <div class="flex gap-6">
-              <div class="bg-gradient-to-b from-gradient-from to-gradient-to p-[2px] rounded-3xl w-full max-w-[11.37rem]">
-                <span class="block bg-white px-6 py-2 rounded-3xl font-play font-normal text-black text-xl text-center">
-                  друзі
-                </span>
-              </div>
-              <div class="bg-gradient-to-b from-gradient-from to-gradient-to p-[2px] rounded-3xl w-full max-w-[11.37rem]">
-                <span class="block bg-white px-6 py-2 rounded-3xl font-play font-normal text-black text-xl text-center">
-                  пригоди
-                </span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </section> -->
+  <WithNestedTabsCampsSection />
 
   <GeneralDescriptionSection />
   
   <ReviewsSection {...reviewsSectionData} />
 
+  <VideoCampsSection />
+
+  <AccordionSection />
+  
+  <InterestingThingsSection />
 
 </DefaultLayout>

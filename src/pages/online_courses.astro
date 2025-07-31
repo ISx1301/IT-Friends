@@ -3,11 +3,15 @@ import DefaultLayout from '@layouts/Default.astro';
 import Article from '@components/Article.astro';
 import aboutUsImage from '@images/about-us-image.jpg';
 
+import userLogo from '@images/user-logo.jpg'
 
 
 import HeroZoomImage from "@components/sharedSections/HeroZoomImage.astro";
 import AboutSection from '@components/sharedSections/AboutSection.astro';
 import GeneralDescriptionSection from "@components/sharedSections/GeneralDescriptionSection.astro";
+import ReviewsSection from "@components/sharedSections/ReviewsSection.astro";
+import AccordionSection from '@components/sharedSections/AccordionSection.astro'
+import InterestingThingsSection from '@components/sharedSections/InterestingThingsSection.astro'
 
 
 // About section data 
@@ -54,6 +58,72 @@ const aboutSectionData: aboutSectionProps = {
 };
 // ==================================================================
 
+
+// Reviews section data 
+type ImageReviewsType = {
+  src: ImageMetadata;
+  alt?: string;
+};
+
+type cardItem = {
+  divBg: 'orange' | 'green' | 'gray';
+  image: ImageReviewsType;
+  name: string;
+  description: string;
+  videoReview: string;
+}
+
+type reviewsSectionProps = {
+  sectionPaddingsStyle: 'withPaddings' | 'withoutPaddings';
+  sectionBgStyle: 'white' | 'gray';
+  titleText: string;
+  reviewsDescription: string[];
+  videoReview: string;
+  cards: cardItem[]
+}
+
+const reviewsSectionData: reviewsSectionProps = {
+  sectionPaddingsStyle: 'withPaddings',
+  sectionBgStyle: 'gray',
+  titleText: 'Відгуки про уроки',
+  reviewsDescription: [
+    'Відгуки наших учнів та їхніх батьків — це найцінніше підтвердження того, що ми на правильному шляху.',
+    'Саме ці слова мотивують нас ставати ще кращими щодня.'
+  ],
+  videoReview: 'Дивитись відеовідгуки',
+  cards: [
+    {
+      divBg: 'green',
+      image: {
+        src: userLogo,
+        alt: 'qwerty'
+      },
+      name: 'Ольга О.',
+      description: 'Мій син із нетерпінням чекає кожного заняття! Нарешті зʼявилось середовище, де його справді чують і підтримують',
+      videoReview: 'Відеовідгук'
+    },
+        {
+      divBg: 'orange',
+      image: {
+        src: userLogo,
+        alt: 'qwerty'
+      },
+      name: 'Світлана К.',
+      description: 'Доньці подобається, що можна спробувати різні напрямки. А я спокійна, бо бачу її зацікавленість і прогрес',
+      videoReview: 'Відеовідгук'
+    },
+    {
+      divBg: 'gray',
+      image: {
+        src: userLogo,
+        alt: 'qwerty'
+      },
+      name: 'Ірина Д.',
+      description: 'Дуже вдячні викладачам за індивідуальний підхід. У сина раніше були труднощі з навчанням, а тут він розкрився',
+      videoReview: 'Відеовідгук'
+    },
+  ]
+}
 ---
 
 <DefaultLayout title='Online courses' description='It-school, courses'>
@@ -63,5 +133,11 @@ const aboutSectionData: aboutSectionProps = {
   <AboutSection {...aboutSectionData} />
 
   <GeneralDescriptionSection />
+
+  <ReviewsSection {...reviewsSectionData} />
+
+  <AccordionSection />
+
+  <InterestingThingsSection />
 
 </DefaultLayout>

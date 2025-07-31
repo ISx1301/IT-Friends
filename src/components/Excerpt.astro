@@ -1,38 +1,34 @@
 ---
-import "@styles/article.sass";
-import type { HTMLAttributes } from "astro/types";
-
 interface Props {
-  anchor: string;
-  wordLength: number;
-  class?: HTMLAttributes<"div">;
-  only?: "desktop" | "mobile";
-  textLength?: number;
+  class?: string;
+  wordLength?: number;
 }
 
-const { 
-  class: className, 
-  anchor, 
-  only, 
-  wordLength, 
-  textLength 
-} = Astro.props;
+const { class: className = '' , wordLength } = Astro.props;
 
 const html = await Astro.slots.render('default');
-
-const username = 'Igor'; // variable example usage
-
-// excerpt component, props: textLength/wordLength
-let excerptedHtml = '';
-excerptedHtml = html.split(' ').slice(0, wordLength).join(' ');
-if (textLength) {
-  // if textLength present ->  delete all tags in html via RegExp -> 
-  excerptedHtml = html.split(' ').slice(0, textLength).join(' ');
-}
+const plainText = html.replace(/<[^>]+>/g, '').trim();
+const words = plainText.split(/\s+/);
+const shouldTruncate = wordLength !== undefined && words.length > wordLength;
+const excerptedWords = shouldTruncate ? words.slice(0, wordLength) : words;
+const excerptedText = excerptedWords.join(' ');
 ---
 
-<!-- TODO: read about aria-content (aria-attrs*) -->
-{only === 'desktop' && (<Fragment set:html={excerptedHtml} />)}
-{only === 'mobile' && (<p>{username}!</p>)}
-...
-<a href={anchor}>Read more</a>
+<div class={`excerpt-container ${className}`}>
+  <p class="text-base excerpt-text">
+    {excerptedText + '...'}
+    {shouldTruncate && (
+      <span class="font-bold cursor-pointer read-more">читати більше</span>
+    )}
+  </p>
+  <p class="hidden text-base full-text">
+    {plainText}
+  </p>
+</div>
+
+{shouldTruncate && (
+  <script>
+    import { setupExcerpt } from '@scripts/excerpt.ts';
+    setupExcerpt();
+  </script>
+)}

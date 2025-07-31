@@ -1,0 +1,802 @@
+---
+import Tabs from '@components/Tabs.astro';
+import TabTrigger from '@components/TabsTrigger.astro';
+import TabContent from "@components/TabContent.astro";
+import Article from "@components/Article.astro";
+import { Image } from "astro:assets";
+---
+
+  <section>
+    <div class="container">
+      <div class="mx-auto mb-6 max-w-md">
+        <h2 class="font-secondary font-medium text-2xl lg:text-4xl text-center">Індивідуальні тури</h2>
+      </div>
+      <div class="mx-auto mb-12 lg:max-w-lg">
+        <p class="text-base lg:text-lg text-center">Наші індивідуальні тури — для батьків, які хочуть, щоб їхня дитина не просто відпочила, а провела канікули цікаво, безпечно та з користю.</p>
+      </div>
+    </div>
+
+    <Tabs colorKey="gray" divider={false} triggerType="pill">
+
+      <Fragment slot="triggers">
+        <TabTrigger id="tab_1" colorKey="gray" triggerType="pill">Україна</TabTrigger>
+
+        <TabTrigger id="tab_2" colorKey="gray" triggerType="pill">закордоном</TabTrigger>
+      </Fragment>
+        
+      
+      <Fragment nt slot="content">
+        <TabContent id="tab_1">
+          <Tabs colorKey="sand" divider={true} triggerType="tab">
+            <Fragment slot="triggers">
+              <TabTrigger id="subtab1_1" colorKey="sand" triggerType="tab">літо 1</TabTrigger>
+
+              <TabTrigger id="subtab1_2" colorKey="sand" triggerType="tab">осінь 1</TabTrigger>
+
+              <TabTrigger id="subtab1_3" colorKey="sand" triggerType="tab">зима 1</TabTrigger>
+
+              <TabTrigger id="subtab1_4" colorKey="sand" triggerType="tab">весна 1</TabTrigger>
+            </Fragment>
+
+            <Fragment slot="content">
+              <TabContent id="subtab1_1">
+
+                <div class="container">
+                  <div class="card-block gap-5 grid grid-cols-1 lg:grid-cols-3">
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="flex justify-center col-span-full">
+                      <button type="button" class="px-11 py-3 transparent-btn show-more-btn">Дивитися більше</button>
+                    </div>
+
+                  </div>
+                </div>                
+              </TabContent>
+            
+              <TabContent id="subtab1_2">
+
+                <div class="container">
+                  <div class="card-block gap-5 grid grid-cols-1 lg:grid-cols-3">
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Summer sea camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Summer sea camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Summer sea camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="flex justify-center col-span-full">
+                      <button type="button" class="px-11 py-3 transparent-btn show-more-btn">Дивитися більше</button>
+                    </div>
+
+                  </div>
+                </div>
+              </TabContent>
+            
+              <TabContent id="subtab1_3">
+
+                <div class="container">
+                  <div class="card-block gap-5 grid grid-cols-1 lg:grid-cols-3">
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-gray mb-auto px-4 py-1 rounded-lg text-white">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-gray mb-auto px-4 py-1 rounded-lg text-white">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-gray mb-auto px-4 py-1 rounded-lg text-white">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="flex justify-center col-span-full">
+                      <button type="button" class="px-11 py-3 transparent-btn show-more-btn">Дивитися більше</button>
+                    </div>
+
+                  </div>
+                </div>                
+              </TabContent>
+
+              <TabContent id="subtab1_4">
+
+                <div class="container">
+                  <div class="card-block gap-5 grid grid-cols-1 lg:grid-cols-3">
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="flex justify-center col-span-full">
+                      <button type="button" class="px-11 py-3 transparent-btn show-more-btn">Дивитися більше</button>
+                    </div>
+
+                  </div>
+                </div>                
+              </TabContent>
+              
+            </Fragment>
+          </Tabs>
+        </TabContent>
+          
+        <TabContent id="tab_2">
+          <Tabs colorKey="sand" >
+            <Fragment slot="triggers">
+              <TabTrigger id="subtab2_1" colorKey="sand" >літо 2</TabTrigger>
+
+              <TabTrigger id="subtab2_2" colorKey="sand" >осінь 2</TabTrigger>
+
+              <TabTrigger id="subtab2_3" colorKey="sand" >зима 2</TabTrigger>
+
+              <TabTrigger id="subtab2_4" colorKey="sand" >весна 2</TabTrigger>
+            </Fragment>
+
+            <Fragment slot="content">
+              <TabContent id="subtab2_1">
+
+                <div class="container">
+                  <div class="card-block gap-5 grid grid-cols-1 lg:grid-cols-3">
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-gray mb-auto px-4 py-1 rounded-lg text-white">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-gray mb-auto px-4 py-1 rounded-lg text-white">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-gray mb-auto px-4 py-1 rounded-lg text-white">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="flex justify-center col-span-full">
+                      <button type="button" class="px-11 py-3 transparent-btn show-more-btn">Дивитися більше</button>
+                    </div>
+
+                  </div>
+                </div>                
+                
+              </TabContent>
+            
+              <TabContent id="subtab2_2">
+
+                <div class="container">
+                  <div class="card-block gap-5 grid grid-cols-1 lg:grid-cols-3">
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="flex justify-center col-span-full">
+                      <button type="button" class="px-11 py-3 transparent-btn show-more-btn">Дивитися більше</button>
+                    </div>
+
+                  </div>
+                </div>                
+                
+              </TabContent>
+            
+              <TabContent id="subtab2_3">
+
+                <div class="container">
+                  <div class="card-block gap-5 grid grid-cols-1 lg:grid-cols-3">
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="flex justify-center col-span-full">
+                      <button type="button" class="px-11 py-3 transparent-btn show-more-btn">Дивитися більше</button>
+                    </div>
+
+                  </div>
+                </div>                
+                
+              </TabContent>
+            
+              <TabContent id="subtab2_4">
+
+                <div class="container">
+                  <div class="card-block gap-5 grid grid-cols-1 lg:grid-cols-3">
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                      <Image
+                        class="mb-9"
+                        src={import("@images/exampleCamp.png")}
+                        alt="Facebook picture"
+                      />
+                      <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">Eco Adventure Camp</h3>
+                      <div class='mb-7 text-center'>
+                        <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black">діти від 9-16 років</span>
+                      </div>
+                      <div class="flex justify-center space-x-2 mb-7">
+                        <Image
+                          class=""
+                          src={import("@images/geo.jpg")}
+                          alt="Facebook picture"
+                        />               
+                        <p class='font-semibold'>Карпати, Україна</p>       
+                      </div>
+                      <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                      <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                    </div>
+
+                    <div class="flex justify-center col-span-full">
+                      <button type="button" class="px-11 py-3 transparent-btn show-more-btn">Дивитися більше</button>
+                    </div>
+
+                  </div>
+                </div>                
+                
+              </TabContent>
+            </Fragment>
+          </Tabs>
+        </TabContent>
+      </Fragment>
+    </Tabs>
+
+  </section>

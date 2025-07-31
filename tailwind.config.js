@@ -36,7 +36,10 @@ module.exports = {
       'transparent-btn-hover-bg': '#D9D9D9',
       'gradient-from': '#FFD394',
       'gradient-to': '#FFC36C',
-      'section-white' : '#FEFEFE'
+      'section-white' : '#FEFEFE',
+      'gradient-pills-from': '#01BCB1',
+      'gradient-pills-to': '#01D4C7',
+      'data-gray': '#858585'
     },
     fontFamily: {
       primary: ['Montserrat', 'sans-serif', ...defaultTheme.fontFamily.sans],
@@ -60,10 +63,13 @@ module.exports = {
       aspectRatio: {
         '11/9': '11 / 9',
         '4/11': '4 / 11',
-        '38/29': '38 / 29',
-        '80/113': '80 / 113',
-        '59/84': '59 / 84',
-        '40/17': '40 / 17'
+        '2/3': '2 / 3',
+        '2/1': '2 / 1',
+        '5/2': '5 / 2',
+        '3/4': '3 / 4',
+        '11/3': '11 / 3',
+        '33/49': '33 / 49',
+        '28/15': '28 / 15'
       },
       keyframes: {
         'marquee-to-top': {

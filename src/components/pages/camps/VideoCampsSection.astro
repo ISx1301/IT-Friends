@@ -1,0 +1,26 @@
+---
+import { Image } from "astro:assets";
+
+---
+
+
+<section class="py-20 lg:py-28">
+  <div class="container">
+    <a href="#">
+      <div class="group relative rounded-xl aspect-3/4 lg:aspect-2/1">
+        <Image
+          class="rounded-xl w-full h-full object-cover"
+          src={import("@images/video-bg.png")}
+          format="webp"
+          alt="image"
+        />    
+        <Image
+          class="top-1/2 left-1/2 absolute group-hover:brightness-90 -translate-x-1/2 -translate-y-1/2"
+          src={import("@images/play.png")}
+          format="webp"
+          alt="image"
+        />  
+      </div>
+    </a>
+  </div>
+</section>

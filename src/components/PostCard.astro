@@ -1,0 +1,31 @@
+---
+import Article from "./Article.astro";
+import { Image } from "astro:assets";
+const { post } = Astro.props;
+
+
+export interface Post {
+  slug: string;
+  title: string;
+  image: string;  
+  content: string;
+  previewContent: string;
+  date: string;  
+}
+---
+
+<a href={`/blog/${post.slug}`}>
+  <div>
+    <Image
+      class="mb-8 w-full h-full object-cover"
+      src={post.image}
+      format="webp"
+      alt={post.title}
+    />  
+    <h2 class="mb-6 font-bold text-xl">{post.title}</h2>
+    <Article class:list={'mb-6'}>
+        {post.previewContent}
+    </Article>
+    <span class="text-data-gray">{post.date}</span>
+  </div>
+</a>

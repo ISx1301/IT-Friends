@@ -1,0 +1,133 @@
+---
+import Tabs from "@components/Tabs.astro";
+import TabTrigger from "@components/TabsTrigger.astro";
+import TabContent from "@components/TabContent.astro";
+import Article from "@components/Article.astro";
+import { Image } from "astro:assets";
+---
+
+  <section>
+    <div class="container">
+      <div class="mx-auto mb-16 max-w-md">
+        <h2 class="font-secondary font-medium text-2xl lg:text-4xl text-center">Що саме ми вивчаємо</h2>
+      </div>
+    </div>
+
+    <Tabs colorKey="gray" divider={true}>
+
+      <Fragment slot="triggers">
+        <TabTrigger id="tab_1" colorKey="gray">7-8 років</TabTrigger>
+
+        <TabTrigger id="tab_2" colorKey="gray">9-16 років</TabTrigger>
+      </Fragment>
+
+        <Fragment slot="content">
+          <TabContent id="tab_1">
+            <div class="container">
+              <div class="card-block gap-5 grid grid-cols-1 lg:grid-cols-3">
+                <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                  <Image
+                    class="mb-9"
+                    src={import("@images/tab1.jpg")}
+                    alt="Facebook picture"
+                  />
+                  <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">IT-Beginner</h3>
+                  <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                  <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                </div>
+
+                <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                  <Image
+                    class="mb-9"
+                    src={import("@images/tab1.jpg")}
+                    alt="Facebook picture"
+                  />
+                  <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">IT-Beginner</h3>
+                  <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                  <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                </div>
+
+                <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                  <Image
+                    class="mb-9"
+                    src={import("@images/tab1.jpg")}
+                    alt="Facebook picture"
+                  />
+                  <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">IT-Beginner</h3>
+                  <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                  <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                </div>
+
+                <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                  <Image
+                    class="mb-9"
+                    src={import("@images/tab1.jpg")}
+                    alt="Facebook picture"
+                  />
+                  <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">IT-Beginner</h3>
+                  <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                  <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                </div>
+
+                <div class="flex justify-center col-span-full">
+                  <button type="button" class="px-11 py-3 transparent-btn show-more-btn">Дивитися більше</button>
+                </div>
+
+              </div>
+
+            </div>
+            
+          </TabContent>    
+        </Fragment>
+        
+        <Fragment slot="content">
+          <TabContent id="tab_2">
+            <div class="container">
+              <div class="card-block gap-5 grid grid-cols-1 lg:grid-cols-3">
+                <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                  <Image
+                    class="mb-9"
+                    src={import("@images/tab1.jpg")}
+                    alt="Facebook picture"
+                  />
+                  <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">IT-skills+</h3>
+                  <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                  <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                </div>
+
+                <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
+                  <Image
+                    class="mb-9"
+                    src={import("@images/tab1.jpg")}
+                    alt="Facebook picture"
+                  />
+                  <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">IT-skills+</h3>
+                  <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                  <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                </div>
+
+                <div class="bg-white shadow-xl px-6 py-9 rounded-xl card">
+                  <Image
+                    class="mb-9"
+                    src={import("@images/tab1.jpg")}
+                    alt="Facebook picture"
+                  />
+                  <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">IT-skills+</h3>
+                  <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
+                  <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
+                </div>
+
+                <div class="flex justify-center col-span-full">
+                  <button type="button" class="px-11 py-3 transparent-btn show-more-btn">Дивитися більше</button>
+                </div>
+
+              </div>
+
+            </div>
+          </TabContent>    
+        </Fragment>
+
+    </Tabs>
+            
+
+  </section>

@@ -1,0 +1,113 @@
+---
+import { Image } from 'astro:assets';
+import Article from '@components/Article.astro';
+import EmblaCarousel from "@components/EmblaCarousel.astro";
+---
+
+  <!-- School addresses section -->
+
+  <section>
+    <div class="container">
+
+      <div class="mb-9">
+        <h2 class="font-secondary font-medium text-2xl lg:text-4xl text-center">Офлайн адреси</h2>
+      </div>
+
+      <!-- cards -->
+
+      <div class="flex lg:flex-row gap-x-5 gap-y-8 mb-11">
+
+        <EmblaCarousel>
+          <Fragment slot="slides">
+            <div class="w-[31rem] min-w-full lg:min-w-0 embla__slide">
+              <a href="https://www.google.com/maps/place/IT+FRIENDS+%E2%80%8D+%D1%88%D0%BA%D0%BE%D0%BB%D0%B0+%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F+%EF%B8%8F+%D0%B4%D0%BB%D1%8F+%D0%B4%D0%B5%D1%82%D0%B5%D0%B9+%D0%91%D0%BE%D1%80%D1%89%D0%B0%D0%B3%D0%BE%D0%B2%D0%BA%D0%B0/@50.4222214,30.3770458,17z/data=!4m16!1m9!3m8!1s0x40d4cb93953b853f:0xf16fb2bfad5b6b0a!2z0LHRg9C7LiDQndC40LrQvtC70LDRjyDQoNGD0LTQtdC90LrQviwgMTQsINCa0LjQtdCyLCAwMzE5NA!3b1!8m2!3d50.4222214!4d30.3796207!10e3!16s%2Fg%2F11c3rqfsd4!3m5!1s0x40d4cb9f20daf997:0xb9ff3dda21067623!8m2!3d50.4222542!4d30.3795066!16s%2Fg%2F11p0ps3ll6?entry=ttu&g_ep=EgoyMDI1MDcxNi4wIKXMDSoASAFQAw%3D%3D">
+                <div class="flex flex-col items-center gap-5 shadow-lg px-6 py-6 rounded-lg basis-full lg:basis-3/13">
+                  <Image
+                    class="rounded-lg"
+                    src={import("@images/borshaha-school.jpg")}
+                    format="webp"
+                    alt="image"
+                  />
+                  <h3 class="font-secondary font-semibold text-base lg:text-lg uppercase">Борщагівка</h3>
+                  <Article class="max-w-xs font-normal text-center">
+                    <p >Б-р Кольцова 14 (4 поверх)</p>
+                    <p>+38-097-140-92-92</p>
+                  </Article>
+                </div>
+              </a>
+            </div>
+            
+
+            <div class="w-[31rem] min-w-full lg:min-w-0 embla__slide">
+              <a href="https://www.google.com/maps/place/IT+FRIENDS+%E2%80%8D+%D1%88%D0%BA%D0%BE%D0%BB%D0%B0+%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F+%EF%B8%8F+%D0%B4%D0%BB%D1%8F+%D0%B4%D0%B5%D1%82%D0%B5%D0%B9+%D0%91%D0%BE%D1%80%D1%89%D0%B0%D0%B3%D0%BE%D0%B2%D0%BA%D0%B0/@50.4222214,30.3770458,17z/data=!4m16!1m9!3m8!1s0x40d4cb93953b853f:0xf16fb2bfad5b6b0a!2z0LHRg9C7LiDQndC40LrQvtC70LDRjyDQoNGD0LTQtdC90LrQviwgMTQsINCa0LjQtdCyLCAwMzE5NA!3b1!8m2!3d50.4222214!4d30.3796207!10e3!16s%2Fg%2F11c3rqfsd4!3m5!1s0x40d4cb9f20daf997:0xb9ff3dda21067623!8m2!3d50.4222542!4d30.3795066!16s%2Fg%2F11p0ps3ll6?entry=ttu&g_ep=EgoyMDI1MDcxNi4wIKXMDSoASAFQAw%3D%3D">
+                <div class="flex flex-col items-center gap-5 shadow-lg px-6 py-6 rounded-lg basis-full lg:basis-3/13">
+                  <Image
+                    class="rounded-lg"
+                    src={import("@images/borshaha-school.jpg")}
+                    format="webp"
+                    alt="image"
+                  />
+                  <h3 class="font-secondary font-semibold text-base lg:text-lg uppercase">Харківська–Позняки</h3>
+                  <Article class="max-w-xs font-normal text-center">
+                    <p>Вул. Кошиця 9Б</p>
+                    <p>+38-098-261-79-75</p>
+                  </Article>
+                </div>
+              </a>
+            </div>
+
+            <div class="w-[31rem] min-w-full lg:min-w-0 embla__slide">
+              <a href="https://www.google.com/maps/place/IT+FRIENDS+%E2%80%8D+%D1%88%D0%BA%D0%BE%D0%BB%D0%B0+%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F+%EF%B8%8F+%D0%B4%D0%BB%D1%8F+%D0%B4%D0%B5%D1%82%D0%B5%D0%B9+%D0%91%D0%BE%D1%80%D1%89%D0%B0%D0%B3%D0%BE%D0%B2%D0%BA%D0%B0/@50.4222214,30.3770458,17z/data=!4m16!1m9!3m8!1s0x40d4cb93953b853f:0xf16fb2bfad5b6b0a!2z0LHRg9C7LiDQndC40LrQvtC70LDRjyDQoNGD0LTQtdC90LrQviwgMTQsINCa0LjQtdCyLCAwMzE5NA!3b1!8m2!3d50.4222214!4d30.3796207!10e3!16s%2Fg%2F11c3rqfsd4!3m5!1s0x40d4cb9f20daf997:0xb9ff3dda21067623!8m2!3d50.4222542!4d30.3795066!16s%2Fg%2F11p0ps3ll6?entry=ttu&g_ep=EgoyMDI1MDcxNi4wIKXMDSoASAFQAw%3D%3D">
+                <div class="flex flex-col items-center gap-5 shadow-lg px-6 py-6 rounded-lg basis-full lg:basis-3/13">
+                  <Image
+                    class="rounded-lg"
+                    src={import("@images/borshaha-school.jpg")}
+                    format="webp"
+                    alt="image"
+                  />
+                  <h3 class="font-secondary font-semibold text-base lg:text-lg uppercase">Позняки</h3>
+                  <Article class="max-w-xs font-normal text-center">
+                    <p>Пр-т Григоренка 16</p>
+                    <p>+38-098-440-94-47</p>
+                  </Article>
+                </div>
+              </a>
+            </div>
+
+          </Fragment>
+
+          <Fragment slot="controls">
+            <div class="lg:hidden flex justify-center items-center gap-3 mt-4">
+              <button class="embla__prev" type="button" aria-label="Previous slide">
+                <Image
+                  class="w-6 h-6"
+                  src={import("@images/embla-prev-svg.svg")}
+                  alt="prev-btn"
+                />
+              </button>
+              <div
+                class="flex justify-center items-center gap-1 bg-gray rounded-2xl w-24 h-9"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                <p class="font-bold text-primary-orange embla-current"></p>
+                <p class="font-bold">/</p>
+                <p class="font-bold embla-total"></p>
+              </div>
+              <button class="embla__next" type="button" aria-label="Next slide">
+                <Image
+                  class="w-6 h-6"
+                  src={import("@images/embla-next-svg.svg")}
+                  alt="next-btn"
+                />
+              </button>
+            </div>
+          </Fragment>
+
+        </EmblaCarousel>
+
+
+      </div>
+
+    </div>
+  </section>

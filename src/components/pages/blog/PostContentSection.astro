@@ -1,0 +1,23 @@
+---
+const { post } = Astro.props;
+import { Image } from "astro:assets";
+
+---
+
+<section class="py-9 lg:py-16">
+  <div class="container">
+    <div class="flex">
+      <div class="flex flex-col basis-full lg:basis-9/12">
+        <h1 class="mb-9 lg:mb-10 font-bold text-2xl lg:text-4xl">{post.title}</h1>  
+        <Image
+          class="mb-14 w-full h-full aspect-28/15"
+          src={post.image}
+          format="webp"
+          alt={post.title}
+        />  
+        <div>
+          <p>{post.content}</p>
+        </div>
+    </div>
+  </div>
+</section>
