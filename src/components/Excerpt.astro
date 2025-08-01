@@ -1,4 +1,6 @@
 ---
+import { LOCALE } from '../constants';
+
 interface Props {
   class?: string;
   wordLength?: number;
@@ -18,7 +20,8 @@ const excerptedText = excerptedWords.join(' ');
   <p class="text-base excerpt-text">
     {excerptedText + '...'}
     {shouldTruncate && (
-      <span class="font-bold cursor-pointer read-more">читати більше</span>
+      // TODO: create current locale var
+      <span class="font-bold cursor-pointer read-more">{ LOCALE['uk'].readMore }</span>
     )}
   </p>
   <p class="hidden text-base full-text">

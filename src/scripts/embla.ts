@@ -1,16 +1,19 @@
-import EmblaCarousel from 'embla-carousel';
-import Autoplay from 'embla-carousel-autoplay';
+import EmblaCarousel, { type EmblaOptionsType } from 'embla-carousel';
+import Autoplay, { type AutoplayOptionsType } from 'embla-carousel-autoplay';
+
+type EmblaOptions = EmblaOptionsType & { autoplay: AutoplayOptionsType };
 
 window.addEventListener('DOMContentLoaded', () => {
   const emblaNodes = document.querySelectorAll('.embla');
 
-  emblaNodes.forEach((emblaNode) => {
-    if (window.innerWidth >= 1440) return;
+  emblaNodes.forEach((emblaNode) => {   
+    const embla = emblaNode as HTMLElement;
+    const options = JSON.parse(embla.dataset.options!) as EmblaOptions;
 
     const viewport = emblaNode.querySelector('.embla__viewport');
     if (viewport instanceof HTMLElement) {
-      const autoplay = Autoplay({ delay: 2000, stopOnInteraction: false });
-      const embla = EmblaCarousel(viewport, { loop: true }, [autoplay]);
+      const autoplay = Autoplay({ delay: 2000, stopOnInteraction: false, ...options.autoplay });
+      const embla = EmblaCarousel(viewport, options, [autoplay]);
 
       const controls = emblaNode.querySelector('.embla__controls');
       if (controls) {

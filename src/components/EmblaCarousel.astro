@@ -1,9 +1,19 @@
 ---
-const {  containerClass = "" } = Astro.props;
+import type { EmblaOptionsType } from 'embla-carousel';
+import type { AutoplayOptionsType } from 'embla-carousel-autoplay';
 
+type Props = {
+  containerClass?: string,
+  options?: EmblaOptionsType & { autoplay?: AutoplayOptionsType }
+};
+const {  containerClass = "", options } = Astro.props;
+
+const baseOptions = {
+  loop: true,
+  ...options
+}
 ---
-
-<div class="embla">
+<div class="embla" data-options={JSON.stringify(baseOptions)}>
   <div class="embla__viewport" >
     <div class={`embla__container ${containerClass}`}>
       <slot name="slides" />

@@ -8,6 +8,8 @@ interface AccordionElements {
 
 const accordionItems = document.querySelectorAll<HTMLElement>(".accordion-item");
 
+// [...accordionItems] === Array.from(accordionItems)
+// 'my text'.includes('text') === 'my text'.endsWith('text') === 'my text'.indexOf('text')
 const accordionElements: AccordionElements[] = Array.from(accordionItems).map((item) => {
   const trigger = item.querySelector<HTMLElement>(".accordion-trigger")!;
   const panel = item.querySelector<HTMLElement>(".accordion-panel")!;

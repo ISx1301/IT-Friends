@@ -402,11 +402,12 @@ const imageNewSchoolData: imageNewSchoolProps = {
 ---
 
 <DefaultLayout title={title} description={description}>
+  <!-- TODO: section id required, e.g. id="section_1" -->
 
   <HeroSection {...heroSectionData}/> 
   
 
-  <AreasOfStudy {...areasStudyData} />
+  <AreasOfStudy {...areasStudyData} id="section_2" />
 
 
   <AboutSection {...aboutSectionData} />
