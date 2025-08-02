@@ -75,7 +75,7 @@ const reviewDivStyle = {
       </div>
 
       <div class="flex flex-row lg:flex-col justify-between gap-5 basis-6/12">
-        <EmblaCarousel containerClass="lg:flex-col overflow-visible">
+        <EmblaCarousel containerClass="lg:flex-col overflow-visible" options={ { breakpoints: { '(min-width: 1272px)': { active: false } }} }>
           <Fragment slot="slides">
             {cards.map((review, index) => {
               const isEven = index % 2 === 0;

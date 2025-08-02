@@ -3,7 +3,6 @@ import "@styles/article.sass";
 
 const { class: className } = Astro.props;
 ---
-<!-- TODO: read about aria-content (aria-attrs*) -->
-<article class:list={[className, 'content']}>
+<article class:list={[className, 'content']} role='article' aria-label="Починаю читати">
   <slot />
 </article>

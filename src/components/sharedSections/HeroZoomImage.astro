@@ -4,7 +4,7 @@ import { Image } from "astro:assets";
 
   <!-- Hero section -->
 
-  <section class="mt-11 lg:mt-16">
+  <section class="relative mt-11 lg:mt-16">
     <div class="container">
 
       <div class="flex justify-center mb-6 lg:mb-8">
@@ -21,9 +21,10 @@ import { Image } from "astro:assets";
         <p class="font-normal text-lg text-center">Вчимо створювати, а не лише користуватися</p>
       </div>
 
-      <div class="mb-6 lg:mb-0 rounded-xl w-full h-full aspect-5/2 overflow-hidden">
+      <div class="relative mb-6 lg:mb-0 rounded-xl aspect-5/2 overflow-hidden">
+        <div class="z-10 absolute inset-0 bg-black opacity-40"></div>
         <Image
-          class="brightness-75 w-full h-full object-cover animate-zoom-pulse"
+          class="z-0 relative w-full h-full object-cover animate-zoom-pulse"
           src={import("@images/it-courses-main.png")}
           format="webp"
           alt="image"

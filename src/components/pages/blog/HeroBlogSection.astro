@@ -3,8 +3,7 @@ import { Image } from "astro:assets";
 ---
 
 <section class="relative">
-  <!-- TODO: after/before cover filter -->
-  <div class="aspect-3/1 lg:aspect-11/3">
+  <div class="before:absolute relative before:inset-0 before:bg-black before:opacity-60 aspect-3/1 lg:aspect-11/3 before:content-['']">
     <Image
       class="w-full h-full object-cover"
       src={import("@images/blog-hero.png")}
