@@ -2,7 +2,6 @@
 import Article from "@components/Article.astro";
 ---
 
-
 <!-- FAQ section -->
 
   <section class="bg-primary-turquoise py-16" id='faq'>
@@ -188,5 +187,9 @@ import Article from "@components/Article.astro";
       </div>
     </div>
   </section>
-<!-- TODO: figure out - move to server prerendered side -->
-<script src="@scripts/accordion"></script>
+
+
+<script>
+  import { initAccordion } from '@scripts/accordion';
+  initAccordion()
+</script>
