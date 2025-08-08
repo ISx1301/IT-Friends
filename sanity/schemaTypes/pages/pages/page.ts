@@ -1,6 +1,8 @@
 // ./schemaTypes/pages/pages/page.ts
 import { defineType, defineField } from 'sanity'
 
+import { SUPPORTED_LANGS } from '../../../constants'
+
 export const page = defineType({
   name: 'page',
   title: 'Сторінка',
@@ -19,18 +21,33 @@ export const page = defineType({
       name: 'sections',
       title: 'Секції',
       type: 'array',
-       of: [{ type: 'aboutUsSection' }, { type: 'directionsSection' }],
+      of: [
+        { type: 'aboutUsSection' },
+        { type: 'directionsSection' }
+      ],
+    }),
+    // ? That fixing internationalization warning
+    defineField({
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      options: {
+        list: SUPPORTED_LANGS.map(l => ({ title: l.title, value: l.id })),
+      },
+      hidden: true,
+      readOnly: true,
     }),
   ],
+  // ? Predefine values
   initialValue: {
-    title: 'New page',
-    slug: { current: 'new-page' },
+    title: 'Нова сторінка',
+    slug: { current: '/' },
     sections: [],
   },
   preview: {
     select: { title: 'title', subtitle: 'slug.current' },
     prepare({ title, subtitle }) {
-       return { title: title || 'Без назви', subtitle: subtitle ? `/${subtitle}` : '' }
+      return { title: title || 'Без назви', subtitle: subtitle ? `/${subtitle}` : '' }
     },
   },
 })

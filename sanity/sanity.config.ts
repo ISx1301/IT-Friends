@@ -5,48 +5,32 @@ import { documentInternationalization } from '@sanity/document-internationalizat
 
 import { appStructure } from './structure'
 import { schemaTypes } from './schemaTypes'
+import { localizedSchemaTypes, SUPPORTED_LANGS } from './constants'
+import { pageTemplates } from './templates/pageTemplates'
+import { withLanguageField } from './utils/withLanguageField'
+import { globalSettingsTemplates } from './templates/globalSettingsTemplates'
 
 export default defineConfig({
   name: 'default',
   title: 'IT Friends CMS',
-
+  subtitle: 'A site for a it school',
   projectId: process.env.SANITY_STUDIO_PROJECT_ID ?? '',
   dataset: 'production',
 
   plugins: [
     structureTool({ structure: appStructure }),
     documentInternationalization({
-      supportedLanguages: [
-        { id: 'uk', title: 'Українська' },
-        { id: 'en', title: 'English' },
-      ],
-      schemaTypes: ['globalSettings', 'page'],
+      supportedLanguages: SUPPORTED_LANGS,
+      schemaTypes: localizedSchemaTypes,
     }),
   ],
 
   schema: {
-    types: schemaTypes,
+    types: withLanguageField(schemaTypes, localizedSchemaTypes),
+    templates: (prev: Template[]): Template[] => [
+      ...prev.filter(t => !localizedSchemaTypes.includes(t.schemaType)), // only page type
+      ...pageTemplates,
+      ...globalSettingsTemplates
+    ],
   },
-
-  templates: (prev: Template[]): Template[] => [
-    ...prev,
-    {
-      id: 'page-uk-base',
-      title: 'Нова сторінка (UA)',
-      schemaType: 'page',
-      value: () => ({
-        __i18n_lang: 'uk',
-      }),
-    },
-    {
-      id: 'page-en-base',
-      title: 'Нова сторінка (EN)',
-      schemaType: 'page',
-      parameters: [{ name: 'baseId', type: 'string' }],
-      value: ({ baseId }: { baseId: string }) => ({
-        __i18n_lang: 'en',
-        __i18n_base: { _type: 'reference', _ref: baseId },
-      }),
-    },
-  ],
 })
