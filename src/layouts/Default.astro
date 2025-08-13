@@ -7,15 +7,14 @@ import Footer from "@components/Footer.astro"
 import FreeLessonForm from "@components/FreeLessonForm.astro";
 import Contacts from "@/components/Contacts.astro";
 
-const { title, description, image } = Astro.props;
+const { settings, lang, seo } = Astro.props;
 ---
 
-<!-- TODO: get current page language from Astro.props -->
 <html class="scroll-smooth" lang="en">
-  <HeadBase title={title} description={description} image={image} />
+  <HeadBase {...seo} />
 
   <body class="flex flex-col min-h-[100svh]">
-    <Header />
+    <Header data={settings?.header} lang={lang}/>
 
     <Contacts />
 
@@ -26,7 +25,7 @@ const { title, description, image } = Astro.props;
     </main>
 
     
-    <Footer />
+    <Footer data={settings?.footer} lang={lang}/>
   </body>
   <script>
     // import "@scripts/app.ts";

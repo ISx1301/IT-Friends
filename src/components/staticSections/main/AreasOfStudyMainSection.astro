@@ -1,152 +1,134 @@
 ---
-import Article from "@components/Article.astro";
-import Excerpt from "@components/Excerpt.astro";
-import type { HTMLAttributes } from "astro/types";
-import { Image } from "astro:assets";
+import Article from "@components/Article.astro"
+import Excerpt from "@components/Excerpt.astro"
+import { BG_CLASSES, type BgColor } from "@/constants"
+import { toHTML } from "@portabletext/to-html"
 
-type CardItem = {
-  image: ImageMetadata;
-  title: string;
-  ageRange: string;
-  description: string[];
-  spanBg: string;
-  spanColor: string;
-  visibleCardButtonText: string;
-  hiddenCardButtonText: string;
-};
+type PTSpan = { _type: 'span'; _key: string; text: string; marks?: string[] }
+type PTLink = { _key: string; _type: 'link'; href: string; openInNewTab?: boolean }
+type PTBlock = {
+  _type: 'block'
+  _key: string
+  style?: string
+  children: PTSpan[]
+  markDefs?: PTLink[]
+}
 
-type Props = {
-  sectionStyle: 'withPaddings' | 'withoutPaddings';
-  title: string;
-  cards: CardItem[];
-  mainButtonText: string;
-} & HTMLAttributes<'section'>;
+const ptComponents = {
+  marks: {
+    em: ({ children }: any) => `<em>${children}</em>`,
+    strong: ({ children }: any) => `<strong>${children}</strong>`,
+    link: ({ value, children }: any) => {
+      const href = value?.href || '#'
+      const blank = value?.openInNewTab
+      const target = blank ? ' target="_blank" rel="noopener noreferrer"' : ''
+      return `<a href="${href}" class="text-primary-orange"${target}>${children}</a>`
+    },
+  },
+}
 
-const {
-  sectionStyle,
-  title,
-  cards,
-  mainButtonText,
-  ...attrs
-} = Astro.props;
+type SanityImage = { url?: string; alt?: string }
 
-const sectionClassMap = {
-  withPaddings: 'py-16',
-  withoutPaddings: 'py-0',
-};
+type AreasCard = {
+  image?: SanityImage
+  title?: string
+  ageText?: string
+  paragraphs?: PTBlock[] 
+  primaryButtonText?: string
+  secondaryButtonText?: string
+}
+
+export interface AreasOfStudyMainSectionProps {
+  _type?: "areasOfStudyMainSection"
+  _key?: string
+  backgroundColor?: BgColor
+  heading?: string
+  cards?: AreasCard[]
+  sectionCtaText?: string
+}
+
+export interface Props { 
+  section: AreasOfStudyMainSectionProps 
+  anchorId?: string 
+}
+
+const { section, anchorId } = Astro.props as Props
+
+const bgClass = BG_CLASSES[(section.backgroundColor ?? 'white') as BgColor]
+
+const BADGE_CLASSES = [
+  "bg-span-gray text-white",
+  "bg-span-sand text-black",
+  "bg-span-mint text-black",
+] as const
+const badgeClassByIndex = (i: number) => BADGE_CLASSES[i % BADGE_CLASSES.length]
 ---
 
-<section id={attrs.id} class={` bg-gray ${sectionClassMap[sectionStyle]}`}>
+<section id={anchorId} class={`lg:py-section-top-bottom-padding ${bgClass} py-12`}>
   <div class="container">
+
     <div class="flex justify-center mb-6 lg:mb-11 basis-1/4 lg:basis-1/12">
-      <h2 class="font-secondary text-2xl lg:text-3xl">{title}</h2>
+      <h2 class="font-secondary text-2xl lg:text-3xl">{section?.heading}</h2>
     </div>
 
-    <!-- Cards -->
-    <div class="flex lg:flex-row flex-col gap-5 mb-11 basis-1/4 lg:basis-1/12">
-      {cards.map((card) => (
-        <div class="flex flex-col items-center bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full lg:basis-4/12">
-          <Image
-            class="mb-3 max-h-28"
-            src={card.image}
-            format="webp"
-            alt={`${card.title} logo`}
-          />
-          <h3 class="mb-4 font-secondary font-semibold text-2xl">{card.title}</h3>
-          <span class={`${card.spanBg} mb-6 px-4 py-1 rounded-lg ${card.spanColor}`}>{card.ageRange}</span>
-          <Article class="mb-auto">
-            <Excerpt wordLength={20}>
-              {card.description.map((paragraph) => <p>{paragraph}</p>)}
-            </Excerpt>
-          </Article>
-          <button class="lg:hidden inline-block mb-3 py-2 border w-full orange-btn form-open" type="button">{card.hiddenCardButtonText}</button>
-          <button class="py-2 border w-full transparent-btn" type="button">{card.visibleCardButtonText}</button>
-        </div>
-      ))}
+    <div class="items-stretch gap-5 grid grid-cols-1 lg:grid-cols-3 mb-11">
+      {Array.isArray(section?.cards) && section.cards.length > 0 &&
+        section.cards.map((card: AreasCard, idx: number) => {
+          const html = card.paragraphs?.length
+            ? toHTML(card.paragraphs, { components: ptComponents })
+            : ''
+
+          return (
+            <div class="grid grid-rows-[auto_1fr_auto] bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full h-full">
+
+              <div class="flex flex-col items-center space-y-3">
+                {card?.image?.url && (
+                  <img src={card.image.url} alt={card.image.alt ?? ""} />
+                )}
+
+                {card?.title && (
+                  <h3 class="w-full font-secondary font-semibold text-2xl text-center">
+                    {card.title}
+                  </h3>
+                )}
+
+                {card?.ageText && (
+                  <span class={`${badgeClassByIndex(idx)} px-4 py-1 rounded-lg`}>
+                    {card.ageText}
+                  </span>
+                )}
+              </div>
+
+              <div class="mt-3 min-h-0">
+                <Article>
+                  {/* <Excerpt wordLength={30}> */}
+                    {html && <div class="max-w-none prose" set:html={html} />}
+                  {/* </Excerpt> */}
+                </Article>
+              </div>
+
+              <div class="flex flex-col gap-3 w-full">
+                {card?.secondaryButtonText && (
+                  <button class="lg:hidden inline-block py-2 border w-full orange-btn form-open" type="button">
+                    {card.secondaryButtonText}
+                  </button>
+                )}
+                {card?.primaryButtonText && (
+                  <button class="py-2 border w-full transparent-btn" type="button">
+                    {card.primaryButtonText}
+                  </button>
+                )}
+              </div>
+            </div>
+          )
+        })}
     </div>
 
     <div class="hidden lg:flex justify-center basis-1/4 lg:basis-1/12">
-      <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn form-open" type="button">{mainButtonText}</button>
+      <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn form-open" type="button">
+        {section.sectionCtaText}
+      </button>
     </div>
+
   </div>
 </section>
-
-
-
-  <!-- Areas of study section -->
-
-  <!-- <section class="lg:py-section-top-bottom-padding bg-gray py-12">
-    <div class="container">
-
-      <div class="flex justify-center mb-6 lg:mb-11 basis-1/4 lg:basis-1/12">
-        <h2 class="font-secondary text-2xl lg:text-3xl">Напрямки</h2>
-      </div>
-
-
-      <div class="flex lg:flex-row flex-col gap-5 mb-11 lg basis-1/4 lg:basis-1/12">
-
-
-        <div class="flex flex-col items-center bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full min-h-[42.125rem] lg:min-h-[35.31rem] lg:basis-4/12">
-          <Image
-            class="mb-3"
-            src={import("@images/logo-it-friends.jpg")}
-            format="webp"
-            alt="IT Friends logo"
-          />
-          <h3 class="mb-4 font-secondary font-semibold text-2xl">IT Заняття</h3>
-          <span class="bg-span-gray mb-auto px-4 py-1 rounded-lg text-white">діти від 7-8 років</span>
-          <Article class='mb-auto'>
-            <p>Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та технологій. Ми вчимо через гру: програмуємо персонажів, розв’язуємо логічні задачі, створюємо прості історії.</p>
-            <p>Діти навчаються з цікавістю, без стресу й тиску.</p>
-          </Article>
-          <button class="lg:hidden inline-block mb-3 py-2 border w-full orange-btn" type="button">Безкоштовний урок</button>
-          <button class="py-2 border w-full transparent-btn" type="button">Дізнатися більше</button>
-        </div>
-
-
-        <div class="flex flex-col items-center bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full min-h-[42.125rem] lg:min-h-[35.31rem] lg:basis-4/12">
-          <Image
-            class="mb-3 max-h-28"
-            src={import("@images/logo-english-friends.jpg")}
-            format="webp"
-            alt="English friends logo"
-          />
-          <h3 class="mb-4 font-secondary font-semibold text-2xl">
-            Англійська для дітей
-          </h3>
-          <span class="bg-span-sand mb-auto px-4 py-1 rounded-lg text-black"
-            >діти від 9-16 років</span
-          >
-          <Article class='mb-auto'>
-            <p>Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та технологій. Ми вчимо через гру: програмуємо персонажів, розв’язуємо логічні задачі, створюємо прості історії. </p>
-            <p>Діти навчаються з цікавістю, без стресу й тиску.</p>
-          </Article>
-          <button class="lg:hidden inline-block mb-3 py-2 border w-full orange-btn" type="button">Безкоштовний урок</button>
-          <button class="py-2 border w-full transparent-btn" type="button">Дізнатися більше</button>
-        </div>
-
-
-        <div class="flex flex-col items-center bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full min-h-[42.125rem] lg:min-h-[35.31rem] lg:basis-4/12">
-          <Image
-            class="mb-3"
-            src={import("@images/logo-tour-friends.jpg")}
-            format="webp"
-            alt="Tour friends logo"
-          />
-          <h3 class="mb-4 font-secondary font-semibold text-2xl">IT Табори</h3>
-          <span class="bg-span-mint mb-auto px-4 py-1 rounded-lg text-black">діти від 7-16 років</span>
-          <Article class='mb-auto'>
-            <p>Цей курс допоможе дітям зробити перші кроки в світі комп’ютерів та технологій. Ми вчимо через гру: програмуємо персонажів, розв’язуємо логічні задачі, створюємо прості історії. </p>
-            <p>Діти навчаються з цікавістю, без стресу й тиску.</p>
-          </Article>
-          <button class="lg:hidden inline-block mb-3 py-2 border w-full orange-btn" type="button">Безкоштовний урок</button>
-          <button class="py-2 border w-full transparent-btn" type="button">Дізнатися більше</button>
-        </div>
-      </div>
-
-      <div class="hidden lg:flex justify-center basis-1/4 lg:basis-1/12">
-        <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn" type="button">Безкоштовний урок</button>
-      </div>
-      
-    </div>
-  </section> -->

@@ -1,0 +1,84 @@
+---
+import { query } from '../../lib/sanity'
+import { PAGE_WITH_SETTINGS } from '../../lib/queries'
+import DefaultLayout from "@layouts/Default.astro";
+import { DEFAULT_LANG } from '@/constants';
+import { date } from 'astro:schema';
+import { sectionsRegistry } from '../../lib/sections-registry'
+
+type SeoHead = { title: string; description?: string | null; image?: string | null }
+type Section = { _type: string; _key?: string } & Record<string, any>
+type PageDoc = { _id: string; title: string; body?: any[]; sections?: Section[]; mainImage?: any; seo: SeoHead }
+type SettingsDoc = { header?: any; footer?: any }
+type PageData = { page: PageDoc | null; settings: SettingsDoc | null }
+
+
+const { lang = DEFAULT_LANG, slug } = Astro.params
+
+const data = await query<PageData>(PAGE_WITH_SETTINGS, { lang, slug })
+// console.log(slug)
+// console.log(lang)
+// console.log('😆')
+
+
+export async function getStaticPaths() {
+  // console.log('123')
+  const rows = await query< { lang: string, rawSlug: string } []>(
+  `
+    *[_type == "page" && defined(slug.current) && defined(language)]{
+      "lang": language,
+      "rawSlug": slug.current
+    }
+  `
+  )
+  // console.log(paths)
+  if (!rows?.length) {
+    console.warn('[getStaticPaths] has no paths for page schema. Check Sanity.');
+  }
+
+return rows.map(({ lang, rawSlug } : { lang: string, rawSlug: string }) => {
+    let s = String(rawSlug || '');
+    s = s.replace(/^\/+|\/+$/g, '');
+
+    if (s.startsWith(`${lang}/`)) s = s.slice(lang.length + 1);
+    
+    if (s === '' || s === lang) s = 'index';
+    
+    if (s.includes('/')) {
+      s = s.split('/')[0];
+    }
+
+    return { params: { lang, slug: s } };
+  });
+
+  // return paths
+
+}
+
+if (!data?.page) {
+  // поставить редирект на 404
+  throw new Error('NotFound')
+}
+
+
+
+const { page, settings } = data
+console.warn(`${page.sections}`)
+// 1. В каждый шаблон астро вставить код динамической секции
+// 2. Сделать редирект на 404 на 44 строке в каждом астро файле 
+---
+
+<DefaultLayout settings={settings} lang={lang} seo={page!.seo}>
+  {
+    page?.sections?.map((sec, index) => {
+      const Cmp = sectionsRegistry[sec._type]
+      const anchorId = `section${index + 1}`
+      return Cmp
+        ? <Cmp section={sec} anchorId={anchorId}/>     
+        : <section class="py-6"><div class="container">Unknown section: {sec._type}</div></section>
+    })
+  }
+</DefaultLayout>
+
+
+

@@ -1,186 +1,67 @@
 ---
-import { Image } from 'astro:assets';
+type SanityImage = { url: string; alt?: string };
+type FourImages = [SanityImage, SanityImage, SanityImage, SanityImage];
 
-
-type ImageHeroSectionType = {
-  src: ImageMetadata;
-  alt?: string;
+type newSchoolMainSection = {
+  _type: 'newSchoolMainSection';
+  _key: string;
+  heading?: string;
+  images: FourImages; 
 };
 
-type Props = {
-  sectionPaddingsStyle: 'withPaddings' | 'withoutPaddings';
-  titleText: string; 
-  images: ImageHeroSectionType[][];
+export interface Props { 
+  section: newSchoolMainSection 
+  anchorId?: string 
 }
 
-const sectionClassMap = {
-  withPaddings: 'py-16 lg:py-32',
-  withoutPaddings: 'py-0',
-};
+const { section, anchorId } = Astro.props as Props
 
-const {
-  sectionPaddingsStyle,
-  titleText,
-  images,
-} = Astro.props;
+const group = section.images;
 
-
+const REPEAT = 4;
+const groups: FourImages[] = Array.from({ length: REPEAT }, () => group);
 ---
 
+<section id={anchorId} class={`py-0 w-full overflow-hidden`}>
+  {section.heading && (
+    <div class="mb-6 lg:mb-12 max-w-2xl container">
+      <h2 class="font-secondary font-medium text-2xl lg:text-4xl text-center">{section.heading}</h2>
+    </div>
+  )}
 
-<section class={`${sectionClassMap[sectionPaddingsStyle]} w-full overflow-hidden`}>
-  <div class='mb-6 lg:mb-12 max-w-2xl container'>
-    <h2 class='font-secondary font-medium text-2xl lg:text-4xl text-center'>{titleText}</h2>
-  </div>
+  <div class="flex gap-2 lg:gap-5 px-0 w-full h-fit animate-[marquee-to-left_60000ms_linear_alternate_infinite]">
+    {groups.map((g) => (
+      <div class="gap-2 lg:gap-5 grid grid-cols-12 min-w-full">
 
-  <div class='flex gap-2 lg:gap-5 px-0 w-full h-fit animate-[marquee-to-left_60000ms_linear_alternate_infinite]'>
-    {images.map((group) => (
-
-      <div class='gap-2 lg:gap-5 grid grid-cols-12 min-w-full'>
-
-        <div class='flex flex-col gap-y-2 lg:gap-y-5 col-span-5 h-full'>
-          {[0, 1].map((i) => (
-            <div class='rounded-xl h-full'>
-              <Image
-                class='rounded-xl w-full h-full object-cover'
-                src={group[i].src}
-                format='webp'
-                alt={group[i].alt || ''}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div class='col-span-3 h-full'>
-          <div class='rounded-xl h-full'>
-            <Image
-              class='rounded-xl w-full h-full object-cover'
-              src={group[2].src}
-              format='webp'
-              alt={group[2].alt || ''}
+        <div class="flex flex-col gap-y-2 lg:gap-y-5 col-span-5 h-full">
+            <img
+              class="rounded-xl w-full h-full object-cover"
+              src={g[0].url}
+              alt={g[0].alt ?? ''}
             />
-          </div>
-        </div>
-
-        <div class='col-span-4 h-full'>
-          <div class='rounded-xl h-full'>
-            <Image
-              class='rounded-xl w-full h-full object-cover'
-              src={group[3].src}
-              format='webp'
-              alt={group[3].alt || ''}
+            <img
+              class="rounded-xl w-full h-full object-cover"
+              src={g[1].url}
+              alt={g[1].alt ?? ''}
             />
-          </div>
         </div>
 
+        <div class="col-span-3 rounded-xl h-full">
+            <img
+              class="w-full h-full object-cover"
+              src={g[2].url}
+              alt={g[2].alt ?? ''}
+            />
+        </div>
+
+        <div class="col-span-4 rounded-xl h-full">
+            <img
+              class="rounded-xl w-full h-full object-cover"
+              src={g[3].url}
+              alt={g[3].alt ?? ''}
+            />
+        </div>
       </div>
     ))}
   </div>
 </section>
-
-
-
-
-<!-- New school section-->
-
-  <!-- <section class="w-full overflow-hidden">
-    <div class="mb-6 lg:mb-12 max-w-2xl container">
-      <h2 class="font-secondary font-medium text-2xl lg:text-4xl text-center">Незабаром відкритя шостої адреси нашої школи</h2>
-    </div>
-
-    <div class="flex gap-5 px-0 w-full h-fit animate-[marquee-to-left_60000ms_linear_alternate_infinite]">
-
-
-      <div class="gap-4 lg:gap-5 grid grid-cols-12 min-w-full"> 
-
-        <div class="flex flex-col gap-y-4 lg:gap-y-5 col-span-5 h-full"> 
-          <div class="rounded-xl h-full">
-            <Image
-              class="rounded-xl w-full h-full object-cover"
-              src={import("@images/new-school1.jpg")}
-              format="webp"
-              alt="IT Friends logo"
-            />
-          </div>
-          <div class="rounded-xl h-full">
-            <Image
-              class="rounded-xl w-full h-full object-cover"
-              src={import("@images/new-school2.jpg")}
-              format="webp"
-              alt="IT Friends logo"
-            />
-          </div>
-        </div>
-
-        <div class="col-span-3"> 
-          <div class="rounded-xl h-full">
-            <Image
-              class="rounded-xl w-full h-full object-cover"
-              src={import("@images/new-school3.jpg")}
-              format="webp"
-              alt="IT Friends logo"
-            />
-          </div>
-        </div>
-
-        <div class="col-span-4"> 
-          <div class="rounded-xl h-full">
-            <Image
-              class="rounded-xl w-full h-full object-cover"
-              src={import("@images/new-school4.png")}
-              format="webp"
-              alt="IT Friends logo"
-            />
-          </div>
-        </div>
-        
-      </div>
-
-      
-
-      <div class="gap-4 lg:gap-5 grid grid-cols-12 min-w-full"> 
-
-        <div class="flex flex-col gap-y-4 lg:gap-y-5 col-span-5 h-full"> 
-          <div class="rounded-xl h-full">
-            <Image
-              class="rounded-xl w-full h-full object-cover"
-              src={import("@images/new-school1.jpg")}
-              format="webp"
-              alt="IT Friends logo"
-            />
-          </div>
-          <div class="rounded-xl h-full">
-            <Image
-              class="rounded-xl w-full h-full object-cover"
-              src={import("@images/new-school2.jpg")}
-              format="webp"
-              alt="IT Friends logo"
-            />
-          </div>
-        </div>
-
-        <div class="col-span-3"> 
-          <div class="rounded-xl h-full">
-            <Image
-              class="rounded-xl w-full h-full object-cover"
-              src={import("@images/new-school3.jpg")}
-              format="webp"
-              alt="IT Friends logo"
-            />
-          </div>
-        </div>
-
-        <div class="col-span-4"> 
-          <div class="rounded-xl h-full">
-            <Image
-              class="rounded-xl w-full h-full object-cover"
-              src={import("@images/new-school4.png")}
-              format="webp"
-              alt="IT Friends logo"
-            />
-          </div>
-        </div>
-        
-      </div>
-    </div>
-  </section> -->

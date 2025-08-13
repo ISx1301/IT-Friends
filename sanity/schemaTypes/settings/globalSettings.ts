@@ -1,5 +1,5 @@
 // ./schemaTypes/settings/globalSettings.ts
-import { defineType, defineField } from 'sanity'
+import { defineType, defineField, defineArrayMember  } from 'sanity'
 
 export const globalSettings = defineType({
   name: 'globalSettings',
@@ -26,14 +26,14 @@ export const globalSettings = defineType({
             }),
           ],
         }),
-        defineField({
-          name: 'logoLink',
-          title: 'Куди веде клік на логотип',
-          type: 'reference',
-          to: [{ type: 'page' }],
-          validation: (Rule) =>
-            Rule.required().error('Потрібно вибрати сторінку'),
-        }),
+        // defineField({
+        //   name: 'logoLink',
+        //   title: 'Куди веде клік на логотип',
+        //   type: 'reference',
+        //   to: [{ type: 'page' }],
+        //   validation: (Rule) =>
+        //     Rule.required().error('Потрібно вибрати сторінку'),
+        // }),
 
         defineField({
           name: 'socials',
@@ -176,7 +176,7 @@ export const globalSettings = defineType({
 
                 defineField({
                   name: 'linkType',
-                  title: 'Куди веде',
+                  title: 'Тип посилання',
                   type: 'string',
                   options: {
                     list: [
@@ -243,7 +243,7 @@ export const globalSettings = defineType({
                       )
                         return true
                       if (p.linkType !== 'anchor') return true
-                      if (!value) return 'Вкажіть якорь'
+                      if (!value) return 'Вкажіть якір'
                       return value.startsWith('#')
                         ? true
                         : 'Якір повинен починатися з #'
@@ -284,20 +284,33 @@ export const globalSettings = defineType({
             }),
           ],
         }),
-        defineField({
-          name: 'logoLink',
-          title: 'Куди веде клік на логотип футера',
-          type: 'reference',
-          to: [{ type: 'page' }],
-          validation: (Rule) =>
-            Rule.required().error('Потрібно вибрати сторінку'),
-        }),
+        // defineField({
+        //   name: 'logoLink',
+        //   title: 'Куди веде клік на логотип футера',
+        //   type: 'reference',
+        //   to: [{ type: 'page' }],
+        //   validation: (Rule) =>
+        //     Rule.required().error('Потрібно вибрати сторінку'),
+        // }),
 
         defineField({
           name: 'description',
-          title: 'Опис футера',
-          type: 'text',
-          rows: 3,
+          title: 'Текст опис в футері',
+          type: 'array',
+          of: [
+            defineArrayMember({
+              type: 'text',
+              rows: 3,
+              validation: (Rule) =>
+                Rule.required().min(1).error('Абзац не може бути порожнім'),
+            }),
+          ],
+          validation: (Rule) =>
+            Rule.custom((val) =>
+              val === undefined || (Array.isArray(val) && val.length >= 1)
+                ? true
+                : 'Додайте хоча б один абзац'
+            ),
         }),
 
         ...[1, 2, 3].map((i) =>
@@ -306,7 +319,7 @@ export const globalSettings = defineType({
             title: `Навігаційний блок ${i}`,
             type: 'array',
             of: [
-              defineField({
+              defineArrayMember({
                 name: `navColItem${i}`,
                 title: 'Пункт меню',
                 type: 'object',
@@ -315,14 +328,64 @@ export const globalSettings = defineType({
                     name: 'text',
                     title: 'Текст',
                     type: 'string',
+                    validation: (Rule) => Rule.required().error('Вкажіть текст'),
+                  }),
+
+                  defineField({
+                    name: 'linkType',
+                    title: 'Тип посилання',
+                    type: 'string',
+                    initialValue: 'page',
+                    options: {
+                      layout: 'radio',
+                      list: [
+                        { title: 'Сторінка', value: 'page' },
+                        { title: 'Якір', value: 'anchor' },
+                        { title: 'Зовнішній ресурс', value: 'external' },
+                      ],
+                    },
                     validation: (Rule) => Rule.required(),
                   }),
+
+                  // СТОРІНКА (reference)
                   defineField({
-                    name: 'link',
-                    title: 'Посилання',
+                    name: 'page',
+                    title: 'Сторінка',
                     type: 'reference',
                     to: [{ type: 'page' }],
-                    validation: (Rule) => Rule.required(),
+                    hidden: ({ parent }) => (parent as any)?.linkType !== 'page',
+                    validation: (Rule) =>
+                      Rule.custom((value, ctx) => {
+                        const lt = (ctx.parent as any)?.linkType
+                        if (lt !== 'page') return true
+                        return value ? true : 'Оберіть сторінку'
+                      }),
+                  }),
+
+                  // ЯКІР
+                  defineField({
+                    name: 'anchor',
+                    title: 'Якір (починається з "#")',
+                    type: 'string',
+                    hidden: ({ parent }) => (parent as any)?.linkType !== 'anchor',
+                    validation: (Rule) =>
+                      Rule.custom<string>((val, ctx) => {
+                        const lt = (ctx.parent as any)?.linkType
+                        if (lt !== 'anchor') return true
+                        if (!val || !val.trim()) return 'Вкажіть якір'
+                        return val.startsWith('#') ? true : 'Якір має починатися з #'
+                      }),
+                  }),
+
+                  // ЗОВНІШНІЙ URL
+                  defineField({
+                    name: 'externalUrl',
+                    title: 'Зовнішній URL',
+                    type: 'url',
+                    hidden: ({ parent }) => (parent as any)?.linkType !== 'external',
+                    validation: (Rule) =>
+                      Rule.uri({ scheme: ['http', 'https'] })
+                        .error('Вкажіть коректний URL'),
                   }),
                 ],
               }),

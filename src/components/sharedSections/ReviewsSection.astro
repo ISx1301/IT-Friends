@@ -1,140 +1,161 @@
 ---
 import Article from "@components/Article.astro";
+import Excerpt from "@components/Excerpt.astro"
 import { Image } from "astro:assets";
 import EmblaCarousel from "@components/EmblaCarousel.astro";
+import { BG_CLASSES, type BgColor } from "@/constants";
+import { toHTML } from "@portabletext/to-html";
 
-type ImageReviewsType = {
-  src: ImageMetadata;
-  alt?: string;
+type PTSpan = { _type: 'span'; text: string; marks?: string[] };
+type PTMarkDef = { _key: string; _type: string; href?: string };
+type PTBlock = {
+  _type: 'block';
+  _key: string;
+  style?: string;
+  children: PTSpan[];
+  markDefs?: PTMarkDef[];
 };
 
-type cardItem = {
-  divBg: "orange" | "green" | "gray";
-  image: ImageReviewsType;
-  name: string;
-  description: string;
-  videoReview: string;
+type SanityImage = { url?: string; alt?: string };
+type Review = { avatar?: SanityImage; name?: string; text?: PTBlock[] };
+
+type ReviewsSectionData = {
+  _type: "reviewsSection";
+  _key: string;
+  backgroundColor?: BgColor;
+  heading?: string;
+  paragraphs?: PTBlock[];
+  buttonText?: string;
+  reviews?: Review[];
 };
 
-type Props = {
-  sectionPaddingsStyle: "withPaddings" | "withoutPaddings";
-  sectionBgStyle: "white" | "gray";
-  titleText: string;
-  reviewsDescription: string[];
-  videoReview: string;
-  cards: cardItem[];
+export interface Props { 
+  section: ReviewsSectionData 
+  anchorId?: string 
+}
+
+const { section, anchorId } = Astro.props as Props
+
+const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
+const reviews = section.reviews ?? [];
+
+
+
+const escapeAttr = (s?: string) =>
+  (s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const ptComponents = {
+  block: {
+    normal: ({ children }: any) => `<p>${children}</p>`,
+  },
+  marks: {
+    strong: ({ children }: any) => `<strong>${children}</strong>`,
+    em: ({ children }: any) => `<em>${children}</em>`,
+    link: ({ value, children }: any) => {
+      const href = escapeAttr(value?.href);
+      if (!href) return children;
+      return `<a class="text-primary-orange" href="${href}" target="_blank" rel="noopener noreferrer">${children}</a>`;
+    },
+  },
 };
 
-const {
-  sectionPaddingsStyle,
-  sectionBgStyle,
-  titleText,
-  reviewsDescription,
-  videoReview,
-  cards,
-} = Astro.props;
+const paragraphsHtml = toHTML(section.paragraphs ?? [], { components: ptComponents });
 
-const sectionClassMap = {
-  withPaddings: "py-16 lg:py-32",
-  withoutPaddings: "py-0",
-};
-
-const sectionBgMap = {
-  white: "bg-section-white",
-  gray: "bg-gray",
-};
-
-const reviewDivStyle = {
-  orange: "bg-primary-orange",
-  green: "bg-primary-green",
-  gray: "bg-span-gray",
-};
+const STRIPE_CLASSES = ["bg-primary-green", "bg-primary-orange", "bg-span-gray"] as const;
+const stripeClassByIndex = (i: number) => STRIPE_CLASSES[i % STRIPE_CLASSES.length];
 ---
 
-<section
-  class={`${sectionClassMap[sectionPaddingsStyle]} ${sectionBgMap[sectionBgStyle]} overflow-hidden`}
-  id="reviews"
->
+<section id={anchorId} class={`py-16 lg:py-32 ${bgClass} overflow-hidden`} id="reviews">
   <div class="container">
     <div class="flex lg:flex-row flex-col justify-between">
+
       <div class="py-14 basis-4/12">
-        <h2
-          class="mb-8 font-secondary font-medium text-2xl lg:text-3xl lg:text-left text-center"
-        >
-          {titleText}
-        </h2>
-        <Article class="mb-11 lg:text-left text-center">
-          {reviewsDescription.map((text) => <p>{text}</p>)}
-        </Article>
-        <button
-          type="button"
-          class="hidden lg:inline-block px-7 py-3 leading-none transparent-btn"
-        >
-          {videoReview}
-        </button>
+        {section.heading && (
+          <h2 class="mb-8 font-secondary font-medium text-2xl lg:text-3xl lg:text-left text-center">
+            {section.heading}
+          </h2>
+        )}
+
+        {Boolean(section.paragraphs?.length) && (
+          <Article class="mb-11 lg:text-left text-center">
+            <div set:html={paragraphsHtml} />
+          </Article>
+        )}
+
+        {section.buttonText && (
+          <button type="button" class="hidden lg:inline-block px-7 py-3 leading-none transparent-btn">
+            {section.buttonText}
+          </button>
+        )}
       </div>
 
       <div class="flex flex-row lg:flex-col justify-between gap-5 basis-6/12">
-        <EmblaCarousel containerClass="lg:flex-col overflow-visible" options={ { breakpoints: { '(min-width: 1272px)': { active: false } }} }>
+        <EmblaCarousel
+          containerClass="lg:flex-col overflow-visible"
+          options={{ breakpoints: { "(min-width: 1272px)": { active: false } } }}
+        >
           <Fragment slot="slides">
-            {cards.map((review, index) => {
+            {reviews.map((rv, index) => {
               const isEven = index % 2 === 0;
-              const cardClass = `embla__slide flex lg:flex-row flex-col lg:justify-between items-center gap-5 lg:gap-0 bg-white shadow-none lg:shadow-md border border-gray lg:border-none rounded-md w-[31rem] min-w-full lg:min-w-0 ${
-                isEven ? "ml-auto" : ""
-              }`;
+              const stripe = stripeClassByIndex(index);
+              const cardClass =
+                `embla__slide flex lg:flex-row flex-col lg:justify-between items-center gap-5 lg:gap-0
+                 bg-white shadow-none lg:shadow-md border border-gray lg:border-none rounded-md
+                 w-[31rem] min-w-full lg:min-w-0 ${isEven ? "ml-auto" : ""}`;
+
+              const reviewHtml = toHTML(rv.text ?? [], { components: ptComponents });
+
               return (
                 <div class={cardClass}>
-                  <div
-                    class={`${reviewDivStyle[review.divBg]} rounded-md w-full lg:w-2 h-2 lg:h-[-webkit-fill-available]`}
-                  ></div>
+                  <div class={`${stripe} rounded-md w-full lg:w-2 h-2 lg:h-[-webkit-fill-available]`}></div>
+
                   <div class="my-3">
-                    <Image
-                      class="rounded-full w-16 h-16 object-cover"
-                      src={review.image.src}
-                      format="webp"
-                      alt={review.image.alt || "image"}
-                    />
-                    <p class="font-normal">{review.name}</p>
+                    {rv.avatar?.url && (
+                      <img
+                        class="rounded-full w-16 h-16 object-cover"
+                        src={rv.avatar.url}
+                        alt={rv.avatar.alt ?? ""}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    )}
+                    {rv.name && <p class="font-normal">{rv.name}</p>}
                   </div>
+
                   <div class="max-w-xs">
-                    <p class="font-normal text-base lg:text-left text-center">
-                      {review.description}
-                    </p>
+                    <Article>
+                      {/* LOOK AT IT COURSES PAGE */}
+                      <Excerpt wordLength={15}>
+                        <div class="text-center lg:text-start" set:html={reviewHtml} />
+                      </Excerpt>
+                    </Article>
                   </div>
-                  <button
-                    type="button"
-                    class="lg:hidden my-6 px-28 py-5 border-black leading-none transparent-btn"
-                  >
-                    {review.videoReview}
-                  </button>
+
+                  {section.buttonText && (
+                    <button
+                      type="button"
+                      class="lg:hidden my-6 py-5 border-black w-11/12 leading-none transparent-btn"
+                    >
+                      {section.buttonText}
+                    </button>
+                  )}
                 </div>
               );
             })}
           </Fragment>
+
           <Fragment slot="controls">
             <div class="lg:hidden flex justify-center items-center gap-3 mt-4">
               <button class="embla__prev" type="button" aria-label="Previous slide">
-                <Image
-                  class="w-6 h-6"
-                  src={import("@images/embla-prev-svg.svg")}
-                  alt="prev-btn"
-                />
+                <Image class="w-6 h-6" src={import("@images/embla-prev-svg.svg")} alt="prev-btn" />
               </button>
-              <div
-                class="flex justify-center items-center gap-1 bg-gray rounded-2xl w-24 h-9"
-                aria-live="polite"
-                aria-atomic="true"
-              >
+              <div class="flex justify-center items-center gap-1 bg-gray rounded-2xl w-24 h-9" aria-live="polite" aria-atomic="true">
                 <p class="font-bold text-primary-green embla-current"></p>
                 <p class="font-bold">/</p>
                 <p class="font-bold embla-total"></p>
               </div>
               <button class="embla__next" type="button" aria-label="Next slide">
-                <Image
-                  class="w-6 h-6"
-                  src={import("@images/embla-next-svg.svg")}
-                  alt="next-btn"
-                />
+                <Image class="w-6 h-6" src={import("@images/embla-next-svg.svg")} alt="next-btn" />
               </button>
             </div>
           </Fragment>
@@ -143,75 +164,3 @@ const reviewDivStyle = {
     </div>
   </div>
 </section>
-
-
-
-<!-- Reviews section-->
-<!-- <section class="bg-section-white py-16 lg:py-32 overflow-hidden" id="reviews">
-    <div class="container">
-      <div class="flex lg:flex-row flex-col justify-between">
-        <div class="py-14 basis-4/12">
-          <h2 class="mb-8 font-secondary font-medium text-2xl lg:text-3xl lg:text-left text-center">Що про нас говорять</h2>
-          <Article class="mb-11 lg:text-left text-center">
-            <p>Відгуки наших учнів та їхніх батьків — це найцінніше підтвердження того, що ми на правильному шляху.</p>
-            <p>Саме ці слова мотивують нас ставати ще кращими щодня.</p>
-          </Article>
-          <button type="button" class="hidden lg:inline-block px-7 py-3 leading-none transparent-btn">Дивитися відевідгуки</button>
-        </div>
-        <div class="flex flex-row lg:flex-col justify-between gap-5 lg:overflow-visible overflow-x-auto scroll-smooth snap-mandatory snap-x lg:snap-none basis-6/12">
-
-          <div class="flex lg:flex-row flex-col lg:justify-between items-center gap-5 lg:gap-0 bg-white shadow-none lg:shadow-md ml-auto border border-gray lg:border-none rounded-md w-[31rem] min-w-full lg:min-w-0 snap-center">
-            <div class="bg-primary-green rounded-md w-full lg:w-2 h-2 lg:h-full"></div>
-            <div class="my-3">
-              <Image
-                class="rounded-full w-16 h-16 object-cover"
-                src={import("@images/user-logo.jpg")}
-                format="webp"
-                alt="IT Friends logo"
-              />
-              <p class="font-normal">Ольга О.</p>
-            </div>
-            <div class="max-w-xs">
-              <p class="font-normal text-base lg:text-left text-center">Мій син із нетерпінням чекає кожного заняття! Нарешті зʼявилось середовище, де його справді чують і підтримують</p>
-            </div>
-            <button type="button" class="lg:hidden my-6 px-28 py-5 border-black leading-none transparent-btn">Відеовідгук</button>
-          </div>
-
-          <div class="flex lg:flex-row flex-col lg:justify-between items-center gap-5 lg:gap-0 bg-white shadow-none lg:shadow-md border border-gray lg:border-none rounded-md w-[31rem] min-w-full lg:min-w-0 snap-center">
-            <div class="bg-primary-orange mr-0 lg:mr-7 rounded-md w-full lg:w-2 h-2 lg:h-full"></div>
-            <div class="my-3 mr-0 lg:mr-10">
-              <Image
-                class="rounded-full w-16 h-16 object-cover"
-                src={import("@images/user-logo.jpg")}
-                format="webp"
-                alt="IT Friends logo"
-              />
-              <p class="font-normal">Ольга О.</p>
-            </div>
-            <div class="max-w-xs">
-              <p class="font-normal text-base lg:text-left text-center">Мій син із нетерпінням чекає кожного заняття! Нарешті зʼявилось середовище, де його справді чують і підтримують</p>
-            </div>
-            <button type="button" class="lg:hidden my-6 px-28 py-5 border-black leading-none transparent-btn">Відеовідгук</button>
-          </div>
-
-          <div class="flex lg:flex-row flex-col lg:justify-between items-center gap-5 lg:gap-0 bg-white shadow-none lg:shadow-md ml-auto border border-gray lg:border-none rounded-md w-[31rem] min-w-full lg:min-w-0 snap-center">
-            <div class="bg-span-gray mr-0 lg:mr-7 rounded-md w-full lg:w-2 h-2 lg:h-full"></div>
-            <div class="my-3 mr-0 lg:mr-10">
-              <Image
-                class="rounded-full w-16 h-16 object-cover"
-                src={import("@images/user-logo.jpg")}
-                format="webp"
-                alt="IT Friends logo"
-              />
-              <p class="font-normal">Ольга О.</p>
-            </div>
-            <div class="max-w-xs">
-              <p class="font-normal text-base lg:text-left text-center">Мій син із нетерпінням чекає кожного заняття! Нарешті зʼявилось середовище, де його справді чують і підтримують</p>
-            </div>
-            <button type="button" class="lg:hidden my-6 px-28 py-5 border-black leading-none transparent-btn">Відеовідгук</button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </section> -->

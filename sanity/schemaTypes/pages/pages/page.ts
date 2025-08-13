@@ -1,6 +1,4 @@
-// ./schemaTypes/pages/pages/page.ts
 import { defineType, defineField } from 'sanity'
-
 import { SUPPORTED_LANGS } from '../../../constants'
 
 export const page = defineType({
@@ -22,8 +20,14 @@ export const page = defineType({
       title: 'Секції',
       type: 'array',
       of: [
-        { type: 'aboutUsSection' },
-        { type: 'directionsSection' }
+        { type: 'heroSectionMainSection'},
+        {type: 'areasOfStudyMainSection'},
+        { type: 'aboutSection' },
+        { type: 'peculiaritiesSection'},
+        { type: 'reviewsSection'},
+        { type: 'newSchoolMainSection'},
+        { type: 'teamSection' },
+        { type: 'accordionSection' }
       ],
     }),
     // ? That fixing internationalization warning

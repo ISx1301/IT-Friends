@@ -1,70 +1,62 @@
 ---
-// Import styles for active burger, burger-menu
 import "@styles/header.scss";
 import { Image } from "astro:assets";
-// Import component for active links in navigation
 import NavLink from "@components/NavLink.astro";
+
+type LinkType = 'page' | 'anchor' | 'external'
+type PageRef = { slug?: string; lang?: string }
+
+type SubMenuItem = {
+  _key: string
+  text?: string
+  linkType?: LinkType
+  page?: PageRef
+  anchor?: string
+  link?: string
+}
+
+type NavItem = SubMenuItem & {
+  submenu?: SubMenuItem[]
+}
+
+interface HeaderData {
+  logo?: { alt?: string; src?: string }
+  buttonText?: string
+  socials?: { _key: string; alt?: string; icon?: { src?: string }; link?: string }[]
+  navigation?: NavItem[]
+}
+
+const { data, lang } = Astro.props as { data?: HeaderData; lang: string };
 ---
 
 <header class="relative h-[4.625rem] lg:h-auto">
-
   <!-- Top header block -->
-
   <div class="z-50 lg:static fixed flex justify-between items-center bg-white py-2 container header-bg">
-
     <!-- Logo -->
-
-    <a href="/">
-      <Image
-        src={import("@images/logo.svg")}
-        format="svg"
-        alt="IT Friends logo"
-      />
+    <a href='/'>
+      {data?.logo?.src && <img src={data.logo.src} alt={data.logo.alt ?? 'IT Friends logo'} />}
     </a>
 
     <!-- Social media desktop -->
-
     <div class="hidden lg:flex gap-9">
       <div class="flex gap-9">
-        <a href="#">
-          <Image
-            class="w-6 h-6"
-            src={import("@images/telegram.svg")}
-            format="svg"
-            alt="IT Friends logo"
-          />
-        </a>
-
-        <a href="#">
-          <Image
-            class="w-6 h-6"
-            src={import("@images/facebook.svg")}
-            format="svg"
-            alt="IT Friends logo"
-          />
-        </a>
-
-        <a href="#">
-          <Image
-            class="w-6 h-6"
-            src={import("@images/instagram.svg")}
-            format="svg"
-            alt="IT Friends logo"
-          />
-        </a>
+        {Array.isArray(data?.socials) &&
+          data.socials.map((s) => (
+            <a href={s.link!} target="_blank" rel="noopener" aria-label={s.alt ?? ''}>
+              {s.icon?.src && (
+                <img class="w-6 h-6" src={s.icon.src} alt={s.alt ?? ''} width="24" height="24" />
+              )}
+            </a>
+          ))
+        }
       </div>
 
       <!-- Language toggle desktop -->
-
       <div class="relative flex justify-center items-center font-secondary cursor-pointer lang-select">
         <div class="flex justify-center items-center gap-1 rounded">
-          <span class="font-medium text-lg current-lang">UA</span>
+          <span class="font-medium text-lg current-lang">{(lang ?? '').toUpperCase()}</span>
           <div class="origin-center transition-transform duration-300 arrow-lang transform">
-            <Image
-              src={import("@images/dropdown-black.svg")}
-              format="svg"
-              alt="IT Friends logo"
-            />
+            <Image src={import("@images/dropdown-black.svg")} format="svg" alt="dropdown" />
           </div>
         </div>
         <ul class="hidden top-full left-1/2 z-50 absolute gap-1 bg-white drop-shadow shadow mt-2 p-2 rounded min-w-[3.75rem] -translate-x-1/2 lang-menu">
@@ -74,8 +66,7 @@ import NavLink from "@components/NavLink.astro";
       </div>
     </div>
 
-    <!-- Burger, bon appetit :) -->
-
+    <!-- Burger -->
     <div class="lg:hidden flex flex-col justify-between space-y-[0.3rem] w-[1.875rem] h-[1.25rem] burger">
       <span class="bg-black rounded-[0.125rem] w-full h-[0.1875rem] transition-all duration-300"></span>
       <span class="bg-black rounded-[0.125rem] w-full h-[0.1875rem] transition-all duration-300"></span>
@@ -84,132 +75,98 @@ import NavLink from "@components/NavLink.astro";
   </div>
 
   <!-- Bottom header block -->
-
   <div class="hidden-menu bg-white lg:bg-primary-green">
     <div class="px-4 lg:px-4 py-10 lg:py-0 w-full lg:container">
-
       <!-- Navigation -->
-
       <nav class="flex lg:flex-row flex-col justify-between items-center py-5">
-
         <ul class="flex lg:flex-row flex-col items-center gap-x-9 gap-y-6 mb-20 lg:mb-0 text-black lg:text-white">
+          {Array.isArray(data?.navigation) &&
+            data.navigation.map((item) => {
+              const hasSubmenu = Array.isArray(item.submenu) && item.submenu.length > 0;
 
-          <!-- Navigation links -->
+              return !hasSubmenu ? (
+                <li class="first-letter:uppercase lg:first-letter:lowercase">
+                  <NavLink
+                    href={
+                      item.linkType === 'page'
+                        ? item.page!.slug!
+                        : item.linkType === 'anchor'
+                          ? item.anchor!
+                          : item.link!
+                    }
+                    class="font-secondary lg:font-normal font-semibold hover:text-primary-orange text-base lg:text-lg hover:scale-105 transition duration-300"
+                  >
+                    {item.text}
+                  </NavLink>
+                </li>
+              ) : (
+                <li class="relative first-letter:uppercase lg:first-letter:lowercase">
+                  <div class="relative cursor-pointer course-select">
+                    <div class="group flex justify-center items-center gap-1">
+                      <span class="hidden lg:inline-block font-secondary font-normal group-hover:text-primary-orange text-lg first-letter:uppercase lg:first-letter:lowercase transition duration-300">
+                        {item.text}
+                      </span>
+                      <span class="lg:hidden font-secondary lg:font-normal font-semibold group-hover:text-primary-orange text-base first-letter:uppercase lg:first-letter:lowercase transition duration-300 mobile-link">
+                        {item.text}
+                      </span>
+                      <div class="origin-center transition-transform duration-300 course-arrow transform">
+                        <span class="lg:hidden block">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
+                            class="group-hover:stroke-primary-orange w-6 h-6 text-black transition duration-300" fill="none" stroke="currentColor">
+                            <path d="M10 30 L50 70 L90 30" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" />
+                          </svg>
+                        </span>
+                        <span class="hidden lg:block">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
+                            class="group-hover:stroke-primary-orange w-6 h-6 text-white transition duration-300" fill="none" stroke="currentColor">
+                            <path d="M10 30 L50 70 L90 30" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" />
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
 
-          <li class="lg:hidden first-letter:uppercase lg:first-letter:lowercase">
-            <NavLink href="/" class="lg:font-normal font-semibold text-base lg:text-lg">головна</NavLink>
-          </li>
-
-          <li class="first-letter:uppercase lg:first-letter:lowercase">
-            <NavLink href="#section_2" class="font-secondary lg:font-normal font-semibold hover:text-primary-orange text-base lg:text-lg hover:scale-105 transition duration-300">про нас </NavLink>
-          </li>
-
-          <!-- Course toggle -->
-
-          <div class="relative cursor-pointer course-select">
-            <div class="group flex justify-center items-center gap-1">
-              <span class="hidden lg:inline-block font-secondary font-normal group-hover:text-primary-orange text-lg transition duration-300">навчання</span>
-              <span class="lg:hidden font-secondary lg:font-normal font-semibold group-hover:text-primary-orange text-base first-letter:uppercase transition duration-300 mobile-link">напрямки</span>
-              <div class="origin-center transition-transform duration-300 course-arrow transform">
-                <span class="lg:hidden block">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="group-hover:stroke-primary-orange w-6 h-6 text-black transition duration-300" fill="none" stroke="currentColor">
-                    <path d="M10 30 L50 70 L90 30" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" />
-                  </svg>
-                </span>
-
-                <span class="hidden lg:block">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="group-hover:stroke-primary-orange w-6 h-6 text-white transition duration-300" fill="none" stroke="currentColor">
-                    <path d="M10 30 L50 70 L90 30" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" />
-                  </svg>
-                </span>
-              </div>
-            </div>
-
-            <ul class="hidden left-1/2 z-50 lg:absolute gap-2 bg-white lg:drop-shadow lg:shadow mt-4 lg:p-2 rounded lg:w-52 lg:-translate-x-1/2 course-menu">
-              
-              <li class="lg:px-2 sm:py-0 lg:py-1 font-normal text-center cursor-pointer">
-                <NavLink href="/it_courses" class="font-secondary text-black hover:text-primary-orange hover:scale-105 transition duration-300">IT-Заняття</NavLink>
-              </li>
-
-              <li class="lg:px-2 sm:py-0 lg:py-1 text-center cursor-pointer">
-                <NavLink href="/english" class="font-secondary text-black hover:text-primary-orange hover:scale-105 transition duration-300">Англійська</NavLink>
-              </li>
-
-              <li class="lg:px-2 sm:py-0 lg:py-1 text-center cursor-pointer">
-                <NavLink href="/online_courses" class="font-secondary text-black hover:text-primary-orange hover:scale-105 transition duration-300">Заняття онлайн</NavLink>
-              </li>
-
-            </ul>
-          </div>
-
-          <li>
-            <NavLink href="/camps" class="font-secondary lg:font-normal font-semibold hover:text-primary-orange text-base lg:text-lg hover:scale-105 transition duration-300">IT-табори</NavLink>
-          </li>
-          
-          <li class="first-letter:uppercase lg:first-letter:lowercase">
-            <NavLink href="/blog" class="font-secondary lg:font-normal font-semibold hover:text-primary-orange text-base lg:text-lg hover:scale-105 transition duration-300">блог</NavLink>
-          </li>
-
-          <li class="first-letter:uppercase lg:first-letter:lowercase">
-            <NavLink href="/franchise" class="font-secondary lg:font-normal font-semibold hover:text-primary-orange text-base lg:text-lg hover:scale-105 transition duration-300">франшиза</NavLink>
-          </li>
-
-          <li class="first-letter:uppercase lg:first-letter:lowercase">
-            <NavLink href="/contacts" class="font-secondary lg:font-normal font-semibold hover:text-primary-orange text-base lg:text-lg hover:scale-105 transition duration-300">контакти</NavLink>
-          </li>
-
-          <!-- Language toggle -->
-
-          <div class="lg:hidden relative flex justify-center items-center font-secondary cursor-pointer lang-select">
-            <div class="flex justify-center items-center gap-1 rounded">
-              <span class="font-medium text-primary-orange text-lg current-lang">UA</span>
-              <div class="origin-center transition-transform duration-300 arrow-lang transform">
-                <Image
-                  src={import("@images/dropdown-black.svg")}
-                  format="svg"
-                  alt="IT Friends logo"
-                />
-              </div>
-            </div>
-            <ul class="hidden top-full left-1/2 z-50 absolute gap-1 bg-white drop-shadow shadow mt-2 p-2 rounded min-w-[3.75rem] -translate-x-1/2 lang-menu">
-              <li class="hover:text-primary-orange text-center transition duration-300" data-lang="UA">UA</li>
-              <li class="hover:text-primary-orange text-center transition duration-300" data-lang="EN">EN</li>
-            </ul>
-          </div>
+                    <ul class="hidden left-1/2 z-50 lg:absolute gap-2 bg-white lg:drop-shadow lg:shadow mt-4 lg:p-2 rounded lg:w-52 lg:-translate-x-1/2 course-menu">
+                      {item.submenu!.map((sub) => (
+                        <li class="lg:px-2 sm:py-0 lg:py-1 font-normal text-center cursor-pointer">
+                          <NavLink
+                            href={
+                              sub.linkType === 'page'
+                                ? sub.page!.slug!
+                                : sub.linkType === 'anchor'
+                                  ? sub.anchor!
+                                  : sub.link!
+                            }
+                            class="font-secondary text-black hover:text-primary-orange hover:scale-105 transition duration-300"
+                          >
+                            {sub.text}
+                          </NavLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </li>
+              );
+            })
+          }
         </ul>
 
         <!-- Social media mobile -->
-
         <div class="lg:hidden flex gap-9 mb-7">
-          <a href="#">
-            <Image
-              class="w-7 h-7"
-              src={import("@images/telegram.svg")}
-              format="svg"
-              alt="IT Friends logo"
-            />
-          </a>
-
-          <a href="#">
-            <Image
-              class="w-7 h-7"
-              src={import("@images/facebook.svg")}
-              format="svg"
-              alt="IT Friends logo"
-            />
-          </a>
-
-          <a href="#">
-            <Image
-              class="w-7 h-7"
-              src={import("@images/instagram.svg")}
-              format="svg"
-              alt="IT Friends logo"
-            />
-          </a>
+          {Array.isArray(data?.socials) &&
+            data.socials.map((s) => (
+              <a href={s.link!} target="_blank" rel="noopener" aria-label={s.alt ?? ''}>
+                {s.icon?.src && (
+                  <img class="w-7 h-7" src={s.icon.src} alt={s.alt ?? ''} width="28" height="28" />
+                )}
+              </a>
+            ))
+          }
         </div>
 
-        <button type="button" class="free-lesson-btn form-open">Безкоштовний урок</button>
+        <!-- Button -->
+        {data?.buttonText && (
+          <button type="button" class="free-lesson-btn form-open">{data.buttonText}</button>
+        )}
       </nav>
     </div>
   </div>

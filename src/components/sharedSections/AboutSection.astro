@@ -1,166 +1,146 @@
 ---
-import { Image } from 'astro:assets';
-import Article from '@components/Article.astro';
+import Article from '@components/Article.astro'
+import {
+  BG_CLASSES,
+  HEADING_ALIGN_CLASSES,
+  ABOUT_LAYOUT_ROW_CLASSES,
+  BADGE_BORDER_CLASSES,
+  type BgColor,
+  type Align,
+  type AboutLayout,
+  type BadgeBorderColor,
+} from '@/constants'
+import { toHTML } from '@portabletext/to-html'
 
-type ImageAboutType = {
-  src: ImageMetadata;
-  alt?: string;
-};
-
-type Props = {
-  sectionPaddingsStyle: 'withPaddings' | 'withoutPaddings';
-  layoutStyle: 'primary' | 'secondary';
-  borderStyle: 'primary' | 'secondary';
-  titleStyle: 'default' | 'secondary'
-  heading: string;
-  subheading?: string;
-  image: ImageAboutType;
-  spanRows: string[][];
-  paragraphs: string[];
-  finalTitle?: string;
-  contentSequence?: ('subheading' | 'spanRows' | 'finalTitle' | 'paragraphs')[];
-};
-
-const {
-  sectionPaddingsStyle,
-  layoutStyle,
-  borderStyle,
-  heading,
-  subheading,
-  titleStyle,
-  image,
-  spanRows,
-  paragraphs,
-  finalTitle,
-  contentSequence = ['subheading', 'spanRows', 'finalTitle', 'paragraphs'],
-} = Astro.props;
-
-const titleClassMap = {
-  default: 'text-start',
-  secondary: 'text-center'
+type PTSpan = { _type: 'span'; _key: string; text: string; marks?: string[] }
+type PTLink = { _key: string; _type: 'link'; href: string; openInNewTab?: boolean }
+type PTBlock = {
+  _type: 'block'
+  _key: string
+  style?: string
+  children: PTSpan[]
+  markDefs?: PTLink[]
 }
 
-const sectionClassMap = {
-  withPaddings: 'py-20 lg:py-32',
-  withoutPaddings: 'py-0',
+const ptComponents = {
+  marks: {
+    em: ({ children }: any) => `<em>${children}</em>`,
+    strong: ({ children }: any) => `<strong>${children}</strong>`,
+    link: ({ value, children }: any) => {
+      const href = value?.href || '#'
+      const blank = value?.openInNewTab
+      const target = blank ? ' target="_blank" rel="noopener noreferrer"' : ''
+      return `<a href="${href}" class="underline hover:no-underline"${target}>${children}</a>`
+    },
+  },
+}
+
+type OrderKind = 'h3' | 'paragraphs' | 'h4' | 'badges';
+
+type AboutSectionData = {
+  _type: 'aboutSection';
+  _key: string;
+  backgroundColor?: BgColor;
+  heading?: string;
+  headingAlign?: Align;
+  layout?: AboutLayout;
+  image?: { url?: string; alt?: string };
+  content?: {
+    h3?: string;
+    paragraphs?: PTBlock[];
+    h4?: string;
+    badges?: { borderColor?: BadgeBorderColor; items?: string[] };
+    order?: { kind: OrderKind }[];
+  };
 };
 
-const layoutClassMap = {
-  primary: 'flex lg:flex-row flex-col gap-8',
-  secondary: 'flex lg:flex-row-reverse flex-col gap-8',
-};
+export interface Props { 
+  section: AboutSectionData 
+  anchorId?: string 
+}
 
-const borderClassMap = {
-  primary: 'border border-span-mint',
-  secondary: 'border border-span-sand',
-};
+const { section, anchorId } = Astro.props as Props
+
+
+const bgClass = BG_CLASSES[(section.backgroundColor ?? 'white') as BgColor];
+const headingAlignClass = HEADING_ALIGN_CLASSES[(section.headingAlign ?? 'left') as Align];
+const rowClass = ABOUT_LAYOUT_ROW_CLASSES[(section.layout ?? 'image-left') as AboutLayout];
+const badgeBorderClass = BADGE_BORDER_CLASSES[(section.content?.badges?.borderColor ?? 'mint') as BadgeBorderColor];
+
+const order: OrderKind[] = section.content?.order?.length
+  ? section.content.order.map((i) => i.kind)
+  : ['h3', 'paragraphs', 'h4', 'badges'];
+
+const paragraphs = (section.content?.paragraphs ?? []) as PTBlock[];
+const badges = section.content?.badges?.items ?? [];
 ---
 
-<section class={sectionClassMap[sectionPaddingsStyle]}>
+<section id={anchorId} class={`py-20 lg:py-32 ${bgClass}`}>
   <div class="container">
-    <div class="mb-8 basis-1/4 lg:basis1/12">
-      <h2 class={`${titleClassMap[titleStyle]} font-secondary font-medium text-2xl lg:text-3xl`}>{heading}</h2>
+    <div class={`mb-8 basis-1/4 lg:basis-1/12 ${headingAlignClass}`}>
+      {section.heading && (
+        <h2 class="font-secondary font-medium text-2xl lg:text-3xl">
+          {section.heading}
+        </h2>
+      )}
     </div>
 
-    <div class={layoutClassMap[layoutStyle]}>
+    <div class={`flex flex-col ${rowClass} gap-8 basis-1/4 lg:basis-1/12`}>
+
       <div class="lg:basis-6/12 basis-1/4">
-        <Image
-          src={image.src}
-          format="webp"
-          alt={image.alt || 'about image'}
-          class="w-full h-full object-cover"
-        />
+        {section.image?.url && (
+          <img
+            src={section.image.url}
+            alt={section.image.alt ?? ''}
+            loading="lazy"
+            decoding="async"
+            class="w-full h-auto"
+          />
+        )}
       </div>
 
       <div class="flex flex-col lg:basis-6/12 basis-1/4">
-        {contentSequence.map((key) => {
-          if (key === 'subheading') {
-            return <h3 class="mb-5 font-secondary font-semibold text-xl lg:text-3xl">{subheading}</h3>;
+        {order.map((kind) => {
+          switch (kind) {
+            case 'h3':
+              return section.content?.h3 ? (
+                <h3 class="mb-5 font-secondary font-semibold text-xl lg:text-3xl">
+                  {section.content.h3}
+                </h3>
+              ) : null;
+
+            case 'paragraphs': {
+              if (!paragraphs.length) return null
+              const html = toHTML(paragraphs, { components: ptComponents })
+              return (
+                <div class="mb-12 lg:mb-auto">
+                  <Article>
+                    <div class="max-w-none prose" set:html={html} />
+                  </Article>
+                </div>
+              )
+            }
+
+            case 'h4':
+              return section.content?.h4 ? (
+                <h4 class="mt-auto mb-4 font-bold text-2xl">
+                  {section.content.h4}
+                </h4>
+              ) : null;
+
+            case 'badges':
+              return badges.length ? (
+                <div class="gap-4 grid grid-cols-2 mb-12 lg:mb-auto lg:[grid-template-columns:max-content_max-content]">
+                  {badges.map((b) => (
+                    <span class={`block w-full px-4 lg:px-6 py-1 lg:py-2 border ${badgeBorderClass} rounded-3xl lg:w-[12rem] font-play font-normal text-xl text-center`}>
+                      {b}
+                    </span>
+                  ))}
+                </div>
+              ) : null;
           }
-          if (key === 'spanRows') {
-            return (
-              <div class="flex flex-col gap-4 mb-12 lg:mb-auto basis-1/4">
-                {spanRows.map((row) => (
-                  <div class="flex gap-6">
-                    {row.map((text) => (
-                      <span
-                        class={`${borderClassMap[borderStyle]} rounded-3xl py-2 w-[10.8rem] lg:w-[11.3rem] font-play font-normal text-xl text-center`}
-                      >
-                        {text}
-                      </span>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            );
-          }
-          if (key === 'finalTitle' && finalTitle) {
-            return <h3 class="mt-auto mb-4 font-bold text-2xl">{finalTitle}</h3>;
-          }
-          if (key === 'paragraphs') {
-            return (
-              <Article>
-                {paragraphs.map((p) => (
-                  <p>{p}</p>
-                ))}
-              </Article>
-            );
-          }
-          return null;
         })}
       </div>
     </div>
   </div>
 </section>
-
-
-
-
-
-
-
-
-
-<!-- About us section-->
-<!-- 
-  <section class="py-20 lg:py-32">
-    <div class="container">
-      <div class="mb-8 basis-1/4 lg:basis1/12">
-        <h2 class="font-secondary font-medium text-2xl lg:text-3xl">Про нас</h2>
-      </div>
-      <div class="flex lg:flex-row flex-col gap-8 basis-1/4 lg:basis1/12">
-        <div class="lg:basis-6/12 basis-1/4">
-          <Image
-            src={import("@images/about-us-image.jpg")}
-            format="webp"
-            alt="about us"
-          />
-        </div>
-        <div class="flex flex-col lg:basis-6/12 basis-1/4">
-          <h3 class="mb-5 font-secondary font-semibold text-xl lg:text-3xl">
-            Віримо в кожну дитину <br /> І вона починає вірити в себе
-          </h3>
-
-          <div class="flex flex-col gap-4 mb-12 lg:mb-auto basis-1/4">
-            <div class="flex gap-6">
-              <span class="px-0 lg:px-6 py-1 lg:py-2 border border-span-mint rounded-3xl w-full lg:w-auto font-play font-normal text-xl text-center">індивідуально</span>
-              <span class="px-0 lg:px-7 py-1 lg:py-2 border border-span-mint rounded-3xl w-full lg:w-auto font-play font-normal text-xl text-center">інтерактивно</span>
-            </div>
-            <div class="flex gap-4">
-              <span class="px-0 lg:px-11 py-1 lg:py-2 border border-span-mint rounded-3xl w-full lg:w-auto font-play font-normal text-xl text-center">з любов’ю</span>
-              <span class="px-0 lg:px-16 py-1 lg:py-2 border border-span-mint rounded-3xl w-full lg:w-auto font-play font-normal text-xl text-center">гнучко</span>
-            </div>
-          </div>
-
-          <h3 class="mt-auto mb-4 font-bold text-2xl">Не просто курси — місце для зростання</h3>
-          
-          <Article>
-            <p>Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
-            <p>Ми віримо, що найкращі результати приходять не через тиск, а через цікавість, довіру та повагу до темпу дитини.</p>
-            <p>У нашій школі можна пробувати, помилятись, змінювати напрям і знову шукати своє — без страху бути «не таким». </p>
-          </Article>
-
-        </div>
-      </div>
-    </div>
-  </section> -->

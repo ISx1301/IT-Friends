@@ -1,203 +1,147 @@
 ---
 import { Image } from "astro:assets";
 import EmblaCarousel from "@components/EmblaCarousel.astro";
+import { BG_CLASSES, type BgColor } from "@/constants";
+import { toHTML } from "@portabletext/to-html";
+
+type PTSpan = { _type: 'span'; text: string; marks?: string[] };
+type PTMarkDef = { _key: string; _type: string; href?: string };
+type PTBlock = {
+  _type: 'block';
+  _key: string;
+  style?: string;
+  children: PTSpan[];
+  markDefs?: PTMarkDef[];
+};
+
+type SanityImage = { url?: string; alt?: string };
+type Member = {
+  photo?: SanityImage;
+  name?: string;
+  subject?: string;
+  social?: { url?: string; icon?: SanityImage };
+};
+
+type TeamSectionData = {
+  _type: "teamSection";
+  _key: string;
+  backgroundColor?: BgColor;
+  heading?: string;
+  description?: PTBlock[]; 
+  members?: Member[];
+};
+
+export interface Props { 
+  section: teamSection 
+  anchorId?: string 
+}
+
+const { section, anchorId } = Astro.props as Props
+
+const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
+const members = section.members ?? [];
+
+
+const escapeAttr = (s?: string) =>
+  (s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const ptComponents = {
+  block: {
+    normal: ({ children }: any) => `<p>${children}</p>`,
+  },
+  marks: {
+    strong: ({ children }: any) => `<strong>${children}</strong>`,
+    em: ({ children }: any) => `<em>${children}</em>`,
+    link: ({ value, children }: any) => {
+      const href = escapeAttr(value?.href);
+      if (!href) return children;
+      return `<a class="text-primary-orange" href="${href}" target="_blank" rel="noopener noreferrer">${children}</a>`;
+    },
+  },
+};
+
+const descriptionHtml = toHTML(section.description ?? [], { components: ptComponents });
 ---
-<!-- Team section -->
 
-  <section class="py-16 lg:py-32 w-full overflow-visible">
-    <div class="container">
-      <div class="m-auto mb-16 max-w-lg">
-        <h2 class="mb-8 font-secondary font-medium text-2xl lg:text-4xl text-center">Наша команда</h2>
-        <p class="font-normal text-base text-center">Наші викладачі не просто навчають — вони надихають, пояснюють складне простими словами та допомагають кожній дитині розкрити свій потенціал.</p>
-      </div>
+<section id={anchorId} class={`py-16 lg:py-32 w-full overflow-visible ${bgClass}`}>
+  <div class="container">
+    <div class="m-auto mb-16 max-w-lg">
+      {section.heading && (
+        <h2 class="mb-8 font-secondary font-medium text-2xl lg:text-4xl text-center">
+          {section.heading}
+        </h2>
+      )}
+      {Boolean(section.description?.length) && (
+        <div class="font-normal text-base text-center">
+          <div set:html={descriptionHtml} />
+        </div>
+      )}
     </div>
+  </div>
 
-    <div class="p-0 container">
-      <div class="flex lg:gap-5 pb-4 lg:overflow-hidden">
-        <EmblaCarousel containerClass="!gap-0 -mr-5" options={ { breakpoints: { '(min-width: 1272px)': { slidesToScroll: 1, loop: true, align: 'start' } } } }>
-          <Fragment slot="slides">
-            <!-- flex flex-col gap-6 min-w-80 lg:min-w-0 basis-1/2 lg:basis-1/3 -->
-            <div class="flex-grow-0 flex-shrink-0 min-w-80 lg:min-w-0 basis-1/2 lg:basis-1/4">
-              <div class="flex flex-col gap-6 pr-5">
-                <div class="rounded-full aspect-2/3">
-                  <Image
-                    class="rounded-full w-full h-full object-cover"
-                    src={import("@images/teacher.png")}
-                    format="webp"
-                    alt="IT Friends logo"
-                  />
-                </div>
-                <div class="flex flex-col items-center">
-                  <h3 class="font-medium text-lg">Ірина Маринова</h3>
-                  <p class="text-base">Вчителька англійської</p>
-                  <a href="#">
-                    <Image
-                      class="w-7 h-7"
-                      src={import("@images/facebook.svg")}
-                      alt="Facebook picture"
-                      format="svg"
-                    />
-                  </a>
-                </div>
-              </div>
-            </div>
-            
-            <div class="flex-grow-0 flex-shrink-0 pt-0 lg:pt-16 min-w-80 lg:min-w-0 basis-1/2 lg:basis-1/4">
-              <div class="flex flex-col lg:flex-col-reverse gap-6 pr-5">
-                <div class="rounded-full aspect-2/3">
-                <Image
-                  class="rounded-full w-full h-full object-cover"
-                  src={import("@images/teacher.png")}
-                  format="webp"
-                  alt="IT Friends logo"
-                />
-              </div>
-              <div class="flex flex-col items-center">
-                <h3 class="font-medium text-lg">Ірина Маринова</h3>
-                <p class="text-base">Вчителька англійської</p>
-                <a href="#">
-                  <Image
-                    class="w-7 h-7"
-                    src={import("@images/facebook.svg")}
-                    alt="Facebook picture"
-                    format="svg"
-                  />
-                </a>
-              </div>
-              </div>
-            </div>
-            
-            <div class="flex-grow-0 flex-shrink-0 min-w-80 lg:min-w-0 basis-1/2 lg:basis-1/4">
-              <div class="flex flex-col gap-6 pr-5">
-                <div class="rounded-full aspect-2/3">
-                  <Image
-                    class="rounded-full w-full h-full object-cover"
-                    src={import("@images/teacher.png")}
-                    format="webp"
-                    alt="Facebook picture"
-                  />
-                </div>
-                <div class="flex flex-col items-center">
-                  <h3 class="font-medium text-lg">Ірина Маринова</h3>
-                  <p class="text-base">Вчителька англійської</p>
-                  <a href="#">
-                    <Image
-                      class="w-7 h-7"
-                      src={import("@images/facebook.svg")}
-                      alt="Facebook picture"
-                      format="svg"
-                    />
-                  </a>
-                </div>
-              </div>
-            </div>
-            
-            <div class="flex-grow-0 flex-shrink-0 pt-0 lg:pt-16 min-w-80 lg:min-w-0 basis-1/2 lg:basis-1/4">
-              <div class="flex flex-col lg:flex-col-reverse gap-6 pr-5">
-                <div class="rounded-full aspect-2/3">
-                  <Image
-                    class="rounded-full w-full h-full object-cover"
-                    src={import("@images/teacher.png")}
-                    format="webp"
-                    alt="Facebook picture"
-                  />
-                </div>
-                <div class="flex flex-col items-center">
-                  <h3 class="font-medium text-lg">Ірина Маринова</h3>
-                  <p class="text-base">Вчителька англійської</p>
-                  <a href="#">
-                    <Image
-                      class="w-7 h-7"
-                      src={import("@images/facebook.svg")}
-                      alt="Facebook picture"
-                      format="svg"
-                    />
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="flex-grow-0 flex-shrink-0 min-w-80 lg:min-w-0 basis-1/2 lg:basis-1/4">
-              <div class="flex flex-col gap-6 pr-5">
-                <div class="rounded-full aspect-2/3">
-                  <Image
-                    class="rounded-full w-full h-full object-cover"
-                    src={import("@images/teacher.png")}
-                    format="webp"
-                    alt="Facebook picture"
-                  />
-                </div>
-                <div class="flex flex-col items-center">
-                  <h3 class="font-medium text-lg">Ірина Маринова</h3>
-                  <p class="text-base">Вчителька англійської</p>
-                  <a href="#">
-                    <Image
-                      class="w-7 h-7"
-                      src={import("@images/facebook.svg")}
-                      alt="Facebook picture"
-                      format="svg"
-                    />
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="flex-grow-0 flex-shrink-0 pt-0 lg:pt-16 min-w-80 lg:min-w-0 basis-1/2 lg:basis-1/4">
-              <div class="flex flex-col lg:flex-col-reverse gap-6 pr-5">
-                <div class="rounded-full aspect-2/3">
-                  <Image
-                    class="rounded-full w-full h-full object-cover"
-                    src={import("@images/teacher.png")}
-                    format="webp"
-                    alt="Facebook picture"
-                  />
-                </div>
-                <div class="flex flex-col items-center">
-                  <h3 class="font-medium text-lg">Ірина Маринова</h3>
-                  <p class="text-base">Вчителька англійської</p>
-                  <a href="#">
-                    <Image
-                      class="w-7 h-7"
-                      src={import("@images/facebook.svg")}
-                      alt="Facebook picture"
-                      format="svg"
-                    />
-                  </a>
-                </div>
-              </div>
-            </div>
-            
-          </Fragment>
-          <Fragment slot="controls">
-            <div class="flex justify-around items-center gap-3 mt-4">
-              <button class="embla__prev" type="button" aria-label="Previous slide">
-                <Image
-                  class="w-8 h-8"
-                  src={import("@images/embla-prev2.svg")}
-                  format="svg"
-                  alt="prev-btn"
-                />
-              </button>
-              <div
-                class="flex justify-center items-center gap-1 bg-gray rounded-2xl w-24 h-9"
-                aria-live="polite"
-                aria-atomic="true"
-              >
-                <p class="font-bold embla-current"></p>
-                <p class="font-bold">/</p>
-                <p class="font-bold embla-total"></p>
-              </div>
-              <button class="embla__next" type="button" aria-label="Next slide">
-                <Image
-                  class="w-8 h-8"
-                  src={import("@images/embla-next2.svg")}
-                  alt="next-btn"
-                  format="svg"
-                />
-              </button>
-            </div>
-          </Fragment>
-        </EmblaCarousel>            
-      </div>  
+  <div class="p-0 container">
+    <div class="flex lg:gap-5 pb-4 lg:overflow-hidden">
+      <EmblaCarousel
+        containerClass="!gap-0 -mr-5"
+        options={{ breakpoints: { "(min-width: 1272px)": { slidesToScroll: 1, loop: true, align: "start" } } }}
+      >
+        <Fragment slot="slides">
+          {members.map((m, index) => {
+            const isEven = ((index + 1) % 2) === 0;
+            const colWrap = isEven ? "flex flex-col lg:flex-col-reverse gap-6 pr-5" : "flex flex-col gap-6 pr-5";
+            const slidePad = isEven ? "pt-0 lg:pt-16" : "";
+            return (
+              <div class={`flex-grow-0 flex-shrink-0 min-w-80 lg:min-w-0 basis-1/2 lg:basis-1/4 ${slidePad}`}>
+                <div class={colWrap}>
+                  <div class="rounded-full aspect-2/3">
+                    {m.photo?.url && (
+                      <img
+                        class="rounded-full w-full h-full object-cover"
+                        src={m.photo.url}
+                        alt={m.photo.alt ?? ""}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    )}
+                  </div>
 
+                  <div class="flex flex-col items-center">
+                    {m.name && <h3 class="font-medium text-lg">{m.name}</h3>}
+                    {m.subject && <p class="text-base">{m.subject}</p>}
+                    {m.social?.icon?.url && m.social?.url && (
+                      <a href={m.social.url} target="_blank" rel="noopener noreferrer">
+                        <img
+                          class="w-7 h-7"
+                          src={m.social.icon.url}
+                          alt={m.social.icon.alt ?? ""}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </Fragment>
+
+        <Fragment slot="controls">
+          <div class="flex justify-around items-center gap-3 mt-4">
+            <button class="embla__prev" type="button" aria-label="Previous slide">
+              <Image class="w-8 h-8" src={import("@images/embla-prev2.svg")} format="svg" alt="prev-btn" />
+            </button>
+            <div class="flex justify-center items-center gap-1 bg-gray rounded-2xl w-24 h-9" aria-live="polite" aria-atomic="true">
+              <p class="font-bold embla-current"></p>
+              <p class="font-bold">/</p>
+              <p class="font-bold embla-total"></p>
+            </div>
+            <button class="embla__next" type="button" aria-label="Next slide">
+              <Image class="w-8 h-8" src={import("@images/embla-next2.svg")} alt="next-btn" format="svg" />
+            </button>
+          </div>
+        </Fragment>
+      </EmblaCarousel>
     </div>
-
-  </section>
+  </div>
+</section>

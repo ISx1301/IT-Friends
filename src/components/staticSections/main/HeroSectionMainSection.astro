@@ -1,374 +1,141 @@
 ---
 import Article from "@components/Article.astro";
 import { Image } from "astro:assets";
+import { BG_CLASSES, type BgColor } from '@/constants';
+import { toHTML } from '@portabletext/to-html';
 
-type ImageHeroSectionType = {
-  src: ImageMetadata;
-  alt?: string;
-};
+type PTSpan = { _type: 'span'; _key: string; text: string; marks?: string[] }
+type PTLink = { _key: string; _type: 'link'; href: string; openInNewTab?: boolean }
+type PTBlock = {
+  _type: 'block'
+  _key: string
+  style?: string
+  children: PTSpan[]
+  markDefs?: PTLink[]
+}
 
-type StatItem = {
-  number: string;
-  label: string;
-};
+const ptComponents = {
+  marks: {
+    em: ({ children }: any) => `<em>${children}</em>`,
+    strong: ({ children }: any) => `<strong>${children}</strong>`,
+    link: ({ value, children }: any) => {
+      const href = value?.href || '#'
+      const blank = value?.openInNewTab
+      const target = blank ? ' target="_blank" rel="noopener noreferrer"' : ''
+      return `<a href="${href}" class="text-primary-orange"${target}>${children}</a>`
+    },
+  },
+}
 
-type Props = {
-  title: string;
-  description: string[];
-  buttonText: string;
-  buttonLink: string;
-  stats: StatItem[];
-  images: ImageHeroSectionType[][];
-};
+type SanityImageAsset = { _ref?: string; _id?: string; url?: string }
+type SanityImageWithAlt = { alt?: string; asset?: SanityImageAsset }
+type ImageColumn = { images: SanityImageWithAlt[] }
+type StatItem = { number: string; label: string }
 
-const {
-  title,
-  description,
-  buttonText,
-  buttonLink,
-  stats,
-  images,
-} = Astro.props as Props;
+export interface HeroSectionMainSectionProps {
+  _type?: 'heroSectionMainSection';
+  _key?: string;
+  backgroundColor?: BgColor;
+  heading?: string;
+  description?: PTBlock[];   
+  button: { text: string; href: string };
+  stats?: StatItem[];
+  imageColumns?: ImageColumn[];
+}
 
+export interface Props { 
+  section: HeroSectionMainSectionProps 
+  anchorId?: string 
+}
+
+const { section, anchorId  } = Astro.props;
+
+const bgClass = BG_CLASSES[(section.backgroundColor ?? 'white') as BgColor];
+
+
+const descHtml = section.description?.length
+  ? toHTML(section.description, { components: ptComponents })
+  : '';
 ---
 
-<section class="flex items-stretch min-h-80 lg:min-h-[80vh]">
+<section id={anchorId} class={`flex ${bgClass} items-stretch min-h-80 lg:min-h-[80vh]`}>
   <div class="container">
     <div class="flex lg:flex-row flex-col justify-between items-center gap-5">
-      
       <div class="flex flex-col items-center lg:items-start order-1 lg:order-0 basis-1/2">
         <h1 class="mb-5 font-secondary font-medium text-3xl lg:text-4xl-custom lg:text-left text-center">
-          {title}
+          {section?.heading}
         </h1>
 
-        <Article class="hidden lg:block mb-9">
-          {description.map((paragraph: string) => <p>{paragraph}</p>)}
+        <Article class="hidden lg:block mb-9 w-96">
+          {descHtml && <div class="max-w-none prose" set:html={descHtml} />}
         </Article>
 
         <a
           class="group inline-flex items-center bg-primary-green lg:bg-black hover:bg-opacity-0 px-10 py-4 border border-primary-green lg:border-black hover:border-black rounded-lg text-white hover:text-black text-lg transition duration-100"
-          href={buttonLink}
+          href={section.button.href}
         >
-          {buttonText}
+          {section.button.text}
           <Image
             class="group-hover:brightness-0 group-hover:invert-1 ml-2"
             src={import("@images/arrow-outline.svg")}
             format="svg"
-            alt="arrow"
+            alt="IT Friends logo"
           />
         </a>
 
-        <div class="mt-14 mb-20">
-          <div class="flex lg:flex-row flex-col items-center lg:items-start gap-8 lg:gap-0 -mx-7">
-            {stats.map(({ number, label }: StatItem, i: number) => (
-              <div class="flex lg:flex-row flex-col items-center lg:items-start gap-8 lg:gap-0">
-                <div class="px-7 text-center">
-                  <p class="font-secondary font-bold text-primary-green text-3xl">{number}</p>
-                  <p class="font-secondary text-xl" set:html={label}></p>
-                </div>
-                {i < stats.length - 1 && (
-                  <div class="bg-primary-green my-4 lg:my-0 w-14 lg:w-[1px] h-[1px] lg:h-14"></div>
-                )}
-              </div>
-            ))}
+        {Array.isArray(section.stats) && section.stats.length > 0 && (
+          <div class="mt-14 mb-20">
+            <div class="flex lg:flex-row flex-col items-center lg:items-start gap-8 lg:gap-0 -mx-14">
+              {
+                section.stats.slice(0, 3).flatMap((s, idx, arr) => ([
+                  <div class="px-7 text-center">
+                    <p class="font-secondary font-bold text-primary-green text-3xl">{s.number}</p>
+                    <p class="font-secondary text-xl">
+                      <span set:html={s.label} />
+                    </p>
+                  </div>,
+                  ...(idx < arr.length - 1 ? [
+                    <div class="bg-primary-green w-14 lg:w-[1px] h-[1px] lg:h-14"></div>
+                  ] : [])
+                ]))
+              }
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
-      <div class="order-0 lg:order-1 mb-10 lg:mb-0 lg:basis-5/12">
-        <div class="flex gap-x-4 lg:gap-x-5 max-h-80 lg:max-h-[80vh] overflow-hidden">
-          {images.map((columnImages: ImageHeroSectionType[], colIndex: number) => (
-            <div
-              class={`flex flex-col ${
-                colIndex % 2 === 0
-                  ? "self-start animate-marquee-to-top-110000ms"
-                  : "self-end animate-marquee-to-bottom-110000ms"
-              } gap-y-4 lg:gap-y-5 h-fit basis-1/4 lg:basis-1/3 ${
-                colIndex === 3 ? "flex lg:hidden" : "flex"
-              }`}
-            >
-              {columnImages.map((img: ImageHeroSectionType) => (
-                <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                  <Image
-                    class="w-full h-full object-cover"
-                    src={img.src}
-                    alt={img.alt || ""}
-                  />
-                </div>
-              ))}
+      <div class="order-0 lg:order-1 mb-1 lg:mb-0 lg:basis-5/12">
+        {Array.isArray(section.imageColumns) && section.imageColumns.length > 0 && (
+          <div class="order-0 lg:order-1 mb-10 lg:mb-0 lg:basis-5/12">
+            <div class="flex gap-x-4 lg:gap-x-5 max-h-80 lg:max-h-[80vh] overflow-hidden">
+              {section.imageColumns.slice(0, 4).map((col, idx) => {
+                const anim = idx % 2 === 0
+                  ? 'animate-[marquee-to-top_90000ms_linear_alternate_infinite]'
+                  : 'animate-[marquee-to-bottom_110000ms_linear_alternate_infinite]'
+                const align = (idx === 1 || idx === 3) ? 'self-end' : ''
+                const lgVisibility = idx === 3 ? 'lg:hidden' : 'lg:basis-1/3'
+                return (
+                  <div class={`flex flex-col gap-y-4 lg:gap-y-5 h-fit ${anim} ${align} basis-1/4 ${lgVisibility}`}>
+                    {Array.isArray(col.images) && col.images.map((img) => (
+                      img?.asset?.url && (
+                        <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
+                          <img
+                            class="w-full h-full object-cover"
+                            src={img.asset.url}
+                            alt={img.alt ?? ''}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </div>
+                      )
+                    ))}
+                  </div>
+                )
+              })}
             </div>
-          ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   </div>
 </section>
-
-
-
-
-  <!-- <section class="flex items-stretch min-h-80 lg:min-h-[80vh]">
-    <div class="container">
-      <div class="flex lg:flex-row flex-col justify-between items-center gap-5">
-        <div class="flex flex-col items-center lg:items-start order-1 lg:order-0 basis-1/2">
-          <h1 class="mb-5 font-secondary font-medium text-3xl lg:text-4xl-custom lg:text-left text-center">Знайди свій напрям в IT Спробуй, змінюй, розвивайся</h1>
-
-          <Article class="hidden lg:block mb-9">
-            <p>Кожна дитина чи підліток може обрати напрям навчання IT за бажанням.</p>
-            <p>Ми підберемо зручний для вас графік навчання у групі</p>
-          </Article>
-          
-          <a class="group inline-flex items-center bg-primary-green lg:bg-black hover:bg-opacity-0 px-10 py-4 border border-primary-green lg:border-black hover:border-black rounded-lg text-white hover:text-black text-lg transition duration-100" href="/itCourses">Всі курси
-            <Image
-              class="group-hover:brightness-0 group-hover:invert-1 ml-2"
-              src={import("@images/arrow-outline.svg")}
-              format="svg"
-              alt="IT Friends logo"
-            />
-          </a>
-          
-          <div class="mt-14 mb-20">
-            <div class="flex lg:flex-row flex-col items-center lg:items-start gap-8 lg:gap-0 -mx-7">
-              <div class="px-7 text-center">
-                <p class="font-secondary font-bold text-primary-green text-3xl">20+</p>
-                <p class="font-secondary text-xl">напрямків <br /> offline i online</p>
-              </div>
-              <div class="bg-primary-green w-14 lg:w-[1px] h-[1px] lg:h-14"></div>
-              <div class="px-7 text-center">
-                <p class="font-secondary font-bold text-primary-green text-3xl">5</p>
-                <p class="font-secondary text-xl">адрес в Києві</p>
-              </div>
-              <div class="bg-primary-green w-14 lg:w-[1px] h-[1px] lg:h-14"></div>
-              <div class="px-7 text-center">
-                <p class="font-secondary font-bold text-primary-green text-3xl">7+</p>
-                <p class="font-secondary text-xl">років навчаємо</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="order-0 lg:order-1 mb-10 lg:mb-0 lg:basis-5/12">
-
-          <div class="flex gap-x-4 lg:gap-x-5 max-h-80 lg:max-h-[80vh] overflow-hidden">
-            <div class="flex flex-col gap-y-4 lg:gap-y-5 h-fit animate-[marquee-to-top_90000ms_linear_alternate_infinite] basic-1/4 lg:basis-1/3">
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-            </div>
-            <div class="flex flex-col self-end gap-y-4 lg:gap-y-5 h-fit animate-[marquee-to-bottom_110000ms_linear_alternate_infinite] basic-1/4 lg:basis-1/3">
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-            </div>
-            <div class="flex flex-col gap-y-4 lg:gap-y-5 h-fit animate-[marquee-to-top_90000ms_linear_alternate_infinite] basic-1/4 lg:basis-1/3">
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-            </div>
-            <div class="lg:hidden flex flex-col self-end gap-y-4 h-fit animate-[marquee-to-bottom_100000ms_linear_alternate_infinite] basic-1/4">
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-              <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                <Image
-                  class="w-full h-full object-cover"
-                  src={import("@images/peculiarities-central-image.jpg")}
-                  format="webp"
-                  alt="peculiarities"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>  -->

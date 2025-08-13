@@ -2,6 +2,8 @@
 import { defineConfig, type Template } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { documentInternationalization } from '@sanity/document-internationalization'
+import {visionTool} from '@sanity/vision'
+
 
 import { appStructure } from './structure'
 import { schemaTypes } from './schemaTypes'
@@ -19,6 +21,7 @@ export default defineConfig({
 
   plugins: [
     structureTool({ structure: appStructure }),
+    visionTool(),
     documentInternationalization({
       supportedLanguages: SUPPORTED_LANGS,
       schemaTypes: localizedSchemaTypes,

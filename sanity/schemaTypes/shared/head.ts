@@ -2,16 +2,29 @@ import { defineType, defineField } from 'sanity'
 
 export const head = defineType({
   name: 'head',
-  title: 'SEO',
+  title: 'SEO Metadata',
   type: 'object',
   fields: [
     defineField({
       name: 'title',
-      title: 'Заголовок сторінки (Title)',
+      title: 'Title',
       type: 'string',
-      description:
-        'Заголовок, який відображається у вкладці браузера та в пошуковій видачі. 5-60 символів.',
-      validation: (Rule) => Rule.required().min(5).max(60),
+      validation: Rule => Rule.required()
     }),
-  ],
-})
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'text',
+      rows: 3
+    }),
+    defineField({
+      name: 'image',
+      title: 'OG Image',
+      type: 'image',
+      options: { hotspot: true },
+      fields: [
+        { name: 'alt', type: 'string', title: 'Alt text' }
+      ]
+    })
+  ]
+});

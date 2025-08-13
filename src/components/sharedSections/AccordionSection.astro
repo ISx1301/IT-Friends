@@ -1,195 +1,129 @@
 ---
 import Article from "@components/Article.astro";
+import { BG_CLASSES, type BgColor } from "@/constants";
+import { toHTML } from "@portabletext/to-html";
+
+type PTSpan = { _type: 'span'; text: string; marks?: string[] };
+type PTMarkDef = { _key: string; _type: string; href?: string };
+type PTBlock = {
+  _type: 'block';
+  _key: string;
+  style?: string;
+  children: PTSpan[];
+  markDefs?: PTMarkDef[];
+};
+
+type FaqItem = { question?: string; answer?: PTBlock[] };
+type accordionSection = {
+  _type: "accordionSection";
+  _key: string;
+  backgroundColor?: BgColor;
+  heading?: string;
+  description?: PTBlock[];
+  buttonText?: string;
+  items?: FaqItem[];
+};
+
+export interface Props { 
+  section: accordionSection 
+  anchorId?: string 
+}
+
+const { section, anchorId } = Astro.props as Props
+
+const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
+const items = section.items ?? [];
+
+
+const escapeAttr = (s?: string) =>
+  (s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+
+const ptComponents = {
+  block: {
+    normal: ({children}: any) => `<p>${children}</p>`,
+  },
+  marks: {
+    strong: ({children}: any) => `<strong>${children}</strong>`,
+    em: ({children}: any) => `<em>${children}</em>`,
+    link: ({value, children}: any) => {
+      const href = escapeAttr(value?.href);
+      if (!href) return children;
+      return `<a class='text-primary-orange' href="${href}" target="_blank" rel="noopener noreferrer">${children}</a>`;
+    },
+  },
+};
+
+
+const descriptionHtml = toHTML(section.description ?? [], { components: ptComponents });
 ---
 
-<!-- FAQ section -->
-
-  <section class="bg-primary-turquoise py-16" id='faq'>
-    <div class="container">
-      <div class="flex lg:flex-row flex-col justify-between">
-        <div class="lg:py-14 basis-4/12">
-          <div class="m-auto lg:mx-0 mb-6 max-w-xs">
-            <h2 class="mb-8 font-secondary font-medium text-2xl lg:text-3xl lg:text-left text-center">Популярні запитання
+<section id={anchorId} class={`${bgClass} py-16`} id="faq">
+  <div class="container">
+    <div class="flex lg:flex-row flex-col justify-between">
+      <div class="lg:py-14 basis-4/12">
+        <div class="m-auto lg:mx-0 mb-6 max-w-xs">
+          {section.heading && (
+            <h2 class="mb-8 font-secondary font-medium text-2xl lg:text-3xl lg:text-left text-center">
+              {section.heading}
             </h2>
-          </div>
-          <Article class="m-auto lg:mx-0 mb-9 max-w-xs lg:text-left text-center">
-            <p>Щоб вам було спокійніше й зрозуміліше, ми зібрали відповіді на найпопулярніші питання про навчання в нашій
-              школі.</p>
-          </Article>
-          <button type="button" class="hidden lg:inline-block px-7 py-3 leading-none transparent-btn">Задати своє
-            питання</button>
+          )}
         </div>
 
-        <!-- Accordion -->
+        {Boolean(section.description?.length) && (
+          <Article class="m-auto lg:mx-0 mb-9 max-w-xs lg:text-left text-center">
+            <div set:html={descriptionHtml} />
+          </Article>
+        )}
 
-        <div class="space-y-4 accordion basis-6/12">
-
-          <!-- First block -->
-
-          <div class="border rounded-md overflow-hidden accordion-item">
-            <h2 class="accordion-header">
-              <button type="button"
-                class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
-                aria-expanded="false">
-                <span>З якого віку можна навчатись у школі?</span>
-                <span class="accordion-icon">
-                  <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="48" d="M256 80v352M80 256h352" />
-                  </svg>
-                  <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 448 512">
-                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="48" d="M80 256h352" />
-                  </svg>
-                </span>
-              </button>
-            </h2>
-            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
-              <div class="p-5 border-t">
-                <Article>
-                  <p class="mb-2">Наші заняття проходять офлайн у Києві за п’ятьма зручними адресами:</p>
-                  <p>📍 вул. Хрещатик, 25, просп. Перемоги, 45, вул. Драгоманова, 12, вул. Михайла Ломоносова, 18, вул. Генерала Алмазова, 6Обирайте найближчу до вас локацію — усі класи
-                  обладнані сучасною технікою та створені спеціально для навчання дітей і підлітків. 🌱</p>
-                </Article>
-              </div>
-            </div>
-          </div>
-
-          <!-- Second block -->
-
-          <div class="border rounded-md overflow-hidden accordion-item">
-            <h2 class="accordion-header">
-              <button type="button"
-                class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
-                aria-expanded="false">
-                <span>Чи можна приєднатись посеред навчального року?</span>
-                <span class="accordion-icon">
-                  <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="48" d="M256 80v352M80 256h352" />
-                  </svg>
-                  <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 448 512">
-                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="48" d="M80 256h352" />
-                  </svg>
-                </span>
-              </button>
-            </h2>
-            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
-              <div class="p-5 border-t">
-                <Article>
-                  <p class="mb-2">Наші заняття проходять офлайн у Києві за п’ятьма зручними адресами:</p>
-                  <p>📍 вул. Хрещатик, 25, просп. Перемоги, 45, вул. Драгоманова, 12, вул. Михайла Ломоносова, 18, вул. Генерала Алмазова, 6Обирайте найближчу до вас локацію — усі класи
-                  обладнані сучасною технікою та створені спеціально для навчання дітей і підлітків. 🌱</p>
-                </Article>
-              </div>
-            </div>
-          </div>
-
-          <!-- Third block -->
-
-          <div class="border rounded-md overflow-hidden accordion-item">
-            <h2 class="accordion-header">
-              <button type="button"
-                class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
-                aria-expanded="false">
-                <span>Скільки дітей у групі?</span>
-                <span class="accordion-icon">
-                  <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="48" d="M256 80v352M80 256h352" />
-                  </svg>
-                  <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 448 512">
-                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="48" d="M80 256h352" />
-                  </svg>
-                </span>
-              </button>
-            </h2>
-            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
-              <div class="p-5 border-t">
-                <Article>
-                  <p class="mb-2">Наші заняття проходять офлайн у Києві за п’ятьма зручними адресами:</p>
-                  <p>📍 вул. Хрещатик, 25, просп. Перемоги, 45, вул. Драгоманова, 12, вул. Михайла Ломоносова, 18, вул. Генерала Алмазова, 6Обирайте найближчу до вас локацію — усі класи
-                  обладнані сучасною технікою та створені спеціально для навчання дітей і підлітків. 🌱</p>
-                </Article>
-              </div>
-            </div>
-          </div>
-
-          <!-- Fourth block -->
-
-          <div class="border rounded-md overflow-hidden accordion-item">
-            <h2 class="accordion-header">
-              <button type="button"
-                class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
-                aria-expanded="false">
-                <span>Чи можна спочатку спробувати?</span>
-                <span class="accordion-icon">
-                  <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="48" d="M256 80v352M80 256h352" />
-                  </svg>
-                  <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 448 512">
-                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="48" d="M80 256h352" />
-                  </svg>
-                </span>
-              </button>
-            </h2>
-            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
-              <div class="p-5 border-t">
-                <Article>
-                  <p class="mb-2">Наші заняття проходять офлайн у Києві за п’ятьма зручними адресами:</p>
-                  <p>📍 вул. Хрещатик, 25, просп. Перемоги, 45, вул. Драгоманова, 12, вул. Михайла Ломоносова, 18, вул. Генерала Алмазова, 6Обирайте найближчу до вас локацію — усі класи
-                  обладнані сучасною технікою та створені спеціально для навчання дітей і підлітків. 🌱</p>
-                </Article>
-              </div>
-            </div>
-          </div>
-
-          <!-- Fifth block -->
-
-          <div class="border rounded-md overflow-hidden accordion-item">
-            <h2 class="accordion-header">
-              <button type="button"
-                class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
-                aria-expanded="false">
-                <span>Де саме проходять заняття?</span>
-                <span class="accordion-icon">
-                  <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="48" d="M256 80v352M80 256h352" />
-                  </svg>
-                  <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 448 512">
-                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="48" d="M80 256h352" />
-                  </svg>
-                </span>
-              </button>
-            </h2>
-            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
-              <div class="p-5 border-t">
-                <Article>
-                  <p class="mb-2">Наші заняття проходять офлайн у Києві за п’ятьма зручними адресами:</p>
-                  <p>📍 вул. Хрещатик, 25, просп. Перемоги, 45, вул. Драгоманова, 12, вул. Михайла Ломоносова, 18, вул. Генерала Алмазова, 6Обирайте найближчу до вас локацію — усі класи
-                  обладнані сучасною технікою та створені спеціально для навчання дітей і підлітків. 🌱</p>
-                </Article>
-              </div>
-            </div>
-          </div>
-
+        {section.buttonText && (
+          <button type="button" class="hidden lg:inline-block px-7 py-3 leading-none transparent-btn">
+            {section.buttonText}
+          </button>
+        )}
       </div>
-    </div>
-  </section>
 
+      <!-- Accordion -->
+      <div class="space-y-4 accordion basis-6/12">
+        {items.map((it) => {
+          const answerHtml = toHTML(it.answer ?? [], { components: ptComponents });
+          return (
+            <div class="border rounded-md overflow-hidden accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  type="button"
+                  class="flex justify-between items-center bg-transparent p-5 w-full font-semibold lg:font-bold text-base lg:text-lg text-left transition-colors accordion-trigger"
+                  aria-expanded="false"
+                >
+                  <span>{it.question}</span>
+                  <span class="accordion-icon">
+                    <svg class="w-5 h-5 accordion-icon-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" aria-hidden="true">
+                      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M256 80v352M80 256h352" />
+                    </svg>
+                    <svg class="hidden w-5 h-5 accordion-icon-minus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" aria-hidden="true">
+                      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M80 256h352" />
+                    </svg>
+                  </span>
+                </button>
+              </h2>
+
+              <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
+                <div class="p-5 border-t">
+                  <Article>
+                    <div set:html={answerHtml} />
+                  </Article>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+    </div>
+  </div>
+</section>
 
 <script>
   import { initAccordion } from '@scripts/accordion';
-  initAccordion()
+  initAccordion();
 </script>
