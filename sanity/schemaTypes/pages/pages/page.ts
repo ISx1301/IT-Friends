@@ -27,7 +27,9 @@ export const page = defineType({
         { type: 'reviewsSection'},
         { type: 'newSchoolMainSection'},
         { type: 'teamSection' },
-        { type: 'accordionSection' }
+        { type: 'accordionSection' },
+        { type: 'heroZoomImageSection' },
+        { type: 'generalDescriptionSection' },
       ],
     }),
     // ? That fixing internationalization warning

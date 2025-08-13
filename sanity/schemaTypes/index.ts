@@ -12,6 +12,8 @@ import { reviewsSection } from './sections/reviewsSection'
 import { newSchoolMainSection } from './sections/newSchoolMainSection'
 import { teamSection } from './sections/teamSection'
 import { accordionSection } from './sections/accordionSection'
+import { heroZoomImageSection } from './sections/heroZoomImageSection'
+import { generalDescriptionSection } from './sections/generalDescriptionSection'
  
 
 // helper
@@ -22,6 +24,7 @@ export const schemaTypes = [
   page,
   head,
   globalSettings,
+  heroZoomImageSection,
 
   // sections
   heroSectionMainSection,
@@ -32,6 +35,7 @@ export const schemaTypes = [
   newSchoolMainSection,
   teamSection,
   accordionSection,
+  generalDescriptionSection,
 
   // helper
   aboutContentOrderItem

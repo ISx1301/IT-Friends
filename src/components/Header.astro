@@ -79,7 +79,7 @@ const { data, lang } = Astro.props as { data?: HeaderData; lang: string };
     <div class="px-4 lg:px-4 py-10 lg:py-0 w-full lg:container">
       <!-- Navigation -->
       <nav class="flex lg:flex-row flex-col justify-between items-center py-5">
-        <ul class="flex lg:flex-row flex-col items-center gap-x-9 gap-y-6 mb-20 lg:mb-0 text-black lg:text-white">
+        <ul class="flex lg:flex-row flex-col items-center gap-x-9 gap-y-6 mb-3 lg:mb-0 text-black lg:text-white">
           {Array.isArray(data?.navigation) &&
             data.navigation.map((item) => {
               const hasSubmenu = Array.isArray(item.submenu) && item.submenu.length > 0;
@@ -148,7 +148,23 @@ const { data, lang } = Astro.props as { data?: HeaderData; lang: string };
               );
             })
           }
-        </ul>
+        </ul> 
+        
+        <!-- Language toggle mobile -->
+        <div class="lg:hidden relative flex justify-center items-center mb-20 font-secondary cursor-pointer lang-select">
+          <div class="flex justify-center items-center gap-1 rounded">
+            <span class="font-medium text-primary-orange text-lg current-lang">{(lang ?? '').toUpperCase()}</span>
+            <div class="origin-center transition-transform duration-300 arrow-lang transform">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="group-hover:stroke-primary-orange w-6 h-6 text-black transition duration-300" fill="none" stroke="currentColor">
+                <path d="M10 30 L50 70 L90 30" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" />
+              </svg>
+            </div>
+          </div>
+          <ul class="hidden top-full left-1/2 z-50 absolute gap-1 bg-white drop-shadow shadow mt-1 p-2 rounded min-w-[3.75rem] -translate-x-1/2 lang-menu">
+            <li class="hover:text-primary-orange text-center transition duration-300" data-lang="UA">UA</li>
+            <li class="hover:text-primary-orange text-center transition duration-300" data-lang="EN">EN</li>
+          </ul>
+        </div>
 
         <!-- Social media mobile -->
         <div class="lg:hidden flex gap-9 mb-7">

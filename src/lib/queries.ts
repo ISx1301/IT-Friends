@@ -222,6 +222,53 @@ export const PAGE_WITH_SETTINGS = /* groq */ `
         }, [])
       },
 
+
+
+       _type == "heroZoomImageSection" => {
+        _type, _key,
+        backgroundColor,
+        "logo": logo{ alt, "url": asset->url },
+        badgeText,
+        heading,
+        "description": coalesce(
+          description[style == "normal"]{
+            _type, _key, style,
+            children[]{ _type, text, marks },
+            markDefs[]{ _key, _type, href }
+          }, []
+        ),
+        buttonText,
+        "mainImage": mainImage{ alt, "url": asset->url },
+        "order": coalesce(order[]{ kind }, [])
+      },
+
+
+      _type == "generalDescriptionSection" => {
+        _type, _key,
+        backgroundColor,
+        heading,
+
+        "cards": coalesce(
+          cards[]{
+            "image": image{ alt, "url": asset->url },
+            title,
+            "description": coalesce(
+              description[style == "normal"]{
+                _type, _key, style,
+                children[]{ _type, text, marks },
+                markDefs[]{ _key, _type, href }
+              },
+              []
+            )
+          },
+          []
+        ),
+
+        buttonText
+      },
+
+
+
         
     }
   },
