@@ -63,6 +63,10 @@ const paragraphsHtml = toHTML(section.paragraphs ?? [], { components: ptComponen
 
 const STRIPE_CLASSES = ["bg-primary-green", "bg-primary-orange", "bg-span-gray"] as const;
 const stripeClassByIndex = (i: number) => STRIPE_CLASSES[i % STRIPE_CLASSES.length];
+
+
+const seg = Astro.url.pathname.replace(/^\/+|\/+$/g, '').split('/')[0];
+const lang = seg === 'en' ? 'en' : 'uk';
 ---
 
 <section id={anchorId} class={`py-16 lg:py-32 ${bgClass} overflow-hidden`} id="reviews">
@@ -125,7 +129,7 @@ const stripeClassByIndex = (i: number) => STRIPE_CLASSES[i % STRIPE_CLASSES.leng
                   <div class="max-w-xs">
                     <Article>
                       {/* LOOK AT IT COURSES PAGE */}
-                      <Excerpt wordLength={15}>
+                      <Excerpt lang={lang} wordLength={15}>
                         <div class="text-center lg:text-start" set:html={reviewHtml} />
                       </Excerpt>
                     </Article>

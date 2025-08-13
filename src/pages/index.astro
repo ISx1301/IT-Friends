@@ -18,8 +18,7 @@ const data = await query<PageData>(PAGE_WITH_SETTINGS, { lang, slug})
 
 
 if (!data?.page) {
-  // поставить редирект на 404
-  throw new Error('NotFound')
+  return Astro.redirect('/404', 302)
 }
 
 

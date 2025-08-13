@@ -56,16 +56,13 @@ return rows.map(({ lang, rawSlug } : { lang: string, rawSlug: string }) => {
 }
 
 if (!data?.page) {
-  // поставить редирект на 404
-  throw new Error('NotFound')
+  return Astro.redirect('/404', 302)
 }
 
 
 
 const { page, settings } = data
 console.warn(`${page.sections}`)
-// 1. В каждый шаблон астро вставить код динамической секции
-// 2. Сделать редирект на 404 на 44 строке в каждом астро файле 
 ---
 
 <DefaultLayout settings={settings} lang={lang} seo={page!.seo}>

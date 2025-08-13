@@ -1,12 +1,31 @@
 ---
-import { LOCALE } from '../constants';
+import { LOCALE, DEFAULT_LANG } from '../constants';
+
+type Lang = keyof typeof LOCALE; // "uk" | "en"
 
 interface Props {
   class?: string;
   wordLength?: number;
+  lang?: Lang;
 }
 
-const { class: className = '' , wordLength } = Astro.props;
+const props = Astro.props as Props;
+
+const className = props.class ?? '';
+const wordLength = props.wordLength;
+
+// type-guard, чтобы не было any
+const isLang = (v: unknown): v is Lang =>
+  typeof v === 'string' && (v === 'uk' || v === 'en');
+
+// жёстко резолвим язык (fallback на DEFAULT_LANG -> 'uk')
+const resolvedLang: Lang = isLang(props.lang)
+  ? props.lang
+  : isLang(DEFAULT_LANG)
+    ? DEFAULT_LANG
+    : 'uk';
+
+const dict = LOCALE[resolvedLang];
 
 const html = await Astro.slots.render('default');
 const plainText = html.replace(/<[^>]+>/g, '').trim();
@@ -15,18 +34,14 @@ const shouldTruncate = wordLength !== undefined && words.length > wordLength;
 const excerptedWords = shouldTruncate ? words.slice(0, wordLength) : words;
 const excerptedText = excerptedWords.join(' ');
 ---
-
 <div class={`excerpt-container ${className}`}>
   <p class="text-base excerpt-text">
-    {excerptedText + '...'}
+    {excerptedText + (shouldTruncate ? '…' : '')}
     {shouldTruncate && (
-      // TODO: create current locale var
-      <span class="font-bold cursor-pointer read-more">{ LOCALE['uk'].readMore }</span>
+      <span class="font-bold cursor-pointer read-more">{dict.readMore}</span>
     )}
   </p>
-  <p class="hidden text-base full-text">
-    {plainText}
-  </p>
+  <p class="hidden text-base full-text">{plainText}</p>
 </div>
 
 {shouldTruncate && (
