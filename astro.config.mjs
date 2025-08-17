@@ -1,10 +1,10 @@
 import sanity from '@sanity/astro'
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
-import { loadEnv } from "vite";
-import vercel from '@astrojs/vercel';
+import { loadEnv } from 'vite';
+import vercel from '@astrojs/vercel/serverless';
 
-const { PROJECT_ID, SECRET_API_TOKEN } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
+const { PROJECT_ID, SECRET_API_TOKEN } = loadEnv(process.env.NODE_ENV, process.cwd(), '');
 
 export default defineConfig({
   site: 'http://localhost:4321',
@@ -14,22 +14,22 @@ export default defineConfig({
     allowedHosts: true
   },
 
-  base: import.meta.env.BASE_URL ?? '',
+  base: process.env.BASE_URL ?? '',
 
   integrations: [tailwind(),
     sanity({
-      projectId: PROJECT_ID,
+      projectId: process.env.PROJECT_ID ?? PROJECT_ID,
       dataset: 'production',
       apiVersion: '2021-10-21',   
       // Set useCdn to false if you're building statically.
       useCdn: true,
-      token: SECRET_API_TOKEN
+      token: process.env.SECRET_API_TOKEN ?? SECRET_API_TOKEN
     }),
   ],
 
   i18n: {
-    locales: ["uk", "en"],
-    defaultLocale: "uk",
+    locales: ['uk', 'en'],
+    defaultLocale: 'uk',
     routing: {
       prefixDefaultLocale: false
     }
