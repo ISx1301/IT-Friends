@@ -22,7 +22,7 @@ export default defineConfig({
       dataset: 'production',
       apiVersion: '2021-10-21',   
       // Set useCdn to false if you're building statically.
-      useCdn: true,
+      useCdn: false,
       token: process.env.SECRET_API_TOKEN ?? SECRET_API_TOKEN
     }),
   ],
@@ -39,5 +39,9 @@ export default defineConfig({
     enabled: false
   },
 
-  adapter: vercel()
+  adapter: vercel({
+    imageService: true,
+    devImageService: 'sharp'
+  }
+  )
 });

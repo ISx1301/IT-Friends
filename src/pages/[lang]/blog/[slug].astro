@@ -17,9 +17,10 @@ type Data = {
   settings: any | null;
 };
 
+export const prerender = false;
+
 const { lang = DEFAULT_LANG, slug } = Astro.params;
 
-export const prerender = false;
 
 export async function getStaticPaths() {
   const rows = await query<{ lang: string; rawSlug: string }[]>(BLOG_POST_SLUGS);

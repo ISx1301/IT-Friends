@@ -11,10 +11,11 @@ type PageDoc = { _id: string; title: string; sections?: Section[]; seo: SeoHead 
 type SettingsDoc = { header?: any; footer?: any }
 type PageData = { page: PageDoc | null; settings: SettingsDoc | null }
 
+export const prerender = false;
+
 const { lang = DEFAULT_LANG } = Astro.params;
 const slug = 'blog';
 
-export const prerender = false;
 
 export async function getStaticPaths() {
   const rows = await query<{ lang: string; rawSlug: string }[]>(/* groq */`
