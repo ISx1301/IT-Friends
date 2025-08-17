@@ -3,131 +3,285 @@ import Tabs from "@components/Tabs.astro";
 import TabTrigger from "@components/TabsTrigger.astro";
 import TabContent from "@components/TabContent.astro";
 import Article from "@components/Article.astro";
-import { Image } from "astro:assets";
+import { BG_CLASSES, type BgColor } from "@/constants";
+import { toHTML } from "@portabletext/to-html";
+
+type PTSpan = { _type: "span"; text: string; marks?: string[] };
+type PTMarkDef = { _key: string; _type: string; href?: string };
+type PTBlock = {
+  _type: "block";
+  _key: string;
+  style?: string;
+  children: PTSpan[];
+  markDefs?: PTMarkDef[];
+};
+
+type SanityImage = { alt?: string; url?: string };
+
+type ClickableCard = {
+  image?: SanityImage;
+  title?: string;
+  plainDescription?: string;
+  phone?: string;
+  href?: string;
+};
+
+type RegularCard = {
+  image?: SanityImage;
+  title?: string;
+  ptDescription?: PTBlock[];
+  buttonText?: string;
+};
+
+type Tab = {
+  label?: string;
+  text?: string;
+  icon?: SanityImage;
+};
+
+type Panel = {
+  panelDescription?: PTBlock[];
+  clickableCards?: ClickableCard[];
+  regularCards?: RegularCard[];
+};
+
+type withoutNestedTabsSection = {
+  _type: "withoutNestedTabsSection";
+  _key: string;
+  backgroundColor?: BgColor;
+  heading?: string;
+  cardsKind?: "clickable" | "regular";
+  tabs?: Tab[];
+  panels?: Panel[];
+  buttonText?: string;
+  showMoreText?: string;
+  tabsColorKey?: "gray" | "sand";
+};
+
+export interface Props {
+  section: withoutNestedTabsSection;
+  anchorId?: string;
+}
+
+const { section, anchorId } = Astro.props as Props;
+
+const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
+const tabs = section.tabs ?? [];
+const panels = section.panels ?? [];
+const cardsKind = section.cardsKind ?? "regular";
+const tabsColorKey = (section.tabsColorKey ?? "gray") as "gray" | "sand";
+const count = Math.min(tabs.length, panels.length);
+
+const escapeAttr = (s?: string) =>
+  (s ?? "").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+const ptPanelComponents = {
+  block: {
+    normal: ({ children }: any) =>
+      `<p class="max-w-md font-medium text-3xl text-center">${children}</p>`,
+  },
+  marks: {
+    strong: ({ children }: any) =>
+      `<strong class="font-semibold">${children}</strong>`,
+    em: ({ children }: any) => `<em class="italic">${children}</em>`,
+    link: ({ value, children }: any) => {
+      const href = escapeAttr(value?.href);
+      if (!href) return children;
+      return `<a class="text-primary-orange" href="${href}" target="_blank" rel="noopener noreferrer">${children}</a>`;
+    },
+  },
+};
+
+const ptCardComponents = {
+  block: {
+    normal: ({ children }: any) =>
+      `<p class="text-base lg:text-lg">${children}</p>`,
+  },
+  marks: {
+    strong: ({ children }: any) =>
+      `<strong class="font-semibold">${children}</strong>`,
+    em: ({ children }: any) => `<em class="italic">${children}</em>`,
+    link: ({ value, children }: any) => {
+      const href = escapeAttr(value?.href);
+      if (!href) return children;
+      return `<a class="text-primary-orange" href="${href}" target="_blank" rel="noopener noreferrer">${children}</a>`;
+    },
+  },
+};
+
+const panelDescHtml = panels.map((p) =>
+  toHTML(p?.panelDescription ?? [], { components: ptPanelComponents })
+);
+const regularDescHtml = panels.map((p) =>
+  (p?.regularCards ?? []).map((c: any) =>
+    toHTML(c?.ptDescription ?? c?.description ?? [], {
+      components: ptCardComponents,
+    })
+  )
+);
+
 ---
 
-  <section>
-    <div class="container">
-      <div class="mx-auto mb-16 max-w-md">
-        <h2 class="font-secondary font-medium text-2xl lg:text-4xl text-center">Що саме ми вивчаємо</h2>
-      </div>
-    </div>
+<section id={anchorId} class={`${bgClass} `}>
+  <div class="container">
+    {
+      section.heading && (
+        <div class="mx-auto mb-10 lg:mb-16 max-w-md">
+          <h2 class="font-secondary font-medium text-2xl lg:text-4xl text-center">
+            {section.heading}
+          </h2>
+        </div>
+      )
+    }
+  </div>
 
-    <Tabs colorKey="gray" divider={true}>
-
-      <Fragment slot="triggers">
-        <TabTrigger id="tab_1" colorKey="gray">7-8 років</TabTrigger>
-
-        <TabTrigger id="tab_2" colorKey="gray">9-16 років</TabTrigger>
-      </Fragment>
-
-        <Fragment slot="content">
-          <TabContent id="tab_1">
-            <div class="container">
-              <div class="card-block gap-5 grid grid-cols-1 lg:grid-cols-3">
-                <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
-                  <Image
-                    class="mb-9"
-                    src={import("@images/tab1.jpg")}
-                    alt="Facebook picture"
+  {
+    count > 0 && (
+      <Tabs colorKey={tabsColorKey} divider={true}>
+        <Fragment slot="triggers">
+          {Array.from({ length: count }).map((_, i) => {
+            const tab = tabs[i];
+            const id = `tab_${i + 1}`;
+            return (
+              <TabTrigger id={id} colorKey={tabsColorKey}>
+                {tab?.icon?.url && (
+                  <img
+                    src={tab.icon.url}
+                    alt={tab.icon.alt ?? ""}
+                    loading="lazy"
+                    decoding="async"
+                    class="inline-block mr-2 mb-2 lg:mb-0 w-6 h-6 object-contain"
                   />
-                  <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">IT-Beginner</h3>
-                  <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
-                  <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
-                </div>
-
-                <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
-                  <Image
-                    class="mb-9"
-                    src={import("@images/tab1.jpg")}
-                    alt="Facebook picture"
-                  />
-                  <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">IT-Beginner</h3>
-                  <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
-                  <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
-                </div>
-
-                <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
-                  <Image
-                    class="mb-9"
-                    src={import("@images/tab1.jpg")}
-                    alt="Facebook picture"
-                  />
-                  <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">IT-Beginner</h3>
-                  <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
-                  <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
-                </div>
-
-                <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
-                  <Image
-                    class="mb-9"
-                    src={import("@images/tab1.jpg")}
-                    alt="Facebook picture"
-                  />
-                  <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">IT-Beginner</h3>
-                  <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
-                  <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
-                </div>
-
-                <div class="flex justify-center col-span-full">
-                  <button type="button" class="px-11 py-3 transparent-btn show-more-btn">Дивитися більше</button>
-                </div>
-
-              </div>
-
-            </div>
-            
-          </TabContent>    
-        </Fragment>
-        
-        <Fragment slot="content">
-          <TabContent id="tab_2">
-            <div class="container">
-              <div class="card-block gap-5 grid grid-cols-1 lg:grid-cols-3">
-                <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
-                  <Image
-                    class="mb-9"
-                    src={import("@images/tab1.jpg")}
-                    alt="Facebook picture"
-                  />
-                  <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">IT-skills+</h3>
-                  <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
-                  <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
-                </div>
-
-                <div class="bg-white shadow-xl px-6 py-9 rounded-xl w-full card">
-                  <Image
-                    class="mb-9"
-                    src={import("@images/tab1.jpg")}
-                    alt="Facebook picture"
-                  />
-                  <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">IT-skills+</h3>
-                  <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
-                  <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
-                </div>
-
-                <div class="bg-white shadow-xl px-6 py-9 rounded-xl card">
-                  <Image
-                    class="mb-9"
-                    src={import("@images/tab1.jpg")}
-                    alt="Facebook picture"
-                  />
-                  <h3 class="mb-7 font-secondary font-semibold text-2xl text-center">IT-skills+</h3>
-                  <Article class="mb-7">Курс IT-Beginner розрахований на дітей 7-8 років, які тільки починають користуватися комп'ютером. Обравши цей курс у школі IT-Friends , дитина дізнається, що комп'ютер – це не лише д ля ігор, а й потужний інструмент для навчання та розвитку. Працювати з комп'ютером це легко та необхідно!</Article>
-                  <button type="button" class="py-5 w-full font-secondary font-medium text-lg orange-btn">Записатися на урок</button>
-                </div>
-
-                <div class="flex justify-center col-span-full">
-                  <button type="button" class="px-11 py-3 transparent-btn show-more-btn">Дивитися більше</button>
-                </div>
-
-              </div>
-
-            </div>
-          </TabContent>    
+                  <br class="lg:hidden">
+                )}
+                {tab?.label ?? tab?.text ?? `Tab ${i + 1}`}
+              </TabTrigger>
+            );
+          })}
         </Fragment>
 
-    </Tabs>
-            
+        <Fragment slot="content">
+          {Array.from({ length: count }).map((_, i) => {
+            const id = `tab_${i + 1}`;
+            const panel = panels[i];
 
-  </section>
+            return (
+              <TabContent id={id}>
+                <div class="container">
+
+                  {cardsKind === "clickable" &&
+                    (panel?.panelDescription?.length ?? 0) > 0 && (
+                      <div class="flex justify-center lg:mb-12">
+                        <Article>
+                          <div set:html={panelDescHtml[i]} />
+                        </Article>
+                      </div>
+                    )}
+
+                  <div class="card-block gap-5 grid grid-cols-1 lg:grid-cols-3">
+                    {(() => {
+                      switch (cardsKind) {
+                        case "clickable": {
+                          const p = panels[i] as {
+                            clickableCards: ClickableCard[];
+                          };
+                          const cards = p.clickableCards as ClickableCard[];
+
+                          const nodes: any[] = cards.map((c) => (
+                            <a
+                              href={c.href!}
+                              class="block space-y-3 bg-white shadow-xl hover:shadow-2xl px-6 py-9 rounded-xl w-full transition card"
+                            >
+                              <img
+                                class="mx-auto object-contain"
+                                src={(c.image as SanityImage).url!}
+                                alt={(c.image as SanityImage).alt ?? ""}
+                                loading="lazy"
+                                decoding="async"
+                              />
+                              <h3 class="font-secondary font-semibold text-2xl text-center">
+                                {c.title!}
+                              </h3>
+                              <p class="font-medium text-base lg:text-lg text-center">
+                                {c.plainDescription!}
+                              </p>
+                              <p class="text-center">{c.phone!}</p>
+                            </a>
+                          ));
+
+                          nodes.push(
+                            <div class="flex justify-center col-span-full mt-11 lg:mt-16">
+                              <button
+                                class="px-5 py-4 font-secondary font-medium text-lg orange-btn form-open"
+                                type="button"
+                              >
+                                {section.buttonText!}
+                              </button>
+                            </div>
+                          );
+
+                          return nodes;
+                        }
+
+                        case "regular": {
+                          const p = panels[i] as {
+                            regularCards: RegularCard[];
+                          };
+                          const cards = p.regularCards as RegularCard[];
+
+                          const nodes: any[] = cards.map((c, idx2) => (
+                            <div class="flex flex-col gap-3 bg-white shadow-xl px-6 py-9 rounded-xl w-full h-full card">
+                              <img
+                                class="mx-auto max-h-32 object-contain"
+                                src={(c.image as SanityImage).url!}
+                                alt={(c.image as SanityImage).alt ?? ""}
+                                loading="lazy"
+                                decoding="async"
+                              />
+
+                              <h3 class="font-secondary font-semibold text-2xl text-center">
+                                {c.title!}
+                              </h3>
+
+                              <Article class="flex-1">
+                                <div set:html={regularDescHtml[i][idx2]} />
+                              </Article>
+
+                              <button
+                                type="button"
+                                class="mt-auto py-5 w-full font-secondary font-medium text-lg orange-btn form-open"
+                              >
+                                {c.buttonText!}
+                              </button>
+                            </div>
+                          ));
+
+
+                          nodes.push(
+                            <div class="flex justify-center col-span-full">
+                              <button
+                                type="button"
+                                class="px-11 py-3 transparent-btn show-more-btn"
+                              >
+                                {section.showMoreText}
+                              </button>
+                            </div>
+                          );
+
+                          return nodes;
+                        }
+
+                        default:
+                          return null;
+                      }
+                    })()}
+                  </div>
+                </div>
+              </TabContent>
+            );
+          })}
+        </Fragment>
+      </Tabs>
+    )
+  }
+</section>

@@ -1,0 +1,22 @@
+---
+import "@styles/global.scss";
+// Components
+import HeadBase from "@components/Head.astro";
+
+
+const { description, btn404 } = Astro.props
+---
+
+<html class="scroll-smooth" lang="en">
+  <HeadBase description={description} btn={btn404}/>
+
+  <body class="flex flex-col min-h-[100svh]">
+
+    <main aria-label="Content">
+      <slot />
+    </main>
+
+
+  </body>
+</html>
+

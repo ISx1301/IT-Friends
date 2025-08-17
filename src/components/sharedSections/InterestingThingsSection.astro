@@ -1,69 +1,114 @@
 ---
-import { Image } from "astro:assets";
 import Article from "@components/Article.astro";
+import { BG_CLASSES, type BgColor } from "@/constants";
+import { toHTML } from "@portabletext/to-html";
 
+type PTSpan = { _type: 'span'; text: string; marks?: string[] };
+type PTMarkDef = { _key: string; _type: string; href?: string };
+type PTBlock = {
+  _type: 'block';
+  _key: string;
+  style?: string;
+  children: PTSpan[];
+  markDefs?: PTMarkDef[];
+};
+
+type SanityImage = { alt?: string; url?: string };
+
+type InterestingItem = {
+  image?: SanityImage;
+  title?: string;
+  ptDescription?: PTBlock[];
+  buttonText?: string;
+};
+
+type InterestingThingsSection = {
+  _type: "interestingThingsSection";
+  _key: string;
+  backgroundColor?: BgColor;
+  heading?: string;
+  items?: InterestingItem[];
+};
+
+export interface Props {
+  section: InterestingThingsSection;
+  anchorId?: string;
+}
+
+const { section, anchorId } = Astro.props as Props;
+
+const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
+const items = section.items ?? [];
+
+const escapeAttr = (s?: string) =>
+  (s ?? "").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+const ptComponents = {
+  block: {
+    normal: ({ children }: any) =>
+      `<p class="text-base lg:text-lg">${children}</p>`,
+  },
+  marks: {
+    strong: ({ children }: any) => `<strong class="font-semibold">${children}</strong>`,
+    em: ({ children }: any) => `<em class="italic">${children}</em>`,
+    link: ({ value, children }: any) => {
+      const href = escapeAttr(value?.href);
+      if (!href) return children;
+      return `<a class="text-primary-orange" href="${href}" target="_blank" rel="noopener noreferrer">${children}</a>`;
+    },
+  },
+};
+
+const itemsDescHtml = items.map((it) => toHTML(it?.ptDescription ?? [], { components: ptComponents }));
 ---
 
-<!-- Interesting things section -->
-
-  <section class="py-20 lg:py-32">
-    <div class="container">
-
+<section id={anchorId} class={`${bgClass} [.${bgClass}+&]:!pt-0 px-20 border py-32`}>
+  <div class="container">
+    {section.heading && (
       <div class="mx-auto mb-5 lg:mb-11 max-w-xs lg:max-w-2xl">
-        <h2 class="font-secondary font-medium text-2xl lg:text-4xl text-center">Що ще вас може зацікавити</h2>
+        <h2 class="font-secondary font-medium text-2xl lg:text-4xl text-center">
+          {section.heading}
+        </h2>
       </div>
+    )}
 
-      <div class="flex lg:flex-row flex-col gap-11 lg:gap-5">
+    <div class="items-stretch gap-11 lg:gap-5 grid grid-cols-1 lg:grid-cols-2">
+      {items.map((it, i) => (
+        <div class="h-full">
+          <div class="flex flex-col gap-y-5 h-full">
+            {it?.image?.url && (
+              <div>
+                <img
+                  class="w-full h-auto object-cover"
+                  src={it.image.url}
+                  alt={it.image.alt ?? ""}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            )}
 
+            {it?.title && (
+              <div class="max-w-md">
+                <h3 class="font-bold text-xl">{it.title}</h3>
+              </div>
+            )}
 
-        <div class="basis-full lg:basis-1/2">
+            {(it?.ptDescription?.length ?? 0) > 0 && (
+              <Article class="mt-auto max-w-sm text-left">
+                <div set:html={itemsDescHtml[i]} />
+              </Article>
+            )}
 
-          <div class="mb-7">
-            <Image
-              class="object-cover"
-              src={import("@images/picture.jpg")}
-              format="webp"
-              alt="IT Friends logo"
-            />
+            {it?.buttonText && (
+              <button type="button" class="mt-auto px-1 py-3 lg:w-64 transparent-btn">
+                {it.buttonText}
+              </button>
+            )}
           </div>
-
-          <div class="mb-6 max-w-xs">
-            <h3 class="font-bold text-xl">Англійська для дітей від 6 до 16 років, 5 адрес в Києві</h3>
-          </div>
-
-          <Article class="mb-9 max-w-sm text-base lg:text-lg text-left">
-            <p>Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
-          </Article>
-
-          <button type="button" class="px-16 py-3 transparent-btn">Детальніше</button>
-
         </div>
-
-
-        <div class="basis-full lg:basis-1/2">
-
-          <div class="mb-7">
-            <Image
-              class="object-cover"
-              src={import("@images/picture.jpg")}
-              format="webp"
-              alt="IT Friends logo"
-            />
-          </div>
-
-          <div class="mb-6 max-w-md">
-            <h3 class="font-bold text-xl">Табори для дітей у будь-яку пору року!  Карпати, море, Україна, закордон</h3>
-          </div>
-
-          <Article class="mb-9 max-w-sm text-base lg:text-lg text-left">
-            <p>Ми створили школу, в якій дитину не оцінюють, а підтримують.Тут кожен учень — важливий.</p>
-          </Article>
-
-          <button type="button" class="px-16 py-3 transparent-btn">Детальніше</button>
-
-        </div>
-
-      </div>
-
+      ))}
     </div>
-  </section>
+    
+  </div>
+</section>

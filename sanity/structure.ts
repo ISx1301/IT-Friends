@@ -1,6 +1,6 @@
 // structure.ts
 import { StructureBuilder } from 'sanity/structure'
-import { AddIcon, CogIcon, DocumentIcon, EarthGlobeIcon } from '@sanity/icons'
+import { AddIcon, CogIcon, DocumentIcon, EarthGlobeIcon, BlockContentIcon } from '@sanity/icons'
 
 import { SUPPORTED_LANGS } from './constants'
 
@@ -37,6 +37,12 @@ export const appStructure = async (
         ),
 
       S.divider(),
+
+      
+      S.documentTypeListItem('page')
+        .title('Сторінки')
+        .icon(DocumentIcon),
+
       S.listItem()
         .title('Створити нову сторінку')
         .icon(AddIcon)
@@ -63,8 +69,33 @@ export const appStructure = async (
 
       S.divider(),
 
-      S.documentTypeListItem('page')
-        .title('Сторінки')
+      S.documentTypeListItem('blog')
+        .title('Статті')
         .icon(DocumentIcon),
+
+      S.listItem()
+        .title('Нова стаття')
+        .icon(BlockContentIcon)
+        .child(
+          S.list()
+            .title('Виберіть мову')
+            .items(
+              SUPPORTED_LANGS.map((lang) =>
+                S.listItem()
+                  .title(lang.title)
+                  .icon(EarthGlobeIcon)
+                  .child(
+                    S.documentTypeList('blog')
+                      .title(`Статті (${lang.title})`)
+                      .filter('_type == "blog" && language == $lang')
+                      .params({ lang: lang.id })
+                      .initialValueTemplates([
+                        S.initialValueTemplateItem(`blog-${lang.id}-base`),
+                      ])
+                  )
+              )
+            )
+        ),
+
     ])
 }

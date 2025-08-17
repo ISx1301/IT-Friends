@@ -101,9 +101,9 @@ const badgeClassByIndex = (i: number) => BADGE_CLASSES[i % BADGE_CLASSES.length]
 
               <div class="mt-3 min-h-0">
                 <Article>
-                  {/* <Excerpt wordLength={30}> */}
-                    {html && <div class="max-w-none prose" set:html={html} />}
-                  {/* </Excerpt> */}
+                  <Excerpt wordLength={30}>
+                    {html && <div class="max-w-none" set:html={html} />}
+                  </Excerpt>
                 </Article>
               </div>
 

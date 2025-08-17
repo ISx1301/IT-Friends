@@ -12,9 +12,9 @@ export const backgroundColors = [
 
 export type BgColor = typeof backgroundColors[number]['value']
 
-export const generalDescriptionSection = defineType({
-  name: 'generalDescriptionSection',
-  title: 'Секція з списком карток',
+export const interestingThingsSection = defineType({
+  name: 'interestingThingsSection',
+  title: 'Секція «Що може зацікавити»',
   type: 'object',
   icon: ImagesIcon,
 
@@ -30,18 +30,17 @@ export const generalDescriptionSection = defineType({
       name: 'heading',
       title: 'Заголовок (H2)',
       type: 'string',
-      description: 'Опціонально',
+      validation: (Rule) => Rule.required(),
     }),
 
     defineField({
-      name: 'cards',
+      name: 'items',
       title: 'Картки',
-      description: 'Всі поля опціонально',
       type: 'array',
       of: [
         defineField({
           type: 'object',
-          name: 'card',
+          name: 'item',
           title: 'Картка',
           fields: [
             defineField({
@@ -49,23 +48,18 @@ export const generalDescriptionSection = defineType({
               title: 'Картинка',
               type: 'image',
               options: { hotspot: true },
-              fields: [
-                defineField({
-                  name: 'alt',
-                  title: 'Alt текст',
-                  type: 'string',
-                }),
-              ],
+              fields: [defineField({ name: 'alt', title: 'Alt текст', type: 'string' })],
+              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: 'title',
               title: 'Заголовок (H3)',
               type: 'string',
+              validation: (Rule) => Rule.required(),
             }),
             defineField({
-              name: 'description',
-              title: 'Опис',
-              description: 'Enter = новий абзац',
+              name: 'ptDescription',
+              title: 'Короткий опис',
               type: 'array',
               of: [
                 {
@@ -82,51 +76,38 @@ export const generalDescriptionSection = defineType({
                         name: 'link',
                         title: 'Link',
                         type: 'object',
-                        fields: [
-                          { name: 'href', title: 'URL', type: 'url' },
-                        ],
+                        fields: [{ name: 'href', title: 'URL', type: 'url' }],
                       },
                     ],
                   },
                 },
               ],
+              description: 'Невеликий абзац під заголовком',
+            }),
+            defineField({
+              name: 'buttonText',
+              title: 'Текст кнопки',
+              type: 'string',
             }),
           ],
           preview: {
-            select: {
-              title: 'title',
-              media: 'image',
-            },
-            prepare({ title, media }) {
-              return {
-                title: title || 'Без назви',
-                media,
-              }
-            },
+            select: { title: 'title', media: 'image' },
+            prepare: ({ title, media }) => ({
+              title: title || 'Картка',
+              media,
+            }),
           },
         }),
       ],
     }),
-
-
-    defineField({
-      name: 'buttonText',
-      title: 'Текст кнопки',
-      type: 'string',
-      description: 'Опціонально.',
-    }),
   ],
 
   preview: {
-    select: {
-      title: 'heading',
-      cards: 'cards',
-    },
-    prepare({ title, cards }) {
-      const count = Array.isArray(cards) ? cards.length : 0
+    select: { title: 'heading', items: 'items' },
+    prepare({ title, items }) {
       return {
-        title: 'Секція з списком карток',
-        subtitle: `Карток: ${count}`,
+        title: 'Секція «Що може зацікавити»',
+        subtitle: `Карток: ${Array.isArray(items) ? items.length : 0}`,
       }
     },
   },

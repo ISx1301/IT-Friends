@@ -3,6 +3,21 @@ import defaultTheme from 'tailwindcss/defaultTheme';
 
 module.exports = {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+  safelist: [
+    // "одинаковый фон у двух соседей"
+    "[.bg-token-white+&.bg-token-white]:!pt-0",
+    "[.bg-token-gray+&.bg-token-gray]:!pt-0",
+    "[.bg-token-mint+&.bg-token-mint]:!pt-0",
+    "[.bg-token-turquoise+&.bg-token-turquoise]:!pt-0",
+    "[.bg-token-sand+&.bg-token-sand]:!pt-0",
+
+    // если надо также на lg
+    "lg:[.bg-token-white+&.bg-token-white]:!pt-0",
+    "lg:[.bg-token-gray+&.bg-token-gray]:!pt-0",
+    "lg:[.bg-token-mint+&.bg-token-mint]:!pt-0",
+    "lg:[.bg-token-turquoise+&.bg-token-turquoise]:!pt-0",
+    "lg:[.bg-token-sand+&.bg-token-sand]:!pt-0",
+  ],
   theme: {
     screens: {
       ...defaultTheme.screens,

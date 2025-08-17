@@ -30,9 +30,15 @@ export const page = defineType({
         { type: 'accordionSection' },
         { type: 'heroZoomImageSection' },
         { type: 'generalDescriptionSection' },
+        { type: 'withoutNestedTabsSection' },
+        { type: 'withNestedTabsCampsSection' },
+        { type: 'interestingThingsSection'},
+        { type: 'offlineAddressesEnglishSection'},
+        { type: 'videoCampsSection' },
+        { type: 'heroBlogSection' },
+        { type: 'postListSection' },
       ],
     }),
-    // ? That fixing internationalization warning
     defineField({
       name: 'language',
       title: 'Language',

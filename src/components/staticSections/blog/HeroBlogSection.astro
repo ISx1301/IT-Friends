@@ -1,18 +1,79 @@
 ---
-import { Image } from "astro:assets";
+import { toHTML } from '@portabletext/to-html';
+
+type PTSpan = { _type: 'span'; text: string; marks?: string[] };
+type PTMarkDef = { _key: string; _type: string; href?: string };
+type PTBlock = {
+  _type: 'block';
+  _key: string;
+  style?: string;
+  children: PTSpan[];
+  markDefs?: PTMarkDef[];
+};
+
+type SanityImage = { alt?: string; url?: string };
+
+type SimpleIntroSection = {
+  _type: 'simpleIntroSection';
+  _key: string;
+  image?: SanityImage;
+  heading?: string;
+  description?: PTBlock[];
+};
+
+export interface Props {
+  section: SimpleIntroSection;
+  anchorId?: string;
+}
+
+const { section, anchorId } = Astro.props as Props;
+
+const escapeAttr = (s?: string) =>
+  (s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const ptComponents = {
+  block: {
+    normal: ({ children }: any) =>
+      `<p class="font-normal text-white text-center">${children}</p>`,
+  },
+  marks: {
+    strong: ({ children }: any) => `<strong class="font-semibold">${children}</strong>`,
+    em: ({ children }: any) => `<em class="italic">${children}</em>`,
+    link: ({ value, children }: any) => {
+      const href = escapeAttr(value?.href);
+      if (!href) return children;
+      return `<a class="underline underline-offset-2" href="${href}" target="_blank" rel="noopener noreferrer">${children}</a>`;
+    },
+  },
+};
+
+const descHtml = toHTML(section?.description ?? [], { components: ptComponents });
 ---
 
-<section class="relative">
-  <div class="before:absolute relative before:inset-0 before:bg-black before:opacity-60 aspect-3/1 lg:aspect-11/3 before:content-['']">
-    <Image
-      class="w-full h-full object-cover"
-      src={import("@images/blog-hero.png")}
-      format="webp"
-      alt="image"
-    />  
-    <div class="top-1/2 left-1/2 absolute w-full lg:max-w-[25rem] -translate-x-1/2 -translate-y-1/2">
-      <h1 class="mb-4 lg:mb-5 font-secondary font-medium text-white text-2xl lg:text-4xl text-center">Наш блог</h1>
-      <p class="font-normal text-white text-center">Розповідаємо про навчання, розвиток та цікаві події в нашій школі. Тут ви знайдете натхнення й корисні поради для дітей та батьків.</p>
+<section id={anchorId} class="relative">
+  <div class="before:absolute relative before:inset-0 before:bg-black/60 rounded-none aspect-3/1 lg:aspect-[11/3] overflow-hidden before:content-['']">
+    {section?.image?.url && (
+      <img
+        class="w-full h-full object-cover"
+        src={section.image.url}
+        alt={section.image.alt ?? ''}
+        loading="lazy"
+        decoding="async"
+      />
+    )}
+
+    <div class="absolute inset-0 flex justify-center items-center px-4">
+      <div class="w-full lg:max-w-[25rem]">
+        {section?.heading && (
+          <h1 class="mb-4 lg:mb-5 font-secondary font-medium text-white text-2xl lg:text-4xl text-center">
+            {section.heading}
+          </h1>
+        )}
+
+        {(section?.description?.length ?? 0) > 0 && (
+          <div class="text-white text-center" set:html={descHtml} />
+        )}
+      </div>
     </div>
   </div>
 </section>

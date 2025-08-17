@@ -11,6 +11,7 @@ import { localizedSchemaTypes, SUPPORTED_LANGS } from './constants'
 import { pageTemplates } from './templates/pageTemplates'
 import { withLanguageField } from './utils/withLanguageField'
 import { globalSettingsTemplates } from './templates/globalSettingsTemplates'
+import { articleTemplates } from './templates/articleTemplates'
 
 export default defineConfig({
   name: 'default',
@@ -31,9 +32,10 @@ export default defineConfig({
   schema: {
     types: withLanguageField(schemaTypes, localizedSchemaTypes),
     templates: (prev: Template[]): Template[] => [
-      ...prev.filter(t => !localizedSchemaTypes.includes(t.schemaType)), // only page type
+      ...prev.filter(t => !localizedSchemaTypes.includes(t.schemaType)),
       ...pageTemplates,
-      ...globalSettingsTemplates
+      ...globalSettingsTemplates,
+      ...articleTemplates
     ],
   },
 })

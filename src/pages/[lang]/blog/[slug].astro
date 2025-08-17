@@ -1,0 +1,51 @@
+---
+import { query } from '../../../lib/sanity';
+import { BLOG_POST_WITH_SETTINGS, BLOG_POST_SLUGS } from '../../../lib/queries';
+import DefaultLayout from "@layouts/Default.astro";
+import PostContentSection from '@/components/staticSections/blog/PostContentSection.astro';
+import { DEFAULT_LANG } from '@/constants';
+
+type Post = {
+  title: string;
+  image: { url: string; alt?: string };
+  content: any[];   // Portable Text
+  date?: string;
+};
+
+type Data = {
+  post: Post | null;
+  settings: any | null;
+};
+
+const { lang = DEFAULT_LANG, slug } = Astro.params;
+
+// Собираем все пути статей
+export async function getStaticPaths() {
+  const rows = await query<{ lang: string; rawSlug: string }[]>(BLOG_POST_SLUGS);
+  if (!rows?.length) return [];
+
+  const paths = rows
+    .map(({ lang, rawSlug }) => {
+      let s = String(rawSlug || '').replace(/^\/+|\/+$/g, '');
+      if (s.startsWith(`${lang}/`)) s = s.slice(lang.length + 1);
+      if (s === '' || s === lang) s = 'index';
+      if (s.includes('/')) s = s.split('/').pop() as string;
+      return { params: { lang, slug: s } };
+    })
+    // исключаем «индексы»/служебные
+    .filter(p => p.params.slug !== 'index' && p.params.slug !== 'blog');
+
+  return paths;
+}
+
+const data = await query<Data>(BLOG_POST_WITH_SETTINGS, { lang, slug });
+if (!data?.post) {
+  return Astro.redirect(`/404`, 302);
+}
+
+const { post, settings } = data;
+---
+
+<DefaultLayout settings={settings} lang={lang} seo={{ title: post.title }}>
+  <PostContentSection post={post} />
+</DefaultLayout>

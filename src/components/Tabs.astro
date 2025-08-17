@@ -22,7 +22,7 @@ const colorMap = {
   
     <div
     class:list={[
-      "flex justify-center gap-10 font-secondary font-semibold text-base lg:text-lg text-center container tab-triggers",
+      "flex justify-center gap-5 lg:gap-10 font-secondary font-semibold  text-base lg:text-lg text-center container tab-triggers",
       triggerType === 'pill' ? 'bg-gradient-pills-to from-gradient-pills-from to-gradient-pills-to p-2 gap-5 w-11/12 lg:max-w-max rounded-full mb-14' : ''
     ]}
     role="tablist"
@@ -35,8 +35,7 @@ const colorMap = {
 
   <div
     class:list={[
-      "relative tab-content ",
-      divider ? "top-[-9rem]" : "",
+      "relative tab-content ", divider ? "top-[-9rem]" : "",
     ]}
   >
     

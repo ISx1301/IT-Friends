@@ -14,9 +14,16 @@ const props = Astro.props as Props;
 const className = props.class ?? '';
 const wordLength = props.wordLength;
 
+
+
+// TODO: переписать функцию и константу resolvedLang / isLang
+
+
 // type-guard, чтобы не было any
 const isLang = (v: unknown): v is Lang =>
   typeof v === 'string' && (v === 'uk' || v === 'en');
+
+
 
 // жёстко резолвим язык (fallback на DEFAULT_LANG -> 'uk')
 const resolvedLang: Lang = isLang(props.lang)
@@ -28,20 +35,18 @@ const resolvedLang: Lang = isLang(props.lang)
 const dict = LOCALE[resolvedLang];
 
 const html = await Astro.slots.render('default');
-const plainText = html.replace(/<[^>]+>/g, '').trim();
+const plainText = html.trim(); //replace(/<[^>]+>/g, '')
 const words = plainText.split(/\s+/);
 const shouldTruncate = wordLength !== undefined && words.length > wordLength;
 const excerptedWords = shouldTruncate ? words.slice(0, wordLength) : words;
 const excerptedText = excerptedWords.join(' ');
+const readMoreHtml = `<span class="font-bold cursor-pointer read-more">${dict.readMore}</span>`;
 ---
 <div class={`excerpt-container ${className}`}>
-  <p class="text-base excerpt-text">
-    {excerptedText + (shouldTruncate ? '…' : '')}
-    {shouldTruncate && (
-      <span class="font-bold cursor-pointer read-more">{dict.readMore}</span>
-    )}
-  </p>
-  <p class="hidden text-base full-text">{plainText}</p>
+  <div class="text-base excerpt-text">
+    <Fragment set:html={excerptedText + (shouldTruncate ? `... ${readMoreHtml}` : '')}>
+  </div>
+  <div set:html={plainText} class="hidden text-base full-text"></div>
 </div>
 
 {shouldTruncate && (

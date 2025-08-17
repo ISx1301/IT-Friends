@@ -9,7 +9,6 @@ export function setupExcerpt() {
     if (readMore && excerptText && fullText) {
       readMore.addEventListener('click', () => {
         fullText.classList.remove('hidden');
-        excerptText.classList.add('hidden');
         readMore.classList.add('hidden');
       });
     }

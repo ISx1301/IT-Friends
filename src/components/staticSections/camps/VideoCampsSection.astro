@@ -1,25 +1,50 @@
 ---
-import { Image } from "astro:assets";
+import { BG_CLASSES, type BgColor } from "@/constants";
+import { Image as AstroImage } from "astro:assets";
+import playPng from "@images/play.png"; // статический импорт, чтобы путь всегда был корректным
 
+type SanityImage = { alt?: string; url?: string }
+
+type VideoTeaserSection = {
+  _type: "videoTeaserSection";
+  _key: string;
+  backgroundColor?: BgColor;
+  image?: SanityImage;   // превью из Sanity (remote URL)
+  videoHref: string;     // ссылка точно приходит
+}
+
+export interface Props {
+  section: VideoTeaserSection;
+  anchorId?: string;
+}
+
+const { section, anchorId } = Astro.props as Props;
+const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
 ---
 
-
-<section class="py-20 lg:py-28">
+<section id={anchorId} class={`${bgClass} [.${bgClass}+&]:!pt-0 px-20 border py-32`}>
   <div class="container">
-    <a href="#">
-      <div class="group relative rounded-xl aspect-3/4 lg:aspect-2/1">
-        <Image
-          class="rounded-xl w-full h-full object-cover"
-          src={import("@images/video-bg.png")}
-          format="webp"
-          alt="image"
-        />    
-        <Image
-          class="top-1/2 left-1/2 absolute group-hover:brightness-90 -translate-x-1/2 -translate-y-1/2"
-          src={import("@images/play.png")}
-          format="webp"
-          alt="image"
-        />  
+    <a href={section.videoHref} target="_blank" rel="noopener noreferrer" aria-label="Відтворити відео">
+      <div class="group relative rounded-xl aspect-[3/4] lg:aspect-[2/1] overflow-hidden">
+        {section?.image?.url && (
+          <img
+            class="rounded-xl w-full h-full object-cover"
+            src={section.image.url}
+            alt={section.image.alt ?? ""}
+            loading="lazy"
+            decoding="async"
+          />
+        )}
+
+        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition pointer-events-none"></div>
+
+        <AstroImage
+          src={playPng}
+          alt=""
+          aria-hidden="true"
+          class="top-1/2 left-1/2 z-10 absolute group-hover:brightness-90 w-16 md:w-20 h-16 md:h-20 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+          loading="lazy"
+        />
       </div>
     </a>
   </div>

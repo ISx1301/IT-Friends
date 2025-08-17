@@ -56,7 +56,7 @@ return rows.map(({ lang, rawSlug } : { lang: string, rawSlug: string }) => {
 }
 
 if (!data?.page) {
-  return Astro.redirect('/404', 302)
+  return Astro.redirect(`/404`, 302)
 }
 
 

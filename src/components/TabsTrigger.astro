@@ -30,7 +30,7 @@ const isActive = id.slice(-1) === '1';
     "tab-trigger inline-block px-3 lg:px-7 py-3 duration-300",
     triggerType === 'pill' ? 'rounded-full w-full' : 'rounded-t-lg',
     isActive
-      ? (triggerType === 'pill' ? 'bg-white text-black' : `${tabColorMap[colorKey]} text-black`)
+      ? (triggerType === 'pill' ? 'bg-white text-black' : `${tabColorMap[colorKey]} text-black `)
       : (triggerType === 'pill' ? 'bg-[transparent] text-white' : 'bg-[transparent] text-black'),
     classes
   ]}

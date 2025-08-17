@@ -2,6 +2,7 @@
 import Article from "@components/Article.astro";
 import { BG_CLASSES, type BgColor } from "@/constants";
 import { toHTML } from "@portabletext/to-html";
+import Excerpt from "@components/Excerpt.astro";
 
 type PTSpan = { _type: 'span'; text: string; marks?: string[] };
 type PTMarkDef = { _key: string; _type: string; href?: string };
@@ -110,7 +111,7 @@ const descriptionHtml = toHTML(section.description ?? [], { components: ptCompon
               <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out accordion-panel">
                 <div class="p-5 border-t">
                   <Article>
-                    <div set:html={answerHtml} />
+                    <Fragment set:html={answerHtml} />
                   </Article>
                 </div>
               </div>

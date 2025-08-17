@@ -57,7 +57,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 
 if (!data?.page) {
-  return Astro.redirect('/404', 302)
+  return Astro.redirect(`/404`, 302)
 }
 
 const { page, settings } = data

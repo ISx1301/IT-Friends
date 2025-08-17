@@ -1,11 +1,17 @@
 const DEFAULT_LANG = import.meta.env.PUBLIC_DEFAULT_LANG || 'uk';
 
+// const CURRENT_LANG = 
+
 const LOCALE = {
   uk: {
-    readMore: 'читати більше'
+    readMore: 'читати більше >',
+    notFoundText: 'На жаль, таку сторінку не знайдено:(',
+    btn404: 'На головну'
   },
   en: {
-    readMore: 'read more'
+    readMore: 'read more >',
+    notFoundText: 'Unfortunately, such page was not found :(',
+    btn404: 'To main'
   }
 };
 

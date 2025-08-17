@@ -163,10 +163,11 @@ export const globalSettings = defineType({
                               )
                                 return true
                               if (p.linkType !== 'anchor') return true
-                              if (!value) return 'Вкажіть якорь'
-                              return value.startsWith('#')
-                                ? true
-                                : 'Якір повинен починатися з #'
+                              if (!value) return 'Вкажіть якiр'
+                              return  true
+                              // return value.startsWith('#')
+                              //   ? true
+                              //   : 'Якір повинен починатися з #'
                             }),
                         }),
                       ],
@@ -244,9 +245,10 @@ export const globalSettings = defineType({
                         return true
                       if (p.linkType !== 'anchor') return true
                       if (!value) return 'Вкажіть якір'
-                      return value.startsWith('#')
-                        ? true
-                        : 'Якір повинен починатися з #'
+                      return true
+                      // return value.startsWith('#')
+                      //   ? true
+                      //   : 'Якір повинен починатися з #'
                     }),
                 }),
 

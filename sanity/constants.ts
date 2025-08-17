@@ -9,4 +9,4 @@ export const SUPPORTED_LANGS: { id: LOCALE; title: string }[] = [
   { id: LOCALE.En, title: 'English' },
 ]
 
-export const localizedSchemaTypes = ['globalSettings', 'page'];
+export const localizedSchemaTypes = ['globalSettings', 'page', 'blog'];

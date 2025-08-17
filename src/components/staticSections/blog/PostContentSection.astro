@@ -1,24 +1,73 @@
 ---
-const { post } = Astro.props;
-import { Image } from "astro:assets";
+/** PostContentSection.astro — полная статья с абзацами */
+
+import { toHTML } from '@portabletext/to-html';
+
+type PortableSpan = { _type: 'span'; text: string; marks?: string[] };
+type PortableLink = { _key: string; _type: 'link'; href?: string };
+type PortableBlock = {
+  _type: 'block';
+  style?: string;                // 'normal', h2, h3...
+  children?: PortableSpan[];
+  markDefs?: PortableLink[];
+};
+
+type Post = {
+  title: string;
+  image: { url: string; alt?: string };
+  content: PortableBlock[];      // Portable Text
+  date?: string;
+};
+
+const { post } = Astro.props as { post: Post };
+
+// Явный рендер Portable Text → HTML
+const html = toHTML(post.content, {
+  components: {
+    // Каждый блок — отдельный <p>, заголовки — по стилю
+    block: ({ children, value }) => {
+      const c = String(children).replace(/\n/g, '<br/>'); // переносы внутри блока
+      switch (value?.style) {
+        case 'h2': return `<h2>${c}</h2>`;
+        case 'h3': return `<h3>${c}</h3>`;
+        case 'h4': return `<h4>${c}</h4>`;
+        default:   return `<p>${c}</p>`;
+      }
+    },
+    // Маркировки текста
+    marks: {
+      strong: ({ children }) => `<strong>${children}</strong>`,
+      em:     ({ children }) => `<em>${children}</em>`,
+      link:   ({ children, value }) => {
+        const href = value?.href || '#';
+        return `<a href="${href}" target="_blank" rel="noopener noreferrer">${children}</a>`;
+      },
+    },
+  },
+});
+
+const alt = post.image.alt ?? post.title;
 ---
 
 <section class="py-9 lg:py-16">
   <div class="container">
     <div class="flex">
       <div class="flex flex-col basis-full lg:basis-9/12">
-        <h1 class="mb-9 lg:mb-10 font-bold text-2xl lg:text-4xl">{post.title}</h1>  
+        <h1 class="mb-9 lg:mb-10 font-bold text-2xl lg:text-4xl">{post.title}</h1>
+
         <div class="zoom-wrapper">
-          <Image
+          <img
             class="mb-14 w-full h-full aspect-28/15"
-            src={post.image}
-            format="webp"
-            alt={post.title}
+            src={post.image.url}
+            alt={alt}
+            loading="lazy"
+            decoding="async"
           />
-        </div>  
-        <div>
-          <p>{post.content}</p>
         </div>
+
+        <!-- Контент с абзацами/заголовками/ссылками -->
+        <div class="space-y-4 max-w-none prose" set:html={html} />
+      </div>
     </div>
   </div>
 </section>
