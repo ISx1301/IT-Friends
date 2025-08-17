@@ -9,7 +9,7 @@ const { PROJECT_ID, SECRET_API_TOKEN } = loadEnv(process.env.NODE_ENV, process.c
 export default defineConfig({
   site: 'http://localhost:4321',
 
-  // output: 'server',
+  output: 'server',
   server: {
     allowedHosts: true
   },
