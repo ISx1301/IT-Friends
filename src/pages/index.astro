@@ -15,15 +15,11 @@ export const prerender = false;
 
 const { lang = DEFAULT_LANG, slug='/' } = Astro.params
 
-const data = await query<PageData>(PAGE_WITH_SETTINGS, { lang, slug})
-
-
+const data = await query<PageData>(PAGE_WITH_SETTINGS, { lang, slug })
 
 if (!data?.page) {
   return Astro.redirect(`/404`, 302)
 }
-
-
 
 const { page, settings } = data
 

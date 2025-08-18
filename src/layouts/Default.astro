@@ -8,9 +8,13 @@ import FreeLessonForm from "@components/FreeLessonForm.astro";
 import Contacts from "@/components/Contacts.astro";
 
 const { settings, lang, seo } = Astro.props;
+
+if (!Astro.cookies.get('language')) {
+  Astro.cookies.set('language', lang, { maxAge: 31536000 });
+}
 ---
 
-<html class="scroll-smooth" lang="en">
+<html class="scroll-smooth" lang={lang}>
   <HeadBase {...seo} />
 
   <body class="flex flex-col min-h-[100svh]">
@@ -25,7 +29,7 @@ const { settings, lang, seo } = Astro.props;
     </main>
 
     
-    <Footer data={settings?.footer} lang={lang}/>
+    <Footer data={settings?.footer}/>
     <!-- <script type="module" src="/src/scripts/app.ts"></script> -->
   </body>
   <script>

@@ -44,14 +44,14 @@ export function setupToggleArrow(opts: SetupOpts = {}): void {
     const currentLang = container.querySelector<HTMLElement>(".current-lang");
     if (!arrow || !menu || !currentLang) return;
 
-    // Открыть/закрыть меню
+    // Open/close menu
     container.addEventListener("click", (e) => {
       e.stopPropagation();
       menu.classList.toggle("hidden");
       arrow.classList.toggle("-rotate-180");
     });
 
-    // Выбор языка
+    // Lang choose
     menu.querySelectorAll<HTMLLIElement>("li[data-lang]").forEach((item) => {
       item.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -67,6 +67,7 @@ export function setupToggleArrow(opts: SetupOpts = {}): void {
         arrow.classList.remove("-rotate-180");
 
         const nextPath = computeTargetPath(window.location.pathname, targetLang, locales);
+        document.cookie = `language=${targetLang}; path=/; max-age=31536000`;
         window.location.assign(nextPath);
       });
     });

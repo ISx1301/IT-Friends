@@ -16,7 +16,6 @@ export const prerender = false;
 const { lang = DEFAULT_LANG } = Astro.params;
 const slug = 'blog';
 
-
 export async function getStaticPaths() {
   const rows = await query<{ lang: string; rawSlug: string }[]>(/* groq */`
     *[
@@ -36,7 +35,7 @@ export async function getStaticPaths() {
   return Array.from(langs).map((lang) => ({ params: { lang } }));
 }
 
-const data = await query<PageData>(PAGE_WITH_SETTINGS, { lang, slug, fallbackLang: DEFAULT_LANG });
+const data = await query<PageData>(PAGE_WITH_SETTINGS, { lang, slug });
 
 if (!data?.page) {
   return Astro.redirect(`/404`, 302);

@@ -3,13 +3,7 @@ import ErrorLayout from "@layouts/Error.astro"
 import { DEFAULT_LANG, LOCALE } from "@/constants"
 import { Image } from "astro:assets"
 
-const firstSeg = Astro.url.pathname.split("/").filter(Boolean)[0] ?? ""
-
-const isLang = (x: unknown): x is keyof typeof LOCALE => x === "uk" || x === "en"
-
-const lang: keyof typeof LOCALE = isLang(firstSeg)
-  ? firstSeg
-  : (isLang(DEFAULT_LANG) ? DEFAULT_LANG : "uk")
+const lang: keyof typeof LOCALE = Astro.cookies.get('language') ?? DEFAULT_LANG;
 
 const t = LOCALE[lang]
 const description = t.notFoundText

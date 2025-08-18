@@ -30,7 +30,6 @@ export async function getStaticPaths() {
     }
   `
   )
-  // console.log(paths)
   if (!rows?.length) {
     console.warn('[getStaticPaths] has no paths for page schema. Check Sanity.');
   }

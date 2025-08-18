@@ -1,5 +1,5 @@
 import { defineType, defineField } from 'sanity'
-import { SUPPORTED_LANGS } from '../../../constants'
+import { PrefixedSlugInput } from '../../../components/PrefixedSlugInput'
 
 export const page = defineType({
   name: 'page',
@@ -11,8 +11,14 @@ export const page = defineType({
       name: 'slug',
       title: 'Slug (URL)',
       type: 'slug',
-      options: { source: 'title', maxLength: 96 },
+      options: { 
+        source: 'title', 
+        maxLength: 96,
+      },
       validation: (Rule) => Rule.required(),
+      components: {
+        input: PrefixedSlugInput
+      }
     }),
     defineField({ name: 'seo', title: 'SEO', type: 'head' }),
     defineField({
@@ -20,12 +26,12 @@ export const page = defineType({
       title: 'Секції',
       type: 'array',
       of: [
-        { type: 'heroSectionMainSection'},
-        {type: 'areasOfStudyMainSection'},
+        { type: 'heroSectionMainSection' },
+        { type: 'areasOfStudyMainSection' },
         { type: 'aboutSection' },
-        { type: 'peculiaritiesSection'},
-        { type: 'reviewsSection'},
-        { type: 'newSchoolMainSection'},
+        { type: 'peculiaritiesSection' },
+        { type: 'reviewsSection' },
+        { type: 'newSchoolMainSection' },
         { type: 'teamSection' },
         { type: 'accordionSection' },
         { type: 'heroZoomImageSection' },
@@ -39,21 +45,11 @@ export const page = defineType({
         { type: 'postListSection' },
       ],
     }),
-    defineField({
-      name: 'language',
-      title: 'Language',
-      type: 'string',
-      options: {
-        list: SUPPORTED_LANGS.map(l => ({ title: l.title, value: l.id })),
-      },
-      hidden: true,
-      readOnly: true,
-    }),
   ],
   // ? Predefine values
   initialValue: {
     title: 'Нова сторінка',
-    slug: { current: '/' },
+    slug: { current: '/' }, 
     sections: [],
   },
   preview: {

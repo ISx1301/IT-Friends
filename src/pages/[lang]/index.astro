@@ -17,8 +17,6 @@ const { lang = DEFAULT_LANG, slug = 'index' } = Astro.params
 
 const data = await query<PageData>(PAGE_WITH_SETTINGS, { lang, slug})
 
-
-
 import type { GetStaticPaths } from 'astro';
 
 export const getStaticPaths: GetStaticPaths = async () => {
