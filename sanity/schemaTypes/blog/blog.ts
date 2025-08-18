@@ -20,7 +20,7 @@ export const blog = defineType({
       options: {
         source: 'title',
         maxLength: 96,
-        isUnique: isUniquePerLanguage, // ✅ уникальность в рамках языка
+        isUnique: isUniquePerLanguage, 
       },
       validation: (Rule) => Rule.required(),
     }),

@@ -117,7 +117,7 @@ export const globalSettings = defineType({
                           options: {
                             list: [
                               { title: 'Сторінка', value: 'page' },
-                              { title: 'Якір на цій сторінці', value: 'anchor' },
+                              { title: 'Anchor на цій сторінці', value: 'anchor' },
                             ],
                             layout: 'radio',
                           },
