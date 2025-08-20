@@ -3,21 +3,7 @@ import defaultTheme from 'tailwindcss/defaultTheme';
 
 module.exports = {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
-  safelist: [
-    // "одинаковый фон у двух соседей"
-    "[.bg-token-white+&.bg-token-white]:!pt-0",
-    "[.bg-token-gray+&.bg-token-gray]:!pt-0",
-    "[.bg-token-mint+&.bg-token-mint]:!pt-0",
-    "[.bg-token-turquoise+&.bg-token-turquoise]:!pt-0",
-    "[.bg-token-sand+&.bg-token-sand]:!pt-0",
-
-    // если надо также на lg
-    "lg:[.bg-token-white+&.bg-token-white]:!pt-0",
-    "lg:[.bg-token-gray+&.bg-token-gray]:!pt-0",
-    "lg:[.bg-token-mint+&.bg-token-mint]:!pt-0",
-    "lg:[.bg-token-turquoise+&.bg-token-turquoise]:!pt-0",
-    "lg:[.bg-token-sand+&.bg-token-sand]:!pt-0",
-  ],
+  safelist: [],
   theme: {
     screens: {
       ...defaultTheme.screens,
@@ -101,11 +87,16 @@ module.exports = {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        'letterGreen': {
+          '0%, 100%': { color: 'inherit' },
+          '50%': { color: '#16a34a' }, // green-600
+        },
       },
       animation: {
         'marquee-to-top-110000ms': 'marquee-to-top 100s linear infinite alternate',
         'marquee-to-bottom-110000ms': 'marquee-to-bottom 100s linear infinite alternate',
         'fadeInUp': 'fadeInUp 0.5s ease-out forwards',
+        'letterGreen': 'letterGreen 1s ease-in-out infinite',
       },
     },
   },

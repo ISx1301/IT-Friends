@@ -4,7 +4,8 @@ import "@styles/global.scss";
 import HeadBase from "@components/Head.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro"
-import FreeLessonForm from "@components/FreeLessonForm.astro";
+import ItLessonForm from "@components/itLessonForm.astro";
+import EnglishLessonForm from "@components/englishLessonForm.astro";
 import Contacts from "@/components/Contacts.astro";
 
 const { settings, lang, seo } = Astro.props;
@@ -22,7 +23,9 @@ if (!Astro.cookies.get('language')) {
 
     <Contacts />
 
-    <FreeLessonForm />
+    <ItLessonForm />
+
+    <EnglishLessonForm />
 
     <main aria-label="Content">
       <slot />
@@ -30,7 +33,6 @@ if (!Astro.cookies.get('language')) {
 
     
     <Footer data={settings?.footer}/>
-    <!-- <script type="module" src="/src/scripts/app.ts"></script> -->
   </body>
   <script>
     // import "@scripts/app.ts";

@@ -10,6 +10,7 @@ export function setupExcerpt() {
       readMore.addEventListener('click', () => {
         fullText.classList.remove('hidden');
         readMore.classList.add('hidden');
+        excerptText.innerHTML = fullText.innerHTML;
       });
     }
   });

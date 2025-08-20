@@ -3,11 +3,17 @@ import ErrorLayout from "@layouts/Error.astro"
 import { DEFAULT_LANG, LOCALE } from "@/constants"
 import { Image } from "astro:assets"
 
-const lang: keyof typeof LOCALE = Astro.cookies.get('language') ?? DEFAULT_LANG;
+export const prerender = false;  
+
+
+
+const cookie = Astro.cookies.get('language');
+const lang: keyof typeof LOCALE = cookie?.value ?? DEFAULT_LANG;
 
 const t = LOCALE[lang]
 const description = t.notFoundText
 const btn404 = t.btn404
+
 ---
 
 <ErrorLayout description={description} btn={btn404}>
