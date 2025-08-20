@@ -1,26 +1,29 @@
-import React, { useCallback, useMemo } from 'react'
-import { Box, Button, Card, Flex, Stack, Text, TextInput } from '@sanity/ui'
-import type { SlugInputProps } from 'sanity'
-import { set, unset, setIfMissing, useFormValue } from 'sanity'
+import React, {useCallback, useMemo} from 'react'
+import {Box, Button, Card, Flex, Stack, Text, TextInput} from '@sanity/ui'
+import type {SlugInputProps} from 'sanity'
+import {set, unset, setIfMissing, useFormValue} from 'sanity'
 
-type SlugValue = { _type?: 'slug'; current?: string }
+type SlugValue = {_type?: 'slug'; current?: string}
 
 const basicSlugify = (input: string) =>
-  input
+  (input || '')
     .toString()
     .normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/[^a-z0-9/]+/g, '-')
     .replace(/(^-|-$)+/g, '')
+    .replace(/\/{2,}/g, '/')
+
+const LOCALE_SEGMENT = /^\/?([a-z]{2,3}(?:-[A-Z]{2})?)\//
 
 const getByPath = (obj: any, path: string | undefined): any => {
   if (!obj || !path) return undefined
   return path.split('.').reduce((acc, key) => (acc ? acc[key] : undefined), obj)
 }
 
-function Prefix({ text }: { text?: string }) {
+function Prefix({text}: {text?: string}) {
   if (!text) return null
   return (
     <Box
@@ -34,22 +37,22 @@ function Prefix({ text }: { text?: string }) {
         lineHeight: 1,
       }}
     >
-      <Text size={2} style={{ 
-        color: 'var(--card-muted-fg-color)' }}
-      >{text}</Text>
+      <Text size={2} style={{color: 'var(--card-muted-fg-color)'}}>
+        {text}
+      </Text>
     </Box>
   )
 }
 
 export function PrefixedSlugInput(props: SlugInputProps) {
-  const { value, onChange, schemaType, readOnly } = props
+  const {value, onChange, schemaType, readOnly} = props
 
   const doc = useFormValue([]) as Record<string, any> | undefined
   const langFromLanguage = useFormValue(['language']) as string | undefined
   const langFromHidden = useFormValue(['__i18n_lang']) as string | undefined
-
   const lang = langFromLanguage ?? langFromHidden
-  const prefix = lang ? `${lang}` : undefined
+
+  const prefix = lang ? `/${lang}` : undefined
 
   const slugVal = (value as SlugValue | undefined)?.current ?? ''
   const maxLength =
@@ -67,23 +70,53 @@ export function PrefixedSlugInput(props: SlugInputProps) {
     | undefined
 
   const shown = useMemo(() => {
-    if (!prefix) return slugVal
-    return slugVal.replace(/^([a-z]{2,3}(?:-[A-Z]{2})?\/)/, '')
-  }, [slugVal, prefix])
+    if (!slugVal) return ''
+    const withoutLocale = slugVal.replace(LOCALE_SEGMENT, '/')
+    return withoutLocale
+  }, [slugVal])
 
-  const commit = useCallback(
-    (nextBare: string) => {
-      const next = nextBare || ''
-      onChange([
-        setIfMissing({ _type: 'slug' }),
-        next ? set({ _type: 'slug', current: next }) : unset(),
-      ])
+  const collapseSlashes = (s: string) => s.replace(/\/{2,}/g, '/')
+
+  const buildStored = useCallback(
+    (nextBare: string, {collapse = false}: {collapse?: boolean} = {}) => {
+      let tail = nextBare || ''
+      if (!tail.startsWith('/')) tail = `/${tail}`
+
+      if (LOCALE_SEGMENT.test(tail)) {
+        return collapse ? collapseSlashes(tail) : tail
+      }
+
+      if (lang) {
+        const normalizedTail = tail.replace(/^\/+/, '')
+        const full = `/${lang}/${normalizedTail}`
+        return collapse ? collapseSlashes(full) : full
+      }
+
+      return collapse ? collapseSlashes(tail) : tail
     },
-    [onChange]
+    [lang]
   )
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    commit(e.currentTarget.value)
+    const raw = e.currentTarget.value
+    const withLeadingSlash = raw.startsWith('/') ? raw : `/${raw}`
+    const full = buildStored(withLeadingSlash, {collapse: false})
+    onChange([
+      setIfMissing({_type: 'slug'}),
+      set({_type: 'slug', current: full}),
+    ])
+  }
+
+  const handleBlur = () => {
+  const current = (value as SlugValue | undefined)?.current ?? ''
+    if (!current) return
+    const normalized = buildStored(current, {collapse: true})
+    if (normalized !== current) {
+      onChange([
+        setIfMissing({_type: 'slug'}),
+        set({_type: 'slug', current: normalized}),
+      ])
+    }
   }
 
   const handleGenerate = () => {
@@ -92,7 +125,7 @@ export function PrefixedSlugInput(props: SlugInputProps) {
       baseInput = (getByPath(doc, source) as string | undefined) ?? ''
     } else if (typeof source === 'function') {
       try {
-        baseInput = source(doc ?? {}, { parentPath: [], parent: doc }) ?? ''
+        baseInput = source(doc ?? {}, {parentPath: [], parent: doc}) ?? ''
       } catch {
         baseInput = ''
       }
@@ -101,8 +134,12 @@ export function PrefixedSlugInput(props: SlugInputProps) {
     }
 
     const raw = (externalSlugify ? externalSlugify(baseInput) : basicSlugify(baseInput)) || ''
-    const nextBare = raw.slice(0, maxLength)
-    commit(nextBare)
+    const full = buildStored(raw, {collapse: true})
+    const clipped = full.slice(0, maxLength)
+    onChange([
+      setIfMissing({_type: 'slug'}),
+      set({_type: 'slug', current: clipped}),
+    ])
   }
 
   return (
@@ -114,6 +151,7 @@ export function PrefixedSlugInput(props: SlugInputProps) {
             prefix={<Prefix text={prefix} />}
             readOnly={readOnly}
             onChange={handleChange}
+            onBlur={handleBlur}
             placeholder={(schemaType.options as any)?.placeholder}
           />
         </Card>
