@@ -18,7 +18,7 @@ import { Image } from "astro:assets";
       </div>
 
       <div class="flex flex-col gap-4 w-full">
-        <!-- ВАЖНО: data-branch совпадает с ключами на сервере -->
+
         <button type="button" class="flex justify-center items-center py-2 contact-btn js-pick-branch" data-branch="borshchahivka">
           <span class="text-center">ЖМ Борщагівка</span>
           <span >Б-р, Кольцова 14</span>
@@ -69,7 +69,6 @@ import { Image } from "astro:assets";
 
         <p class="mb-4 text-gray-600 text-sm text-center js-branch-hint"></p>
 
-        <!-- скрытое поле выбора адреса -->
         <input type="hidden" name="branch" class="js-branch-value" value="">
 
         <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
