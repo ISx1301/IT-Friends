@@ -1,6 +1,5 @@
 ---
 import "@styles/global.scss";
-// Components
 import HeadBase from "@components/Head.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro"
@@ -21,9 +20,9 @@ if (!Astro.cookies.get('language')) {
   <body class="flex flex-col min-h-[100svh]">
     <Header data={settings?.header} lang={lang}/>
 
-    <Contacts />
+    <Contacts lang={lang} />
 
-    <ItLessonForm />
+    <ItLessonForm lang={lang} />
 
     <EnglishLessonForm />
 
