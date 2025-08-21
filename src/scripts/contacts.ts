@@ -1,41 +1,32 @@
 function setupMenuControls() {
-  const callBtn = document.querySelector(".menu-btn-call") as HTMLButtonElement | null;
-  const telegramBtn = document.querySelector(".menu-btn-telegram") as HTMLButtonElement | null;
+  const callBtn = document.querySelector(".phone-menu-btn") as HTMLButtonElement | null;
+  const callMenu = document.querySelector(".phone-menu") as HTMLElement | null;
+  const callBtnClose = document.querySelector(".phone-menu-close") as HTMLElement | null;
 
-  const callMenu = document.querySelector(".menu-call") as HTMLElement | null;
-  const telegramMenu = document.querySelector(".menu-telegram") as HTMLElement | null;
 
-  const closeButtons = document.querySelectorAll(".menu-panel .close");
+  const telegramBtn = document.querySelector(".tg-menu-btn") as HTMLButtonElement | null;
+  const telegramMenu = document.querySelector(".telegram-menu") as HTMLElement | null;
+  const telegramBtnClose = document.querySelector(".telegram-menu-close") as HTMLElement | null;
 
-  const allMenus = document.querySelectorAll(".menu-panel");
-
-  function closeAllMenus() {
-    allMenus.forEach(menu => {
-      menu.classList.add("-translate-x-full");
-    });
-  }
+  
 
   callBtn?.addEventListener("click", () => {
-    closeAllMenus();
     callMenu?.classList.remove("-translate-x-full");
   });
 
+  callBtnClose?.addEventListener("click", () => {
+    callMenu?.classList.add('-translate-x-full')
+  });
+
+
   telegramBtn?.addEventListener("click", () => {
-    closeAllMenus();
     telegramMenu?.classList.remove("-translate-x-full");
   });
 
-  closeButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      closeAllMenus();
-    });
+  telegramBtnClose?.addEventListener("click", () => {
+    telegramMenu?.classList.add('-translate-x-full')
   });
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      closeAllMenus();
-    }
-  });
 }
 
 document.addEventListener("DOMContentLoaded", setupMenuControls);

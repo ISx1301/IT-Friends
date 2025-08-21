@@ -1,0 +1,150 @@
+---
+import "@styles/header.scss";
+import { Image } from "astro:assets";
+import {
+  LOCALE,
+  DEFAULT_LANG,
+  type Lang,
+  BRANCHES,
+  BRANCH_ORDER,
+} from "@/constants";
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = DEFAULT_LANG as Lang } = Astro.props;
+const t = LOCALE[lang].form;
+const branches = BRANCHES[lang];
+---
+
+<div class="top-0 left-0 z-50 fixed flex justify-center items-center w-full h-screen overflow-y-auto transition-transform -translate-x-full duration-300 ease-in-out address-panel transform">
+  <div class="flex justify-center items-center h-screen overflow-y-auto">
+    <div class="left-0 absolute bg-white/10 backdrop-blur-md w-full h-screen overflow-y-auto js-close-address" aria-label={t.close}></div>
+
+    <div class="relative flex flex-col items-center bg-white lg:shadow-2xl px-3 lg:px-14 py-9 rounded-lg w-11/12 lg:w-full">
+      <button type="button" class="top-4 right-4 absolute cursor-pointer js-close-address" aria-label={t.close}>
+        <Image src={import("@images/green-close.svg")} format="svg" alt={t.close} />
+      </button>
+
+      <div class="mb-5">
+        <h2 class="font-secondary font-medium text-xl text-center">{t.addressTitle}</h2>
+      </div>
+
+      <div class="flex flex-col gap-4 w-full">
+        {BRANCH_ORDER.map((id) => (
+          <button
+            type="button"
+            class="flex justify-center items-center gap-3 py-2 contact-btn js-pick-branch"
+            data-branch={id}
+            aria-label={`${branches[id].district}, ${branches[id].address}`}
+          >
+            <span class="text-center">{branches[id].district}</span>
+            <span>{branches[id].address}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="z-50 fixed inset-0 transition-transform -translate-x-full duration-300 ease-in-out form-slider transform">
+  <div class="fixed inset-0 bg-white/10 backdrop-blur-md form-close" aria-label={t.close}></div>
+
+  <div class="flex justify-center items-center w-full h-full">
+    <form
+      class="relative flex flex-col items-center bg-white lg:shadow-2xl mx-auto px-3 lg:px-14 py-9 rounded-3xl w-11/12 lg:w-2/4 max-h-[85vh] overflow-hidden overflow-y-auto free-lesson-form"
+      method="POST"
+      action="/api/submit"
+      novalidate
+    >
+      <button type="button" class="top-4 right-4 absolute mb-5 lg:mb-0 cursor-pointer form-close" aria-label={t.close}>
+        <Image src={import("@images/green-close.svg")} format="svg" alt={t.close} />
+      </button>
+
+      <h2 class="mb-4 pt-5 font-secondary font-semibold text-primary-green text-xl text-center">
+        {t.tryFree}
+      </h2>
+
+      <p class="mb-4 text-gray-600 text-sm text-center js-branch-hint">{t.branchHintEmpty}</p>
+
+      <input type="hidden" name="branch" class="js-branch-value" value="">
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.parentName}
+        <input name="parentName" class="pl-3 border focus:border-2 rounded-md h-10 form-input-parent" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">{t.requiredError}</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.childFirstName}
+        <input name="childFirstName" class="pl-3 border focus:border-2 rounded-md h-10 form-input-child-first" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">{t.requiredError}</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.childLastName}
+        <input name="childLastName" class="pl-3 border focus:border-2 rounded-md h-10 form-input-child-last" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">{t.requiredError}</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.childAge}
+        <input name="childAge" class="pl-3 border focus:border-2 rounded-md h-10 form-input-age" type="number" min="3" max="18" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">{t.requiredError}</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.addressStreet}
+        <input name="addressStreet" class="pl-3 border focus:border-2 rounded-md h-10 form-input-street" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">{t.requiredError}</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.phone}
+        <input name="phone" class="pl-3 border focus:border-2 rounded-md h-10 form-input-phone" type="tel" inputmode="tel" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">{t.phoneError}</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.itCourse}
+        <input name="itCourse" class="pl-3 border focus:border-2 rounded-md h-10 form-input-itcourse" type="text" />
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.wantEnglish}
+        <input name="wantEnglish" class="pl-3 border focus:border-2 rounded-md h-10 form-input-english" type="text" />
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.referral}
+        <input name="referral" class="pl-3 border focus:border-2 rounded-md h-10 form-input-referral" type="text" />
+      </label>
+
+      <!-- honeypot -->
+      <input
+        type="text"
+        name="hp"
+        tabindex="-1"
+        autocomplete="off"
+        style="position:absolute;left:-9999px;opacity:0"
+      />
+
+      <button class="px-8 py-4 font-secondary font-medium orange-btn" type="submit">
+        {t.sendBtn}
+      </button>
+      <p class="mt-2 text-base form-status"></p>
+    </form>
+
+    <div class="hidden animate-fadeInUp form-success">
+      <div class="flex flex-col items-center gap-6 lg:gap-9 lg:w-96">
+        <h2 class="font-secondary font-semibold text-lg lg:text-2xl text-center">
+          {t.success}
+        </h2>
+        <Image src={import("@images/form-done.svg")} format="svg" alt="IT Friends logo" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/src/scripts/itLessonForm.ts"></script>

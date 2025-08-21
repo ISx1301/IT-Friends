@@ -75,7 +75,7 @@ const { data, lang } = Astro.props as { data?: HeaderData; lang: string };
   </div>
 
   <!-- Bottom header block -->
-  <div class="hidden-menu bg-white lg:bg-primary-green">
+  <div class="hidden-menu bg-white lg:bg-primary-green lg:overflow-visible overflow-y-auto">
     <div class="px-4 lg:px-4 py-10 lg:py-0 w-full lg:container">
       <!-- Navigation -->
       <nav class="flex lg:flex-row flex-col justify-between items-center py-5">
@@ -125,9 +125,9 @@ const { data, lang } = Astro.props as { data?: HeaderData; lang: string };
                       </div>
                     </div>
 
-                    <ul class="hidden left-1/2 z-50 lg:absolute gap-2 bg-white lg:drop-shadow lg:shadow mt-4 lg:p-2 rounded lg:w-52 lg:-translate-x-1/2 course-menu">
+                    <ul class="hidden left-1/2 z-50 lg:absolute gap-y-5 lg:gap-2 bg-white lg:drop-shadow lg:shadow mt-4 lg:p-2 rounded lg:w-52 lg:-translate-x-1/2 course-menu">
                       {item.submenu!.map((sub) => (
-                        <li class="lg:px-2 sm:py-0 lg:py-1 font-normal text-center cursor-pointer">
+                        <li class="mb-3 last:mb-0 lg:px-2 sm:py-0 lg:py-1 font-medium text-center cursor-pointer">
                           <NavLink
                             href={
                               sub.linkType === 'page'
@@ -181,7 +181,7 @@ const { data, lang } = Astro.props as { data?: HeaderData; lang: string };
 
         <!-- Button -->
         {data?.buttonText && (
-          <button type="button" class="free-lesson-btn form-open">{data.buttonText}</button>
+          <button type="button" class="free-lesson-btn free-lesson-open">{data.buttonText}</button>
         )}
       </nav>
     </div>

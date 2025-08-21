@@ -1,80 +1,86 @@
 ---
 import { Image } from "astro:assets";
 import "@styles/global.scss";
+
+import {
+  DEFAULT_LANG,
+  type Lang,
+  LOCALE,
+  BRANCHES,
+  BRANCH_ORDER,
+  TELEGRAM_LINKS,
+} from "@/constants";
+
+interface Props { lang?: Lang }
+
+const { lang = DEFAULT_LANG as Lang } = Astro.props;
+const t = LOCALE[lang];
+const ui = t.ui;
+const phoneItems = t.phoneMenu;
+const branches = BRANCHES[lang];
 ---
 
-<div class="lg:hidden right-0 bottom-1 z-10 fixed flex flex-col menu-controls">
-  <button type="button" class="menu-btn-call">
-    <Image
-      src={import("@images/call-btn.svg")}
-      format="svg"
-      alt="Call"
-    />
+<!-- Кнопки открытия меню -->
+<div class="right-0 bottom-1 z-10 fixed flex flex-col">
+  <button type="button" class="phone-menu-btn" aria-label={ui.callAlt}>
+    <Image src={import("@images/call-btn.svg")} format="svg" alt={ui.callAlt} />
   </button>
-  <button type="button" class="menu-btn-telegram">
-    <Image
-      src={import("@images/telegram-btn.svg")}
-      format="svg"
-      alt="Telegram"
-    />
+  <button type="button" class="tg-menu-btn" aria-label={ui.telegramAlt}>
+    <Image src={import("@images/telegram-btn.svg")} format="svg" alt={ui.telegramAlt} />
   </button>
 </div>
 
+<!-- PHONE MENU -->
+<div class="top-0 left-0 z-50 fixed flex justify-center items-center w-full h-screen overflow-y-auto transition-transform -translate-x-full duration-300 ease-in-out transform phone-menu">
+  <div class="flex justify-center items-center h-screen overflow-y-auto phone-menu-close">
+    <div class="left-0 absolute bg-white/10 backdrop-blur-md w-full h-screen overflow-y-auto"></div>
 
-<div class="top-0 left-0 z-50 fixed flex flex-col justify-center items-center gap-4 bg-white w-full h-screen overflow-x-auto transition-transform -translate-x-full duration-300 ease-in-out menu-panel menu-call transform">
-  <div class="container">
-    <div class="top-4 right-4 absolute cursor-pointer close">
-      <Image
-        src={import("@images/green-close.svg")}
-        format="svg"
-        alt="Close menu"
-      />
-    </div>
-    <div class="mb-5">
-      <h2 class="font-secondary font-medium text-xl text-center">Оберіть, будь ласка,  напрямок, який цікавить:</h2>
-    </div>
-    <div class="flex flex-col items-center gap-4 w-full">
-      <a href="tel:+38067" class="contact-btn">IT школа</a>
-      <a href="tel:+38098" class="contact-btn">Англійська для дітей</a>
-      <a href="tel:+38093" class="contact-btn">IT табори</a>
-      <a href="tel:+38050" class="contact-btn">Франшиза</a>
+    <div class="relative flex flex-col items-center bg-white lg:shadow-2xl px-3 lg:px-14 py-9 rounded-lg w-11/12 lg:w-full">
+      <div class="top-4 right-4 absolute cursor-pointer phone-menu-close" aria-label={ui.close}>
+        <Image src={import("@images/green-close.svg")} format="svg" alt={ui.close} />
+      </div>
+
+      <div class="mb-5">
+        <h2 class="font-secondary font-medium text-xl text-center">{ui.phoneMenuTitle}</h2>
+      </div>
+
+      <div class="flex flex-col items-center gap-4 w-full">
+        {phoneItems.map((item) => (
+          <a href={item.href} class="contact-btn">{item.label}</a>
+        ))}
+      </div>
     </div>
   </div>
 </div>
 
-<div class="top-0 left-0 z-50 fixed flex flex-col justify-center items-center gap-4 bg-white w-full h-screen overflow-x-auto transition-transform -translate-x-full duration-300 ease-in-out menu-panel menu-telegram transform">
-  <div class="container">
-    <div class="top-4 right-4 absolute cursor-pointer close">
-      <Image
-        src={import("@images/green-close.svg")}
-        format="svg"
-        alt="Close menu"
-      />
-    </div>
-    <div class="mb-5">
-      <h2 class="font-secondary font-medium text-xl text-center">Оберіть, будь ласка, зручну для вас адресу:</h2>
-    </div>
-    <div class="flex flex-col gap-4">
-      <a href="https://t.me/user1" target="_blank" class="py-2 contact-btn">
-        <span>ЖМ Борщагівка</span>
-        <span>Б-р, Кольцова 14</span>
-      </a>
-      <a href="https://t.me/user2" target="_blank" class="py-2 contact-btn">
-        <span>ЖМ Харківська-Позняки</span>
-        <span>Вул. Кошиця 9Б</span>
-      </a>
-      <a href="https://t.me/user3" target="_blank" class="py-2 contact-btn">
-        <span>ЖМ Позняки</span>
-        <span>Пр-т, Григоренко 16</span>
-      </a>
-      <a href="https://t.me/user4" target="_blank" class="py-2 contact-btn">
-        <span>ЖМ Троєщина</span>
-        <span>Пр-т, Маяковського 91в</span>
-      </a>
-      <a href="https://t.me/user5" target="_blank" class="py-2 contact-btn">
-        <span>ЖМ Воскресенка</span>
-        <span>Вул. Курнатовського 22</span>
-      </a>
+<!-- TELEGRAM MENU -->
+<div class="top-0 left-0 z-50 fixed flex justify-center items-center w-full h-screen overflow-y-auto transition-transform -translate-x-full duration-300 ease-in-out transform telegram-menu">
+  <div class="flex justify-center items-center h-screen overflow-y-auto telegram-menu-close">
+    <div class="left-0 absolute bg-white/10 backdrop-blur-md w-full h-screen overflow-y-auto"></div>
+
+    <div class="relative flex flex-col items-center bg-white lg:shadow-2xl px-3 lg:px-14 py-9 rounded-lg w-11/12 lg:w-full">
+      <div class="top-4 right-4 absolute cursor-pointer telegram-menu-close" aria-label={ui.close}>
+        <Image src={import("@images/green-close.svg")} format="svg" alt={ui.close} />
+      </div>
+
+      <div class="mb-5">
+        <h2 class="font-secondary font-medium text-xl text-center">{ui.telegramMenuTitle}</h2>
+      </div>
+
+      <div class="flex flex-col gap-4 w-full">
+        {BRANCH_ORDER.map((id) => (
+          <a
+            href={TELEGRAM_LINKS[id]}
+            target="_blank"
+            rel="noopener"
+            class="py-2 contact-btn"
+            aria-label={`${branches[id].district}, ${branches[id].address}`}
+          >
+            <span>{branches[id].district}</span>
+            <span>{branches[id].address}</span>
+          </a>
+        ))}
+      </div>
     </div>
   </div>
 </div>
