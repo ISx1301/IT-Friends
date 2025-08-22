@@ -1,7 +1,6 @@
 export const DEFAULT_LANG = import.meta.env.PUBLIC_DEFAULT_LANG || 'uk' as const;
 export type Lang = 'uk' | 'en';
 
-// ====== Локализация общих строк и формы ======
 export const LOCALE: Record<
   Lang,
   {
@@ -9,7 +8,6 @@ export const LOCALE: Record<
     notFoundText: string;
     btn404: string;
 
-    // UI-тексты для кнопок/заголовков в интерфейсе (добавлено)
     ui: {
       callAlt: string;
       telegramAlt: string;
@@ -18,8 +16,29 @@ export const LOCALE: Record<
       telegramMenuTitle: string;
     };
 
-    // Пункты phone-меню (кнопки-звонки) — массив, чтобы легко переводить (добавлено)
     phoneMenu: Array<{ label: string; href: string }>;
+
+    onlineForm: {
+      addressTitle: string;
+      close: string;
+      tryFree: string;
+      branchHintEmpty: string;
+      sendBtn: string;
+      success: string;
+      parentName: string;
+      childFirstName: string;
+      childLastName: string;
+      childAge: string;
+      addressStreet: string;
+      city: string;
+      country: string;
+      phone: string;
+      itCourse: string;
+      wantEnglish: string;
+      referral: string;      
+      requiredError: string;
+      phoneError: string;
+    };
 
     form: {
       addressTitle: string;
@@ -36,6 +55,25 @@ export const LOCALE: Record<
       phone: string;
       itCourse: string;
       wantEnglish: string;
+      referral: string;
+      requiredError: string;
+      phoneError: string;
+    };
+
+    formEnglish: {
+      addressTitle: string;
+      close: string;
+      tryFree: string;
+      branchHintEmpty: string;
+      sendBtn: string;
+      success: string;
+      parentName: string;
+      childFirstName: string;
+      childLastName: string;
+      childAge: string;
+      addressStreet: string;
+      phone: string;
+      wantIt: string;
       referral: string;
       requiredError: string;
       phoneError: string;
@@ -63,10 +101,32 @@ export const LOCALE: Record<
       { label: 'Франшиза',             href: 'tel:+38050' },
     ],
 
+    onlineForm: {
+      addressTitle: 'Оберіть, будь ласка, що ви хочете вивчати',
+      close: 'Закрити',
+      tryFree: 'Спробуйте безкоштовний онлайн урок!',
+      branchHintEmpty: '',
+      sendBtn: 'Надіслати заявку',
+      success: 'Форма успішно надіслана! Дякуємо, ми зв’яжемось з вами протягом 24 годин',
+      parentName: 'Ім’я батьків*',
+      childFirstName: 'Ім’я дитини*',
+      childLastName: 'Прізвище дитини*',
+      childAge: 'Вік дитини (скільки повних років)*',
+      addressStreet: 'Адреса проживання (вулиця)*',
+      city: 'Місто*',
+      country: 'Країна проживання*',
+      phone: 'Телефон для контакту*',
+      itCourse: 'Який курс IT хочете спробувати?',
+      wantEnglish: 'Чи бажаєте спробувати курси англ. мови додатково?',
+      referral: 'Звідки Ви дізнались про нас?',
+      requiredError: 'Поле обов’язкове',
+      phoneError: 'Введіть номер телефону',
+    },
+
     form: {
       addressTitle: 'Оберіть, будь ласка, зручну для вас адресу:',
       close: 'Закрити',
-      tryFree: 'Спробуйте безкоштовний урок!',
+      tryFree: 'Спробуйте безкоштовний IT урок!',
       branchHintEmpty: '',
       sendBtn: 'Надіслати заявку',
       success:
@@ -79,6 +139,25 @@ export const LOCALE: Record<
       phone: 'Телефон для контакту*',
       itCourse: 'Який курс IT хочете спробувати?',
       wantEnglish: 'Чи бажаєте спробувати курси англ. мови додатково?',
+      referral: 'Звідки Ви дізнались про нас?',
+      requiredError: 'Поле обов’язкове',
+      phoneError: 'Введіть номер телефону',
+    },
+
+    formEnglish: {
+      addressTitle: 'Оберіть, будь ласка, зручну для вас адресу:',
+      close: 'Закрити',
+      tryFree: 'Спробуйте безкоштовний урок англійської!',
+      branchHintEmpty: '',
+      sendBtn: 'Надіслати заявку',
+      success: 'Форма успішно надіслана! Ми зв’яжемось з вами протягом 24 годин',
+      parentName: 'Ім’я батьків*',
+      childFirstName: 'Ім’я дитини*',
+      childLastName: 'Прізвище дитини*',
+      childAge: 'Вік дитини (скільки повних років)*',
+      addressStreet: 'Адреса проживання (вулиця)*',
+      wantIt: 'Чи бажаєте спробувати IT напрямки додатково',
+      phone: 'Телефон для контакту*',
       referral: 'Звідки Ви дізнались про нас?',
       requiredError: 'Поле обов’язкове',
       phoneError: 'Введіть номер телефону',
@@ -106,14 +185,35 @@ export const LOCALE: Record<
       { label: 'Franchise',        href: 'tel:+38050' },
     ],
 
+    onlineForm: {
+      addressTitle: 'Оберіть, будь ласка, що ви хочете вивчати',
+      close: 'Закрити',
+      tryFree: 'Спробуйте безкоштовний онлайн урок!',
+      branchHintEmpty: '',
+      sendBtn: 'Надіслати заявку',
+      success: 'Форма успішно надіслана! Дякуємо, ми зв’яжемось з вами протягом 24 годин',
+      parentName: 'Ім’я батьків*',
+      childFirstName: 'Ім’я дитини*',
+      childLastName: 'Прізвище дитини*',
+      childAge: 'Вік дитини (скільки повних років)*',
+      addressStreet: 'Адреса проживання (вулиця)*',
+      city: 'Місто*',
+      country: 'Країна проживання',
+      phone: 'Телефон для контакту*',
+      itCourse: 'Який курс IT хочете спробувати?',
+      wantEnglish: 'Чи бажаєте спробувати курси англ. мови додатково?',
+      referral: 'Звідки Ви дізнались про нас?',
+      requiredError: 'Поле обов’язкове',
+      phoneError: 'Введіть номер телефону',
+    },
+
     form: {
       addressTitle: 'Please choose the most convenient address:',
       close: 'Close',
-      tryFree: 'Try a free lesson!',
+      tryFree: 'Try a free IT lesson!',
       branchHintEmpty: '',
       sendBtn: 'Send request',
-      success:
-        'Form submitted! Thank you — we will contact you within 24 hours',
+      success: 'Form submitted! Thank you — we will contact you within 24 hours',
       parentName: 'Parent’s name*',
       childFirstName: 'Child’s first name*',
       childLastName: 'Child’s last name*',
@@ -126,10 +226,28 @@ export const LOCALE: Record<
       requiredError: 'This field is required',
       phoneError: 'Enter a valid phone number',
     },
+
+    formEnglish: {
+      addressTitle: 'Please choose the most convenient address:',
+      close: 'Close',
+      tryFree: 'Try a free English lesson!',
+      branchHintEmpty: '',
+      sendBtn: 'Send request',
+      success: 'Form submitted! Thank you — we will contact you within 24 hours',
+      parentName: 'Parent’s name*',
+      childFirstName: 'Child’s first name*',
+      childLastName: 'Child’s last name*',
+      childAge: 'Child’s age (full years)*',
+      addressStreet: 'Адреса проживання (вулиця)*',
+      phone: 'Contact phone*',
+      wantIt: 'Would you like to try additional IT areas?',
+      referral: 'How did you hear about us?',
+      requiredError: 'This field is required',
+      phoneError: 'Enter a valid phone number',
+    },
   },
 };
 
-// ====== Цвета фона секций ======
 export type BgColor =
   | 'white'
   | 'gray'
@@ -147,7 +265,7 @@ export const BG_CLASSES: Record<BgColor, string> = {
   turquoise: 'bg-primary-turquoise',
 };
 
-// ====== Выравнивание заголовков ======
+
 export type Align = 'left' | 'center' | 'right';
 export const HEADING_ALIGN_CLASSES: Record<Align, string> = {
   left: 'text-left',
@@ -155,34 +273,45 @@ export const HEADING_ALIGN_CLASSES: Record<Align, string> = {
   right: 'text-right',
 };
 
-// ====== Лейауты about-секции ======
+
 export type AboutLayout = 'image-left' | 'image-right';
 export const ABOUT_LAYOUT_ROW_CLASSES: Record<AboutLayout, string> = {
   'image-left': 'lg:flex-row',
   'image-right': 'lg:flex-row-reverse',
 };
 
-// ====== Цвет рамки баджей ======
+
 export type BadgeBorderColor = 'sand' | 'mint';
 export const BADGE_BORDER_CLASSES: Record<BadgeBorderColor, string> = {
   sand: 'border-span-sand',
   mint: 'border-span-mint',
 };
 
-// ====== Филиалы (кнопки выбора адреса) ======
+
 export type BranchId =
   | 'borshchahivka'
   | 'kharkivska_poznyaky'
   | 'poznyaky'
   | 'troieshchyna'
-  | 'voskresenka';
+  | 'voskresenka'
+  | 'online';
 
+export type BranchIdOnline =
+  | 'online_it'
+  | 'online_eng';
+ 
 export const BRANCH_ORDER: BranchId[] = [
   'borshchahivka',
   'kharkivska_poznyaky',
   'poznyaky',
   'troieshchyna',
   'voskresenka',
+  'online'
+];
+
+export const BRANCH_ORDER_ONLINE: BranchIdOnline[] = [
+  'online_it',
+  'online_eng'
 ];
 
 export const BRANCHES: Record<
@@ -204,6 +333,10 @@ export const BRANCHES: Record<
       district: 'ЖМ Воскресенка',
       address: 'Вул. Курнатовського 22',
     },
+    online: {
+      district: 'Онлайн',
+      address: 'Будь-яка точка світу'
+    }
   },
   en: {
     borshchahivka: { district: 'Borshchahivka District', address: 'Kolt­sova Blvd 14' },
@@ -220,14 +353,45 @@ export const BRANCHES: Record<
       district: 'Voskresenka District',
       address: 'Kurnatovskoho St 22',
     },
+    online: {
+      district: 'Online',
+      address: 'Anywhere in the world'
+    }
   },
 };
 
-// ====== Телеграм-ссылки по филиалам (добавлено) ======
+
+export const BRANCHES_ONLINE: Record<
+  Lang,
+  Record<BranchIdOnline, { district: string; address: string }>
+> = {
+  uk: {
+    online_it: {
+      district: 'IT заняття онлайн',
+      address: 'Будь-яка точка світу'
+    },
+    online_eng: {
+      district: 'Англійська онлайн',
+      address: 'Будь-яка точка світу'      
+    }
+  },
+  en: {
+    online_it: {
+      district: 'IT lessons online',
+      address: 'Anywhere in the world'
+    },
+    online_eng: {
+      district: 'English lessons online',
+      address: 'Anywhere in the world'      
+    }
+  },
+};
+
 export const TELEGRAM_LINKS: Record<BranchId, string> = {
   borshchahivka: 'https://t.me/user1',
   kharkivska_poznyaky: 'https://t.me/user2',
   poznyaky: 'https://t.me/user3',
   troieshchyna: 'https://t.me/user4',
   voskresenka: 'https://t.me/user5',
+  online: 'https://t.me/user5'
 };

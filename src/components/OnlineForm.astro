@@ -1,0 +1,172 @@
+---
+import "@styles/header.scss";
+import { Image } from "astro:assets";
+import {
+  LOCALE,
+  DEFAULT_LANG,
+  type Lang,
+  BRANCHES_ONLINE,
+  BRANCH_ORDER_ONLINE,
+} from "@/constants";
+
+interface Props { lang?: Lang }
+const { lang = DEFAULT_LANG as Lang } = Astro.props;
+
+const t = LOCALE[lang].onlineForm;           
+const tEng = LOCALE[lang].formEnglish;
+const branches = BRANCHES_ONLINE[lang];
+---
+
+<div class="top-0 left-0 z-50 fixed flex justify-center items-center w-full h-screen overflow-y-auto transition-transform -translate-x-full duration-300 ease-in-out online-address-panel transform">
+  <div class="flex justify-center items-center h-screen overflow-y-auto">
+    <div class="left-0 absolute bg-white/10 backdrop-blur-md w-full h-screen overflow-y-auto js-close-online-address" aria-label={t.close}></div>
+
+    <div class="relative flex flex-col items-center bg-white lg:shadow-2xl px-3 lg:px-14 py-9 rounded-lg w-11/12 lg:w-full">
+      <button type="button" class="top-4 right-4 absolute cursor-pointer js-close-online-address" aria-label={t.close}>
+        <Image src={import("@images/green-close.svg")} format="svg" alt={t.close} />
+      </button>
+
+      <div class="mb-5">
+        <h2 class="font-secondary font-medium text-xl text-center">{t.addressTitle}</h2>
+      </div>
+
+      <div class="flex flex-col gap-4 w-full">
+        {BRANCH_ORDER_ONLINE.map((id) => (
+          <button
+            type="button"
+            class="flex justify-center items-center gap-3 py-2 contact-btn js-pick-branch-online"
+            data-branch={id}
+            aria-label={`${branches[id].district}, ${branches[id].address}`}
+          >
+            <span class="text-center">{branches[id].district}</span>
+            <span>{branches[id].address}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="z-50 fixed inset-0 transition-transform -translate-x-full duration-300 ease-in-out online-form-slider transform">
+  <div class="fixed inset-0 bg-white/10 backdrop-blur-md online-form-close" aria-label={t.close}></div>
+
+  <div class="flex justify-center items-center w-full h-full">
+    <form
+      class="relative flex flex-col items-center bg-white lg:shadow-2xl mx-auto px-3 lg:px-14 py-9 rounded-3xl w-11/12 lg:w-2/4 max-h-[85vh] overflow-hidden overflow-y-auto online-lesson-form"
+      method="POST"
+      action="/api/submit-online"
+      novalidate
+    >
+      <button type="button" class="top-4 right-4 absolute mb-5 lg:mb-0 cursor-pointer online-form-close" aria-label={t.close}>
+        <Image src={import("@images/green-close.svg")} format="svg" alt={t.close} />
+      </button>
+
+      <h2 class="mb-4 pt-5 font-secondary font-semibold text-primary-green text-xl text-center">
+        {t.tryFree}
+      </h2>
+
+      <p class="mb-4 text-gray-600 text-sm text-center js-online-branch-hint">{t.branchHintEmpty}</p>
+
+      <input type="hidden" name="branch" class="js-online-branch-value" value="">
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.parentName}
+        <input name="parentName" class="pl-3 border focus:border-2 rounded-md h-10 online-input-parent" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">{t.requiredError}</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.childFirstName}
+        <input name="childFirstName" class="pl-3 border focus:border-2 rounded-md h-10 online-input-child-first" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">{t.requiredError}</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.childLastName}
+        <input name="childLastName" class="pl-3 border focus:border-2 rounded-md h-10 online-input-child-last" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">{t.requiredError}</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.childAge}
+        <input name="childAge" class="pl-3 border focus:border-2 rounded-md h-10 online-input-age" type="number" min="3" max="18" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">{t.requiredError}</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.addressStreet}
+        <input name="addressStreet" class="pl-3 border focus:border-2 rounded-md h-10 online-input-street" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">{t.requiredError}</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.city}
+        <input name="city" class="pl-3 border focus:border-2 rounded-md h-10 online-input-city" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">{t.requiredError}</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.country}
+        <input name="country" class="pl-3 border focus:border-2 rounded-md h-10 online-input-country" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error"></span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.phone}
+        <input name="phone" class="pl-3 border focus:border-2 rounded-md h-10 online-input-phone" type="tel" inputmode="tel" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">{t.phoneError}</span>
+      </label>
+
+      <div class="hidden w-full lg:w-80 online-field-itcourse">
+        <label class="flex flex-col mb-7 w-full font-secondary font-medium">
+          {t.itCourse}
+          <input name="itCourse" class="pl-3 border focus:border-2 rounded-md h-10 online-input-itcourse" type="text" disabled />
+        </label>
+      </div>
+
+      <div class="hidden w-full lg:w-80 online-field-wantEnglish">
+        <label class="flex flex-col mb-7 w-full font-secondary font-medium">
+          {t.wantEnglish}
+          <input name="wantEnglish" class="pl-3 border focus:border-2 rounded-md h-10 online-input-want-english" type="text" disabled />
+        </label>
+      </div>
+
+      <div class="hidden w-full lg:w-80 online-field-wantIt">
+        <label class="flex flex-col mb-7 w-full font-secondary font-medium">
+          {tEng.wantIt}
+          <input name="wantIt" class="pl-3 border focus:border-2 rounded-md h-10 online-input-want-it" type="text" disabled />
+        </label>
+      </div>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        {t.referral}
+        <input name="referral" class="pl-3 border focus:border-2 rounded-md h-10 online-input-referral" type="text" />
+      </label>
+
+      <!-- honeypot -->
+      <input
+        type="text"
+        name="hp"
+        tabindex="-1"
+        autocomplete="off"
+        style="position:absolute;left:-9999px;opacity:0"
+      />
+
+      <button class="px-8 py-4 font-secondary font-medium orange-btn" type="submit">
+        {t.sendBtn}
+      </button>
+      <p class="mt-2 text-base online-form-status"></p>
+    </form>
+
+    <div class="hidden animate-fadeInUp online-form-success">
+      <div class="flex flex-col items-center gap-6 lg:gap-9 lg:w-96">
+        <h2 class="font-secondary font-semibold text-lg lg:text-2xl text-center">
+          {t.success}
+        </h2>
+        <Image src={import("@images/form-done.svg")} format="svg" alt="IT Friends logo" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="@/scripts/onlineForm.ts"></script>

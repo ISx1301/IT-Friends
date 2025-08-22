@@ -28,6 +28,7 @@ type GeneralDescriptionSection = {
   heading?: string;
   cards?: Card[];
   buttonText?: string;
+  buttonClass?: string;
 };
 
 export interface Props {
@@ -59,6 +60,11 @@ const ptComponents = {
 const descriptionHtmlByIndex = cards.map((c) =>
   toHTML(c?.description ?? [], { components: ptComponents })
 );
+
+const baseBtn =
+  "px-5 py-4 font-secondary font-medium text-lg orange-btn form-open";
+const extraBtn = (section.buttonClass ?? "").trim();
+const finalBtnClass = (baseBtn + " " + extraBtn).trim();
 ---
 
 <section id={anchorId} class={`${bgClass} my-20 lg:my-28`}>
@@ -104,7 +110,7 @@ const descriptionHtmlByIndex = cards.map((c) =>
 
     {section.buttonText && (
       <div class="flex justify-center mt-8">
-        <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn form-open" type="button">
+        <button class={finalBtnClass} type="button">
           {section.buttonText}
         </button>
       </div>

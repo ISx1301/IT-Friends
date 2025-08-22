@@ -130,9 +130,9 @@ const badges = section.content?.badges?.items ?? [];
 
             case 'badges':
               return badges.length ? (
-                <div class="gap-4 grid grid-cols-2 mb-12 lg:mb-auto lg:[grid-template-columns:max-content_max-content]">
+                <div class="gap-4 grid grid-cols-2 mb-12 lg:mb-auto lg:w-full">
                   {badges.map((b) => (
-                    <span class={`block w-full px-4 lg:px-6 py-1 lg:py-2 border ${badgeBorderClass} rounded-3xl lg:w-[12rem] font-play font-normal text-xl text-center`}>
+                    <span class={`block w-full px-4 lg:px-6 py-1 lg:py-2 border ${badgeBorderClass} rounded-3xl lg:w-full font-play font-normal text-xl text-center`}>
                       {b}
                     </span>
                   ))}

@@ -1,4 +1,3 @@
-// ./schemaTypes/sections/studyTabsSection.ts
 import { defineType, defineField } from 'sanity'
 import { ImagesIcon } from '@sanity/icons'
 
@@ -19,6 +18,14 @@ function sectionCardsKindForPanel(document: any, panelParent: any): 'clickable' 
   const host = sections.find((s: any) => Array.isArray(s?.panels) && s.panels.some((p: any) => p?._key === panelParent._key))
   return host?.cardsKind
 }
+
+const classValidation = (Rule: any) =>
+  Rule.custom((val: string) => {
+    if (!val) return true
+    return /^[A-Za-z0-9:_\-\s]+$/.test(val)
+      ? true
+      : 'Дозволені: літери, цифри, дефіс, підкреслення, двокрапка та пробіли'
+  })
 
 export const withoutNestedTabsSection = defineType({
   name: 'withoutNestedTabsSection',
@@ -227,6 +234,14 @@ export const withoutNestedTabsSection = defineType({
                       ],
                     }),
                     defineField({ name: 'buttonText', title: 'Текст кнопки', type: 'string' }),
+
+                    defineField({
+                      name: 'buttonClass',
+                      title: 'CSS-клас (для розробника)',
+                      type: 'string',
+                      description: 'Опціонально.',
+                      validation: classValidation,
+                    }),
                   ],
                   preview: {
                     select: { title: 'title', media: 'image' },

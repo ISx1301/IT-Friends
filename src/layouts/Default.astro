@@ -3,8 +3,9 @@ import "@styles/global.scss";
 import HeadBase from "@components/Head.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro"
-import ItLessonForm from "@components/itLessonForm.astro";
-import EnglishLessonForm from "@components/englishLessonForm.astro";
+import ItLessonForm from "@components/ItLessonForm.astro";
+import EnglishLessonForm from "@components/EnglishLessonForm.astro";
+import OnlineForm from "@components/OnlineForm.astro";
 import Contacts from "@/components/Contacts.astro";
 
 const { settings, lang, seo } = Astro.props;
@@ -24,7 +25,10 @@ if (!Astro.cookies.get('language')) {
 
     <ItLessonForm lang={lang} />
 
-    <EnglishLessonForm />
+    <EnglishLessonForm lang={lang}/>
+
+    <OnlineForm lang={lang} />
+    
 
     <main aria-label="Content">
       <slot />

@@ -4,6 +4,9 @@ import EmblaCarousel from "@components/EmblaCarousel.astro";
 import { BG_CLASSES, type BgColor } from "@/constants";
 import { toHTML } from "@portabletext/to-html";
 
+import { urlForImage } from "@/lib/sanityImage";          
+import type { SanityImage } from "@/types/sanity";        
+
 type PTSpan = { _type: 'span'; text: string; marks?: string[] };
 type PTMarkDef = { _key: string; _type: string; href?: string };
 type PTBlock = {
@@ -14,12 +17,10 @@ type PTBlock = {
   markDefs?: PTMarkDef[];
 };
 
-type SanityImage = { url?: string; alt?: string };
 type Member = {
   photo?: SanityImage;
   name?: string;
   subject?: string;
-  social?: { url?: string; icon?: SanityImage };
 };
 
 type TeamSectionData = {
@@ -27,28 +28,25 @@ type TeamSectionData = {
   _key: string;
   backgroundColor?: BgColor;
   heading?: string;
-  description?: PTBlock[]; 
+  description?: PTBlock[];
   members?: Member[];
 };
 
-export interface Props { 
-  section: teamSection 
-  anchorId?: string 
+export interface Props {
+  section: TeamSectionData;
+  anchorId?: string;
 }
 
-const { section, anchorId } = Astro.props as Props
+const { section, anchorId } = Astro.props as Props;
 
 const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
 const members = section.members ?? [];
-
 
 const escapeAttr = (s?: string) =>
   (s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 const ptComponents = {
-  block: {
-    normal: ({ children }: any) => `<p>${children}</p>`,
-  },
+  block: { normal: ({ children }: any) => `<p>${children}</p>` },
   marks: {
     strong: ({ children }: any) => `<strong>${children}</strong>`,
     em: ({ children }: any) => `<em>${children}</em>`,
@@ -61,6 +59,12 @@ const ptComponents = {
 };
 
 const descriptionHtml = toHTML(section.description ?? [], { components: ptComponents });
+
+// helper
+const photoUrl = (img?: SanityImage, w = 600, h = 900) =>
+  img?.asset
+    ? urlForImage(img).width(w).height(h).fit('crop').auto('format').url()
+    : undefined;
 ---
 
 <section id={anchorId} class={`py-16 lg:py-32 w-full overflow-visible ${bgClass}`}>
@@ -86,19 +90,17 @@ const descriptionHtml = toHTML(section.description ?? [], { components: ptCompon
         options={{ breakpoints: { "(min-width: 1272px)": { slidesToScroll: 1, loop: true, align: "start" } } }}
       >
         <Fragment slot="slides">
-          {members.map((m, index) => {
-            const isEven = ((index + 1) % 2) === 0;
-            const colWrap = isEven ? "flex flex-col lg:flex-col-reverse gap-6 pr-5" : "flex flex-col gap-6 pr-5";
-            const slidePad = isEven ? "pt-0 lg:pt-16" : "";
+          {members.map((m) => {
+            const src = photoUrl(m.photo, 600, 900); // 2:3
             return (
-              <div class={`flex-grow-0 flex-shrink-0 min-w-80 lg:min-w-0 basis-1/2 lg:basis-1/4 ${slidePad}`}>
-                <div class={colWrap}>
-                  <div class="rounded-full aspect-2/3">
-                    {m.photo?.url && (
+              <div class="flex-grow-0 flex-shrink-0 min-w-80 lg:min-w-0 basis-1/2 lg:basis-1/4">
+                <div class="flex flex-col gap-6 pr-5">
+                  <div class="rounded-full aspect-2/3 overflow-hidden">
+                    {src && (
                       <img
-                        class="rounded-full w-full h-full object-cover"
-                        src={m.photo.url}
-                        alt={m.photo.alt ?? ""}
+                        class="w-full h-full object-cover"
+                        src={src}
+                        alt={m.photo?.alt ?? ""}
                         loading="lazy"
                         decoding="async"
                       />
@@ -108,17 +110,6 @@ const descriptionHtml = toHTML(section.description ?? [], { components: ptCompon
                   <div class="flex flex-col items-center">
                     {m.name && <h3 class="font-medium text-lg">{m.name}</h3>}
                     {m.subject && <p class="text-base">{m.subject}</p>}
-                    {m.social?.icon?.url && m.social?.url && (
-                      <a href={m.social.url} target="_blank" rel="noopener noreferrer">
-                        <img
-                          class="w-7 h-7"
-                          src={m.social.icon.url}
-                          alt={m.social.icon.alt ?? ""}
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </a>
-                    )}
                   </div>
                 </div>
               </div>
@@ -127,7 +118,7 @@ const descriptionHtml = toHTML(section.description ?? [], { components: ptCompon
         </Fragment>
 
         <Fragment slot="controls">
-          <div class="flex justify-around items-center gap-3 mt-4">
+          <div class="flex justify-around items-center gap-3 mt-14">
             <button class="embla__prev" type="button" aria-label="Previous slide">
               <Image class="w-8 h-8" src={import("@images/embla-prev2.svg")} format="svg" alt="prev-btn" />
             </button>

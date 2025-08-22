@@ -33,9 +33,10 @@ type AreasCard = {
   image?: SanityImage
   title?: string
   ageText?: string
-  paragraphs?: PTBlock[] 
+  paragraphs?: PTBlock[]
   primaryButtonText?: string
   secondaryButtonText?: string
+  secondaryButtonClass?: string 
 }
 
 export interface AreasOfStudyMainSectionProps {
@@ -45,90 +46,94 @@ export interface AreasOfStudyMainSectionProps {
   heading?: string
   cards?: AreasCard[]
   sectionCtaText?: string
+  sectionCtaClass?: string 
 }
 
-export interface Props { 
-  section: AreasOfStudyMainSectionProps 
-  anchorId?: string 
+export interface Props {
+  section: AreasOfStudyMainSectionProps
+  anchorId?: string
 }
 
 const { section, anchorId } = Astro.props as Props
 
-const bgClass = BG_CLASSES[(section.backgroundColor ?? 'white') as BgColor]
-
-const BADGE_CLASSES = [
-  "bg-span-gray text-white",
-  "bg-span-sand text-black",
-  "bg-span-mint text-black",
-] as const
+// ── helpers/consts
+const join = (...parts: (string | undefined)[]) => parts.filter(Boolean).map(s => s!.trim()).join(" ")
+const BADGE_CLASSES = ["bg-span-gray text-white","bg-span-sand text-black","bg-span-mint text-black"] as const
 const badgeClassByIndex = (i: number) => BADGE_CLASSES[i % BADGE_CLASSES.length]
+
+// ── derived
+const bgClass = BG_CLASSES[(section.backgroundColor ?? 'white') as BgColor]
+const cards = section.cards ?? []
+
+
+const htmlByIndex = cards.map(card =>
+  card.paragraphs?.length ? toHTML(card.paragraphs, { components: ptComponents }) : ''
+)
+
+const baseSecondaryBtn = "py-2 border w-full orange-btn" 
+const basePrimaryBtn   = "py-2 border w-full transparent-btn"                            
+
+const secondaryBtnClassByIndex = cards.map(card =>
+  join(baseSecondaryBtn, card.secondaryButtonClass)
+)
+
+const baseSectionCta = "px-5 py-4 font-secondary font-medium text-lg orange-btn form-open"
+const finalSectionCta = join(baseSectionCta, section.sectionCtaClass)
 ---
 
 <section id={anchorId} class={`lg:py-section-top-bottom-padding ${bgClass} py-12`}>
   <div class="container">
-
     <div class="flex justify-center mb-6 lg:mb-11 basis-1/4 lg:basis-1/12">
       <h2 class="font-secondary text-2xl lg:text-3xl">{section?.heading}</h2>
     </div>
 
     <div class="items-stretch gap-5 grid grid-cols-1 lg:grid-cols-3 mb-11">
-      {Array.isArray(section?.cards) && section.cards.length > 0 &&
-        section.cards.map((card: AreasCard, idx: number) => {
-          const html = card.paragraphs?.length
-            ? toHTML(card.paragraphs, { components: ptComponents })
-            : ''
+      {cards.length > 0 && cards.map((card, idx) => (
+        <div class="grid grid-rows-[auto_1fr_auto] bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full h-full">
+          <div class="flex flex-col items-center space-y-3">
+            {card?.image?.url && <img src={card.image.url} alt={card.image.alt ?? ""} />}
 
-          return (
-            <div class="grid grid-rows-[auto_1fr_auto] bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full h-full">
+            {card?.title && (
+              <h3 class="w-full font-secondary font-semibold text-2xl text-center">
+                {card.title}
+              </h3>
+            )}
 
-              <div class="flex flex-col items-center space-y-3">
-                {card?.image?.url && (
-                  <img src={card.image.url} alt={card.image.alt ?? ""} />
-                )}
+            {card?.ageText && (
+              <span class={`${badgeClassByIndex(idx)} px-4 py-1 rounded-lg`}>
+                {card.ageText}
+              </span>
+            )}
+          </div>
 
-                {card?.title && (
-                  <h3 class="w-full font-secondary font-semibold text-2xl text-center">
-                    {card.title}
-                  </h3>
-                )}
+          <div class="mt-3 min-h-0">
+            <Article>
+              <Excerpt wordLength={30}>
+                {htmlByIndex[idx] && <div class="max-w-none" set:html={htmlByIndex[idx]} />}
+              </Excerpt>
+            </Article>
+          </div>
 
-                {card?.ageText && (
-                  <span class={`${badgeClassByIndex(idx)} px-4 py-1 rounded-lg`}>
-                    {card.ageText}
-                  </span>
-                )}
-              </div>
-
-              <div class="mt-3 min-h-0">
-                <Article>
-                  <Excerpt wordLength={30}>
-                    {html && <div class="max-w-none" set:html={html} />}
-                  </Excerpt>
-                </Article>
-              </div>
-
-              <div class="flex flex-col gap-3 w-full">
-                {card?.secondaryButtonText && (
-                  <button class="lg:hidden inline-block py-2 border w-full orange-btn form-open" type="button">
-                    {card.secondaryButtonText}
-                  </button>
-                )}
-                {card?.primaryButtonText && (
-                  <button class="py-2 border w-full transparent-btn" type="button">
-                    {card.primaryButtonText}
-                  </button>
-                )}
-              </div>
-            </div>
-          )
-        })}
+          <div class="flex flex-col gap-3 w-full">
+            {card?.secondaryButtonText && (
+              <button class={secondaryBtnClassByIndex[idx]} type="button">
+                {card.secondaryButtonText}
+              </button>
+            )}
+            {card?.primaryButtonText && (
+              <button class={basePrimaryBtn} type="button">
+                {card.primaryButtonText}
+              </button>
+            )}
+          </div>
+        </div>
+      ))}
     </div>
 
     <div class="hidden lg:flex justify-center basis-1/4 lg:basis-1/12">
-      <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn form-open" type="button">
+      <button class={finalSectionCta} type="button">
         {section.sectionCtaText}
       </button>
     </div>
-
   </div>
 </section>

@@ -1,3 +1,4 @@
+// ./schemas/objects/generalDescriptionSection.ts
 import { defineType, defineField } from 'sanity'
 import { ImagesIcon } from '@sanity/icons'
 
@@ -93,21 +94,14 @@ export const generalDescriptionSection = defineType({
             }),
           ],
           preview: {
-            select: {
-              title: 'title',
-              media: 'image',
-            },
+            select: { title: 'title', media: 'image' },
             prepare({ title, media }) {
-              return {
-                title: title || 'Без назви',
-                media,
-              }
+              return { title: title || 'Без назви', media }
             },
           },
         }),
       ],
     }),
-
 
     defineField({
       name: 'buttonText',
@@ -115,18 +109,29 @@ export const generalDescriptionSection = defineType({
       type: 'string',
       description: 'Опціонально.',
     }),
+
+    defineField({
+      name: 'buttonClass',
+      title: 'CSS (для розробника)',
+      type: 'string',
+      description: 'Опціонально.',
+      validation: (Rule) =>
+        Rule.custom((val) => {
+          if (!val) return true
+          return /^[A-Za-z0-9\-\_: ]+$/.test(val)
+            ? true
+            : 'Тільки літери, цифри, дефіс, підкреслення, двокрапка та пробіли'
+        }),
+    }),
   ],
 
   preview: {
-    select: {
-      title: 'heading',
-      cards: 'cards',
-    },
+    select: { title: 'heading', cards: 'cards' },
     prepare({ title, cards }) {
       const count = Array.isArray(cards) ? cards.length : 0
       return {
         title: 'Секція з списком карток',
-        subtitle: `Карток: ${count}`,
+        subtitle: `${title ? `“${title}” • ` : ''}Карток: ${count}`,
       }
     },
   },

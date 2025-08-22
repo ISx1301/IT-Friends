@@ -1,7 +1,7 @@
-// src/lib/queries.ts
+// === Pages + Settings 
+/* groq */
 
-// === СТРАНИЦЫ (Page) + Settings ===
-export const PAGE_WITH_SETTINGS = /* groq */ `
+export const PAGE_WITH_SETTINGS = `
 {
   "page": *[
     _type == "page" &&
@@ -58,16 +58,30 @@ export const PAGE_WITH_SETTINGS = /* groq */ `
         imageColumns
       ),
 
-      // --- все твои секции (без изменений) ---
+
       // areasOfStudyMainSection
       _type == "areasOfStudyMainSection" => {
-        _type, _key, backgroundColor, heading, sectionCtaText,
+        _type,
+        _key,
+        backgroundColor,
+        heading,
+        sectionCtaText,
+        sectionCtaClass,
         "cards": cards[]{
-          title, ageText, "paragraphs": coalesce(paragraphs, []),
-          primaryButtonText, secondaryButtonText,
-          "image": image{ alt, "url": asset->url }
+          _key,
+          title,
+          ageText,
+          "paragraphs": coalesce(paragraphs, []),
+          primaryButtonText,
+          secondaryButtonText,
+          secondaryButtonClass,       
+          "image": image{
+            alt,
+            "url": asset->url
+          }
         }
       },
+
 
       // aboutSection
       _type == "aboutSection" => {
@@ -125,13 +139,33 @@ export const PAGE_WITH_SETTINGS = /* groq */ `
       _type == "teamSection" => {
         _type, _key, backgroundColor, heading,
         "description": coalesce(
-          description[style == "normal"]{ _type, _key, style, children[]{ _type, text, marks }, markDefs[]{ _key, _type, href } }, []
+          description[style == "normal"]{
+            _type, _key, style,
+            children[]{ _type, text, marks },
+            markDefs[]{ _key, _type, href }
+          }, []
         ),
         "members": coalesce(members[]{
-          name, subject, "photo": photo{ alt, "url": asset->url },
-          "social": social{ url, "icon": icon{ alt, "url": asset->url } }
+          name,
+          subject,
+          "photo": photo{
+            alt,
+            asset->{_id, _ref, url},
+            crop,
+            hotspot
+          },
+          "social": social{
+            url,
+            "icon": icon{
+              alt,
+              asset->{_id, _ref, url},
+              crop,
+              hotspot
+            }
+          }
         }, [])
       },
+
 
       _type == "accordionSection" => {
         _type, _key, backgroundColor, heading,
@@ -173,30 +207,63 @@ export const PAGE_WITH_SETTINGS = /* groq */ `
 
       _type == "withoutNestedTabsSection" => {
         _type, _key, backgroundColor, heading, cardsKind, tabsColorKey,
-        "tabs": coalesce(tabs[]{ label, text, "icon": icon{ alt, "url": asset->url } }, []),
+        "tabs": coalesce(
+          tabs[]{
+            label,
+            text,
+            "icon": icon{ alt, "url": asset->url }
+          },
+          []
+        ),
         "panels": coalesce(
           panels[]{
             "panelDescription": coalesce(
-              panelDescription[style == "normal"]{ _type, _key, style, children[]{ _type, text, marks }, markDefs[]{ _key, _type, href } }, []
+              panelDescription[style == "normal"]{
+                _type, _key, style,
+                children[]{ _type, text, marks },
+                markDefs[]{ _key, _type, href }
+              },
+              []
             ),
             "clickableCards": coalesce(
-              clickableCards[]{ "image": image{ alt, "url": asset->url }, title, plainDescription, phone, href }, []
+              clickableCards[]{
+                "image": image{ alt, "url": asset->url },
+                title,
+                plainDescription,
+                phone,
+                href
+              },
+              []
             ),
             "regularCards": coalesce(
               regularCards[]{
-                "image": image{ alt, "url": asset->url }, title,
+                "image": image{ alt, "url": asset->url },
+                title,
                 "ptDescription": select(
-                  count(ptDescription) > 0 => ptDescription[style == "normal"]{ _type, _key, style, children[]{ _type, text, marks }, markDefs[]{ _key, _type, href } },
-                  count(description) > 0 => description[style == "normal"]{ _type, _key, style, children[]{ _type, text, marks }, markDefs[]{ _key, _type, href } },
+                  count(ptDescription) > 0 => ptDescription[style == "normal"]{
+                    _type, _key, style,
+                    children[]{ _type, text, marks },
+                    markDefs[]{ _key, _type, href }
+                  },
+                  count(description) > 0 => description[style == "normal"]{
+                    _type, _key, style,
+                    children[]{ _type, text, marks },
+                    markDefs[]{ _key, _type, href }
+                  },
                   []
                 ),
-                buttonText
-              }, []
+                buttonText,
+                "buttonClass": coalesce(buttonClass, "")   
+              },
+              []
             )
-          }, []
+          },
+          []
         ),
-        buttonText, showMoreText
+        buttonText,
+        showMoreText
       },
+
 
       // withNestedTabsCampsSection
       _type == "withNestedTabsCampsSection" => {

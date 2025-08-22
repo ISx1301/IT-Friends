@@ -62,7 +62,7 @@ const ptComponents = {
 const itemsDescHtml = items.map((it) => toHTML(it?.ptDescription ?? [], { components: ptComponents }));
 ---
 
-<section id={anchorId} class={`${bgClass} [.${bgClass}+&]:!pt-0 px-20 border py-32`}>
+<section id={anchorId} class={` px-20 ${bgClass}  py-32`}>
   <div class="container">
     {section.heading && (
       <div class="mx-auto mb-5 lg:mb-11 max-w-xs lg:max-w-2xl">
@@ -79,7 +79,7 @@ const itemsDescHtml = items.map((it) => toHTML(it?.ptDescription ?? [], { compon
             {it?.image?.url && (
               <div>
                 <img
-                  class="w-full h-auto object-cover"
+                  class="rounded-lg w-full h-auto object-cover aspect-2/1"
                   src={it.image.url}
                   alt={it.image.alt ?? ""}
                   loading="lazy"

@@ -1,3 +1,4 @@
+// ./schemas/objects/areasOfStudyMainSection.ts
 import { defineType, defineField, defineArrayMember } from 'sanity'
 import { ImagesIcon } from '@sanity/icons'
 
@@ -9,6 +10,14 @@ const backgroundColors = [
   { title: 'Прозорий', value: 'transparent' },
   { title: 'Бірюзовий', value: 'turquoise' },
 ]
+
+const classValidation = (Rule: any) =>
+  Rule.custom((val: string) => {
+    if (!val) return true
+    return /^[A-Za-z0-9\-\_: ]+$/.test(val)
+      ? true
+      : 'Дозволені: літери, цифри, дефіс, підкреслення, двокрапка та пробіли'
+  })
 
 export const areasOfStudyMainSection = defineType({
   name: 'areasOfStudyMainSection',
@@ -126,6 +135,14 @@ export const areasOfStudyMainSection = defineType({
               type: 'string',
               validation: (Rule) => Rule.required(),
             }),
+
+            defineField({
+              name: 'secondaryButtonClass',
+              title: 'CSS-клас для другої кнопки',
+              type: 'string',
+              description: 'Опціонально.',
+              validation: classValidation,
+            }),
           ],
           preview: {
             select: { title: 'title', subtitle: 'ageText', media: 'image' },
@@ -139,6 +156,14 @@ export const areasOfStudyMainSection = defineType({
       title: 'Текст головної кнопки секції',
       type: 'string',
       validation: (Rule) => Rule.required(),
+    }),
+
+    defineField({
+      name: 'sectionCtaClass',
+      title: 'CSS-клас головної кнопки',
+      type: 'string',
+      description: 'Опціонально.',
+      validation: classValidation,
     }),
   ],
 

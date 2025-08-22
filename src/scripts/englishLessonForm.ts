@@ -1,5 +1,6 @@
 import { DEFAULT_LANG, LOCALE, BRANCHES, type Lang } from "@/constants";
 
+// --- helpers ---
 function getLang(): Lang {
   const htmlLang = (document.documentElement.getAttribute("lang") || "").toLowerCase();
   if (htmlLang === "uk" || htmlLang === "en") return htmlLang;
@@ -8,9 +9,9 @@ function getLang(): Lang {
   return DEFAULT_LANG as Lang;
 }
 
-export function setupFreeLessonForm() {
+export function setupEnglishLessonForm() {
   const lang = getLang();
-  const t = LOCALE[lang].form;
+  const t = LOCALE[lang].formEnglish; 
   const branchesDict = BRANCHES[lang];
 
   const MSG = {
@@ -21,20 +22,20 @@ export function setupFreeLessonForm() {
   };
 
   // --- DOM ---
-  const form = document.querySelector<HTMLFormElement>(".free-lesson-form");
-  const successBlock = document.querySelector<HTMLElement>(".form-success");
-  const slider = document.querySelector<HTMLElement>(".form-slider");
-  const addressPanel = document.querySelector<HTMLElement>(".address-panel");
+  const form = document.querySelector<HTMLFormElement>(".english-lesson-form");
+  const successBlock = document.querySelector<HTMLElement>(".english-form-success");
+  const slider = document.querySelector<HTMLElement>(".english-form-slider");
+  const addressPanel = document.querySelector<HTMLElement>(".english-address-panel");
 
-  const pickButtons = document.querySelectorAll<HTMLButtonElement>(".js-pick-branch");
-  const closeAddressBtn = document.querySelectorAll<HTMLElement>(".js-close-address");
-  const closeButtons = document.querySelectorAll<HTMLElement>(".form-close");
+  const pickButtons = document.querySelectorAll<HTMLButtonElement>(".js-pick-branch-en");
+  const closeAddressBtn = document.querySelectorAll<HTMLElement>(".js-close-english-address");
+  const closeButtons = document.querySelectorAll<HTMLElement>(".english-form-close");
 
-  const branchInput = document.querySelector<HTMLInputElement>(".js-branch-value");
-  const branchHint = document.querySelector<HTMLParagraphElement>(".js-branch-hint");
-  const statusEl = document.querySelector<HTMLParagraphElement>(".form-status");
+  const branchInput = document.querySelector<HTMLInputElement>(".js-english-branch-value");
+  const branchHint = document.querySelector<HTMLParagraphElement>(".js-english-branch-hint");
+  const statusEl = document.querySelector<HTMLParagraphElement>(".english-form-status");
 
-  const openTriggers = document.querySelectorAll<HTMLElement>(".free-lesson-open");
+  const openTriggers = document.querySelectorAll<HTMLElement>(".english-lesson-form-open");
 
   // --- show/hide ---
   const show = (el?: Element | null) => { el?.classList.remove("-translate-x-full"); el?.classList.add("translate-x-0"); };
@@ -73,12 +74,12 @@ export function setupFreeLessonForm() {
       let isValid = true;
 
       const fields = [
-        { input: form.querySelector<HTMLInputElement>(".form-input-parent"),      error: t.requiredError, validate: (v: string) => v.trim() !== "" },
-        { input: form.querySelector<HTMLInputElement>(".form-input-child-first"), error: t.requiredError, validate: (v: string) => v.trim() !== "" },
-        { input: form.querySelector<HTMLInputElement>(".form-input-child-last"),  error: t.requiredError, validate: (v: string) => v.trim() !== "" },
-        { input: form.querySelector<HTMLInputElement>(".form-input-age"),         error: t.requiredError, validate: (v: string) => v.trim() !== "" },
-        { input: form.querySelector<HTMLInputElement>(".form-input-street"),      error: t.requiredError, validate: (v: string) => v.trim() !== "" },
-        { input: form.querySelector<HTMLInputElement>(".form-input-phone"),       error: t.phoneError,    validate: (v: string) => v.replace(/\D/g, "").length >= 10 },
+        { input: form.querySelector<HTMLInputElement>(".english-input-parent"),      error: t.requiredError, validate: (v: string) => v.trim() !== "" },
+        { input: form.querySelector<HTMLInputElement>(".english-input-child-first"), error: t.requiredError, validate: (v: string) => v.trim() !== "" },
+        { input: form.querySelector<HTMLInputElement>(".english-input-child-last"),  error: t.requiredError, validate: (v: string) => v.trim() !== "" },
+        { input: form.querySelector<HTMLInputElement>(".english-input-age"),         error: t.requiredError, validate: (v: string) => v.trim() !== "" },
+        { input: form.querySelector<HTMLInputElement>(".english-input-street"),      error: t.requiredError, validate: (v: string) => v.trim() !== "" },
+        { input: form.querySelector<HTMLInputElement>(".english-input-phone"),       error: t.phoneError,    validate: (v: string) => v.replace(/\D/g, "").length >= 10 },
       ];
 
       fields.forEach(({ input, error, validate }) => {
@@ -103,7 +104,7 @@ export function setupFreeLessonForm() {
 
       try {
         if (statusEl) statusEl.textContent = MSG.sending;
-        const res = await fetch("/api/submit", { method: "POST", body: new FormData(form) });
+        const res = await fetch("/api/submit-english", { method: "POST", body: new FormData(form) });
         const data = await res.json().catch(() => ({} as any));
         if (res.ok && (data as any).ok) {
           form.classList.add("hidden");
@@ -122,4 +123,4 @@ export function setupFreeLessonForm() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", setupFreeLessonForm);
+document.addEventListener("DOMContentLoaded", setupEnglishLessonForm);

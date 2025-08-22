@@ -2,7 +2,8 @@ import sanity from '@sanity/astro'
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import { loadEnv } from 'vite';
-import vercel from '@astrojs/vercel';
+import vercel from '@astrojs/vercel'
+
 
 const { PROJECT_ID, SECRET_API_TOKEN } = loadEnv(process.env.NODE_ENV, process.cwd(), '');
 
@@ -14,7 +15,7 @@ export default defineConfig({
     allowedHosts: true
   },
 
-  base: process.env.BASE_URL ?? '',
+  // base: process.env.BASE_URL ?? '',
 
   integrations: [tailwind(),
     sanity({
@@ -31,7 +32,7 @@ export default defineConfig({
     locales: ['uk', 'en'],
     defaultLocale: 'uk',
     routing: {
-      prefixDefaultLocale: false
+      prefixDefaultLocale: true
     }
   },
 
