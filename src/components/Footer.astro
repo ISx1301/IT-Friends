@@ -31,7 +31,7 @@ interface FooterData {
 const { data } = Astro.props as { data?: FooterData };
 
 const paragraphClass = (i: number) =>
-  i === 0 ? 'mb-1 lg:mb-2 leading-5 lg:w-52' : 'lg:text-left text-center leading-5 lg:w-52';
+  i === 0 ? 'mb-1 lg:mb-2 text-center lg:text-start leading-5 lg:w-52' : 'lg:text-left text-center leading-5 lg:w-52';
 ---
 <footer class="relative bg-white pt-12 lg:pt-9 peer-lg:pt-0 pb-5 lg:pb-11">
   <div class="container">
@@ -150,7 +150,7 @@ const paragraphClass = (i: number) =>
 
       <div class="flex flex-col items-center lg:items-end gap-10 order-2 lg:order-5 pt-12 lg:pt-7 basis:1/4 lg:basis-2/12 shrink-0">
         <button type="button" class="order-2 lg:order-1 px-11 py-3 orange-btn free-lesson-open">{data?.buttonText}</button>
-        <div class="flex justify-center lg:justify-between gap-16 lg:gap-0 order-1 lg:order-2 pl-0 lg:pl-[1rem] w-full">
+        <div class="flex justify-center lg:justify-center gap-16 lg:gap-10 order-1 lg:order-2 pl-0 lg:pl-[1rem] w-full">
 
           <!-- Social media -->
         {Array.isArray(data?.socials) &&
@@ -192,7 +192,7 @@ const paragraphClass = (i: number) =>
     </div>
 
     <div class="flex justify-center w-full">
-      <p class="font-normal text-sm lg:text-base">
+      <p class="font-normal text-sm lg:text-base text-center">
         &copy; {data?.copyright}
       </p>
     </div>
