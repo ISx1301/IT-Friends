@@ -65,6 +65,7 @@ export const PAGE_WITH_SETTINGS = `
         _key,
         backgroundColor,
         heading,
+        paddingClass,
         sectionCtaText,
         sectionCtaClass,
         "cards": cards[]{
@@ -74,7 +75,7 @@ export const PAGE_WITH_SETTINGS = `
           "paragraphs": coalesce(paragraphs, []),
           primaryButtonText,
           secondaryButtonText,
-          secondaryButtonClass,       
+          secondaryButtonClass,
           "image": image{
             alt,
             "url": asset->url
@@ -83,9 +84,10 @@ export const PAGE_WITH_SETTINGS = `
       },
 
 
+
       // aboutSection
       _type == "aboutSection" => {
-        _type, _key, backgroundColor, heading, headingAlign, layout,
+        _type, _key, backgroundColor, heading, headingAlign, layout, paddingClass,
         "image": image{alt, "url": asset->url},
         content{
           h3, "paragraphs": coalesce(paragraphs, []), h4,
@@ -94,9 +96,10 @@ export const PAGE_WITH_SETTINGS = `
         }
       },
 
+
       // peculiaritiesSection
       _type == "peculiaritiesSection" => {
-        _type, _key, backgroundColor, heading,
+        _type, _key, backgroundColor, heading, paddingClass,
         "mainImage": mainImage{ alt, "url": asset->url },
         "row1": coalesce(row1[]{
           "image": image{ alt, "url": asset->url }, title,
@@ -115,6 +118,7 @@ export const PAGE_WITH_SETTINGS = `
           )
         }, [])
       },
+
 
       // reviewsSection
       _type == "reviewsSection" => {

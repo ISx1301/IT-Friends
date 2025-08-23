@@ -10,7 +10,6 @@ const backgroundColors = [
   { title: 'Бірюзовий', value: 'turquoise'},
 ] as const
 
-
 const portableTextBlocks = [
   {
     type: 'block',
@@ -33,6 +32,19 @@ const portableTextBlocks = [
   },
 ] as const
 
+const paddingValidation = (Rule: any) =>
+  Rule.required().custom((val: string) => {
+    if (typeof val !== 'string' || !val.trim()) {
+      return 'Заповніть відступи секції (Tailwind класи)'
+    }
+    const ok = val.trim().split(/\s+/).every((t) =>
+      /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t)
+    )
+    return ok
+      ? true
+      : 'Використовуйте лише pt-*/pb-* (наприклад: "pt-5 pb-5 lg:pt-10 lg:pb-12")'
+  })
+
 export const peculiaritiesSection = defineType({
   name: 'peculiaritiesSection',
   title: 'Секція «Особливості»',
@@ -40,6 +52,23 @@ export const peculiaritiesSection = defineType({
   icon: ImagesIcon,
 
   fields: [
+    defineField({
+      name: 'adminTitle',
+      title: 'Назва секції',
+      type: 'string',
+      description: 'Необовʼязково. Використовується лише в списку секцій у Sanity.',
+      validation: (Rule) => Rule.max(80),
+    }),
+
+    defineField({
+      name: 'paddingClass',
+      title: 'Відступи секції (Tailwind класи)',
+      type: 'string',
+      description: 'Наприклад: pt-20 pb-20 lg:pt-32 lg:pb-32. Перелік значень та інструкції — у розділі «Інфо».',
+      initialValue: 'pt-20 pb-20 lg:pt-32 lg:pb-32',
+      validation: paddingValidation,
+    }),
+
     defineField({
       name: 'backgroundColor',
       title: 'Колір фону',
@@ -166,9 +195,12 @@ export const peculiaritiesSection = defineType({
   ],
 
   preview: {
-    select: { title: 'heading' },
-    prepare() {
-      return { title: 'Секція «Особливості»' }
+    select: { adminTitle: 'adminTitle', heading: 'heading' },
+    prepare({ adminTitle, heading }) {
+      return {
+        title: (adminTitle && adminTitle.trim()) || 'Секція «Особливості»',
+        subtitle: heading || undefined,
+      }
     },
   },
 })

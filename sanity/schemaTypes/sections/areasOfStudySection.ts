@@ -1,4 +1,3 @@
-// ./schemas/objects/areasOfStudyMainSection.ts
 import { defineType, defineField, defineArrayMember } from 'sanity'
 import { ImagesIcon } from '@sanity/icons'
 
@@ -19,12 +18,43 @@ const classValidation = (Rule: any) =>
       : 'Дозволені: літери, цифри, дефіс, підкреслення, двокрапка та пробіли'
   })
 
+const paddingValidation = (Rule: any) =>
+  Rule.required().custom((val: string) => {
+    if (typeof val !== 'string' || !val.trim()) {
+      return 'Заповніть відступи секції (Tailwind класи)'
+    }
+    const tokens = val.trim().split(/\s+/)
+    const ok = tokens.every((t) =>
+      /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t)
+    )
+    return ok
+      ? true
+      : 'Використовуйте лише pt-*/pb-* (наприклад: "pt-5 pb-5 lg:pt-10 lg:pb-12")'
+  })
+
 export const areasOfStudyMainSection = defineType({
   name: 'areasOfStudyMainSection',
   title: 'Секція «Напрямки»',
   type: 'object',
   icon: ImagesIcon,
   fields: [
+    defineField({
+      name: 'adminTitle',
+      title: 'Назва секції',
+      type: 'string',
+      description: 'Необовʼязково. Використовується лише в списку секцій у Sanity.',
+      validation: (Rule) => Rule.max(80),
+    }),
+
+    defineField({
+      name: 'paddingClass',
+      title: 'Відступи секції (Tailwind класи)',
+      type: 'string',
+      description: 'Наприклад: pt-20 pb-20 lg:pt-32 lg:pb-32. Перелік значень та інструкції — у розділі «Інфо».',
+      initialValue: 'pt-5 pb-5',
+      validation: paddingValidation,
+    }),
+
     defineField({
       name: 'backgroundColor',
       title: 'Колір фону',
@@ -79,7 +109,6 @@ export const areasOfStudyMainSection = defineType({
               type: 'string',
               validation: (Rule) => Rule.required(),
             }),
-
             defineField({
               name: 'paragraphs',
               title: 'Опис',
@@ -122,25 +151,23 @@ export const areasOfStudyMainSection = defineType({
               options: { sortable: true },
               validation: (Rule) => Rule.min(1).required(),
             }),
-
             defineField({
               name: 'primaryButtonText',
-              title: 'Текст першої кнопки (кнопку видно всюди)',
+              title: 'Текст першої кнопки',
               type: 'string',
               validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: 'secondaryButtonText',
-              title: 'Текст другої кнопки (кнопку видно тільки на мобільній версії)',
+              title: 'Текст другої кнопки',
               type: 'string',
               validation: (Rule) => Rule.required(),
             }),
-
             defineField({
               name: 'secondaryButtonClass',
-              title: 'CSS-клас для другої кнопки',
+              title: 'CSS-клас (для розробника)',
               type: 'string',
-              description: 'Опціонально.',
+              description: 'Опціонально',
               validation: classValidation,
             }),
           ],
@@ -160,17 +187,25 @@ export const areasOfStudyMainSection = defineType({
 
     defineField({
       name: 'sectionCtaClass',
-      title: 'CSS-клас головної кнопки',
+      title: 'CSS-клас (для розробника)',
       type: 'string',
-      description: 'Опціонально.',
+      description: 'Опціонально',
       validation: classValidation,
     }),
   ],
 
   preview: {
-    select: { title: 'heading' },
-    prepare() {
-      return { title: 'Секція «Напрямки»' }
+    select: {
+      adminTitle: 'adminTitle',
+      heading: 'heading',
+      headingOverride: 'headingOverride',
+    },
+    prepare({ adminTitle, heading, headingOverride }: any) {
+      return {
+        title: (adminTitle && adminTitle.trim()) || 'Секція «Напрямки»',
+        subtitle:
+          (headingOverride && headingOverride.trim()) || heading || undefined,
+      }
     },
   },
 })

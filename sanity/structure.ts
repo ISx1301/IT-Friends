@@ -1,6 +1,7 @@
 // structure.ts
 import { StructureBuilder } from 'sanity/structure'
-import { AddIcon, CogIcon, DocumentIcon, EarthGlobeIcon, BlockContentIcon } from '@sanity/icons'
+import EditorReadme from './components/EditorReadme'
+import { AddIcon, CogIcon, DocumentIcon, EarthGlobeIcon, BlockContentIcon, BookIcon } from '@sanity/icons'
 
 import { SUPPORTED_LANGS } from './constants'
 
@@ -12,6 +13,19 @@ export const appStructure = async (
   return S.list()
     .title('Контент')
     .items([
+
+      S.listItem()
+        .title('Інфо')
+        .icon(BookIcon)
+        .child(
+          S.component()
+            .id('editor-readme')        
+            .title('Інфо')     
+            .component(EditorReadme) 
+        ),
+
+      S.divider(),
+
       S.listItem()
         .id('global-settings')
         .title('Налаштування Header & Footer')

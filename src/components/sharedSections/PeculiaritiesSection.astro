@@ -20,6 +20,7 @@ type SectionData = {
   _key: string;
   backgroundColor?: BgColor;
   heading?: string;
+  paddingClass?: string; 
   mainImage?: SanityImage;
   row1?: Card[];
   row2?: Card[];
@@ -32,11 +33,20 @@ export interface Props {
 
 const { section, anchorId } = Astro.props as Props
 
-
 const bgClass = BG_CLASSES[(section.backgroundColor ?? 'white') as BgColor];
 const left = section.row1 ?? [];
 const right = section.row2 ?? [];
 
+const join = (...parts: (string | undefined | false)[]) =>
+  parts.filter(Boolean).map(String).map(s => s.trim()).join(' ')
+
+const isValidPadding = (s: string) =>
+  s.split(/\s+/).every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t))
+
+// padding (required in Sanity)
+const padding = (section.paddingClass ?? '').trim()
+if (!padding) throw new Error('[peculiaritiesSection] Missing required "paddingClass" from Sanity')
+if (!isValidPadding(padding)) throw new Error('[peculiaritiesSection] Invalid "paddingClass" value')
 
 const escapeAttr = (s?: string) =>
   (s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -55,7 +65,7 @@ const ptComponents = {
 };
 ---
 
-<section id={anchorId} class={`py-20 lg:py-32 ${bgClass}`}>
+<section id={anchorId} class={join(bgClass, padding)}>
   <div class="container">
     <div class="w-full">
       {section.heading && (
@@ -64,7 +74,6 @@ const ptComponents = {
     </div>
 
     <div class="gap-5 grid grid-cols-1 lg:grid-cols-3 lg:grid-rows-2">
-
       {left.slice(0,2).map((card, i) => {
         const html = toHTML(card.description ?? [], { components: ptComponents })
         const row = i === 0 ? 'lg:row-start-1' : 'lg:row-start-2'
@@ -83,7 +92,6 @@ const ptComponents = {
         )
       })}
 
-
       <div class="lg:col-start-2 row-span-1 lg:row-span-2 rounded-md overflow-hidden">
         {section.mainImage?.url && (
           <img class="w-full h-52 lg:h-full object-cover"
@@ -93,7 +101,6 @@ const ptComponents = {
               decoding="async"/>
         )}
       </div>
-
 
       {right.slice(0,2).map((card, i) => {
         const html = toHTML(card.description ?? [], { components: ptComponents })
@@ -113,6 +120,5 @@ const ptComponents = {
         )
       })}
     </div>
-
   </div>
 </section>

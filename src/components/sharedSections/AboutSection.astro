@@ -44,6 +44,7 @@ type AboutSectionData = {
   heading?: string;
   headingAlign?: Align;
   layout?: AboutLayout;
+  paddingClass?: string; // 👈 новое
   image?: { url?: string; alt?: string };
   content?: {
     h3?: string;
@@ -61,6 +62,11 @@ export interface Props {
 
 const { section, anchorId } = Astro.props as Props
 
+const join = (...parts: (string | undefined | false)[]) =>
+  parts.filter(Boolean).map(s => String(s).trim()).join(' ')
+
+const isValidPadding = (s: string) =>
+  s.split(/\s+/).every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t))
 
 const bgClass = BG_CLASSES[(section.backgroundColor ?? 'white') as BgColor];
 const headingAlignClass = HEADING_ALIGN_CLASSES[(section.headingAlign ?? 'left') as Align];
@@ -73,9 +79,14 @@ const order: OrderKind[] = section.content?.order?.length
 
 const paragraphs = (section.content?.paragraphs ?? []) as PTBlock[];
 const badges = section.content?.badges?.items ?? [];
+
+// padding (required в Sanity)
+const padding = (section.paddingClass ?? '').trim()
+if (!padding) throw new Error('[aboutSection] Missing required "paddingClass" from Sanity')
+if (!isValidPadding(padding)) throw new Error('[aboutSection] Invalid "paddingClass" value')
 ---
 
-<section id={anchorId} class={`py-20 lg:py-32 ${bgClass}`}>
+<section id={anchorId} class={join(bgClass, padding)}>
   <div class="container">
     <div class={`mb-8 basis-1/4 lg:basis-1/12 ${headingAlignClass}`}>
       {section.heading && (
@@ -86,7 +97,6 @@ const badges = section.content?.badges?.items ?? [];
     </div>
 
     <div class={`flex flex-col ${rowClass} gap-8 basis-1/4 lg:basis-1/12`}>
-
       <div class="lg:basis-6/12 basis-1/4">
         {section.image?.url && (
           <img

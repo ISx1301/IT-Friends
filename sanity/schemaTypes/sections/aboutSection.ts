@@ -1,4 +1,3 @@
-// sanity/schemaTypes/sections/aboutSectionMain.ts
 import { defineType, defineField, defineArrayMember } from 'sanity'
 import { ImagesIcon } from '@sanity/icons'
 
@@ -34,6 +33,26 @@ const contentBlocksOrderList = [
   { title: 'Бейджі (спани)', value: 'badges' },
 ] as const
 
+// const classValidation = (Rule: any) =>
+//   Rule.custom((val: string) => {
+//     if (!val) return true
+//     return /^[A-Za-z0-9\-\_: ]+$/.test(val)
+//       ? true
+//       : 'Дозволені: літери, цифри, дефіс, підкреслення, двокрапка та пробіли'
+//   })
+
+const paddingValidation = (Rule: any) =>
+  Rule.required().custom((val: string) => {
+    if (typeof val !== 'string' || !val.trim()) {
+      return 'Заповніть відступи секції (Tailwind класи)'
+    }
+    const tokens = val.trim().split(/\s+/)
+    const ok = tokens.every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t))
+    return ok
+      ? true
+      : 'Використовуйте лише pt-*/pb-* (наприклад: "pt-5 pb-5 lg:pt-10 lg:pb-12")'
+  })
+
 export const aboutContentOrderItem = defineType({
   name: 'aboutContentOrderItem',
   title: 'Елемент контенту',
@@ -68,6 +87,24 @@ export const aboutSection = defineType({
   icon: ImagesIcon,
 
   fields: [
+    defineField({
+      name: 'adminTitle',
+      title: 'Назва секції',
+      type: 'string',
+      description: 'Необовʼязково. Використовується лише в списку секцій у Sanity.',
+      validation: (Rule) => Rule.max(80),
+    }),
+
+    defineField({
+      name: 'paddingClass',
+      title: 'Відступи секції (Tailwind класи)',
+      type: 'string',
+      description:
+        'Наприклад: pt-20 pb-20 lg:pt-32 lg:pb-32. Перелік значень та інструкції — у розділі «Інфо».',
+      initialValue: 'pt-20 pb-20 lg:pt-32 lg:pb-32',
+      validation: paddingValidation,
+    }),
+
     defineField({
       name: 'backgroundColor',
       title: 'Колір фону',
@@ -130,10 +167,8 @@ export const aboutSection = defineType({
           of: [
             defineArrayMember({
               type: 'block',
-              styles: [
-                { title: 'Звичайний', value: 'normal' },
-              ],
-              lists: [], 
+              styles: [{ title: 'Звичайний', value: 'normal' }],
+              lists: [],
               marks: {
                 decorators: [
                   { title: 'Жирний', value: 'strong' },
@@ -193,7 +228,7 @@ export const aboutSection = defineType({
           name: 'order',
           title: 'Порядок елементів у контенті',
           description:
-            'Перетягніть, щоб змінити порядок положення елемнтів. Можна прибирати елементи, якщо вони не потрібні.',
+            'Перетягніть, щоб змінити порядок. Можна прибирати елементи, якщо вони не потрібні.',
           type: 'array',
           of: [{ type: 'aboutContentOrderItem' }],
           options: { sortable: true },
@@ -211,9 +246,12 @@ export const aboutSection = defineType({
   ],
 
   preview: {
-    select: { title: 'heading' },
-    prepare() {
-      return { title: 'Секція «Про нас»' }
+    select: { adminTitle: 'adminTitle', heading: 'heading' },
+    prepare({ adminTitle, heading }) {
+      return {
+        title: (adminTitle && adminTitle.trim()) || 'Секція «Про нас»',
+        subtitle: heading || undefined,
+      }
     },
   },
 })

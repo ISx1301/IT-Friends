@@ -1,139 +1,168 @@
 ---
-import Article from "@components/Article.astro"
-import Excerpt from "@components/Excerpt.astro"
-import { BG_CLASSES, type BgColor } from "@/constants"
-import { toHTML } from "@portabletext/to-html"
+import Article from "@components/Article.astro";
+import Excerpt from "@components/Excerpt.astro";
+import { BG_CLASSES, type BgColor } from "@/constants";
+import { toHTML } from "@portabletext/to-html";
 
-type PTSpan = { _type: 'span'; _key: string; text: string; marks?: string[] }
-type PTLink = { _key: string; _type: 'link'; href: string; openInNewTab?: boolean }
+/* ================= Portable Text types ================= */
+type PTSpan = { _type: "span"; _key: string; text: string; marks?: string[] };
+type PTLink = { _key: string; _type: "link"; href: string; openInNewTab?: boolean };
 type PTBlock = {
-  _type: 'block'
-  _key: string
-  style?: string
-  children: PTSpan[]
-  markDefs?: PTLink[]
-}
+  _type: "block";
+  _key: string;
+  style?: string;
+  children: PTSpan[];
+  markDefs?: PTLink[];
+};
 
+/* ================= Portable Text components ================= */
 const ptComponents = {
   marks: {
     em: ({ children }: any) => `<em>${children}</em>`,
     strong: ({ children }: any) => `<strong>${children}</strong>`,
     link: ({ value, children }: any) => {
-      const href = value?.href || '#'
-      const blank = value?.openInNewTab
-      const target = blank ? ' target="_blank" rel="noopener noreferrer"' : ''
-      return `<a href="${href}" class="text-primary-orange"${target}>${children}</a>`
+      const href = value?.href || "#";
+      const blank = value?.openInNewTab;
+      const target = blank ? ' target="_blank" rel="noopener noreferrer"' : "";
+      return `<a href="${href}" class="text-primary-orange"${target}>${children}</a>`;
     },
   },
-}
+};
 
-type SanityImage = { url?: string; alt?: string }
+/* ================= Types ================= */
+type SanityImage = { url?: string; alt?: string };
 
 type AreasCard = {
-  image?: SanityImage
-  title?: string
-  ageText?: string
-  paragraphs?: PTBlock[]
-  primaryButtonText?: string
-  secondaryButtonText?: string
-  secondaryButtonClass?: string 
-}
+  image?: SanityImage;
+  title?: string;
+  ageText?: string;
+  paragraphs?: PTBlock[];
+  primaryButtonText?: string;
+  secondaryButtonText?: string;
+  secondaryButtonClass?: string;
+};
 
 export interface AreasOfStudyMainSectionProps {
-  _type?: "areasOfStudyMainSection"
-  _key?: string
-  backgroundColor?: BgColor
-  heading?: string
-  cards?: AreasCard[]
-  sectionCtaText?: string
-  sectionCtaClass?: string 
+  _type?: "areasOfStudyMainSection";
+  _key?: string;
+  backgroundColor?: BgColor;
+  heading?: string;
+  paddingClass?: string; 
+  cards?: AreasCard[];
+  sectionCtaText?: string;
+  sectionCtaClass?: string;
 }
 
 export interface Props {
-  section: AreasOfStudyMainSectionProps
-  anchorId?: string
+  section: AreasOfStudyMainSectionProps;
+  anchorId?: string;
 }
 
-const { section, anchorId } = Astro.props as Props
+const { section, anchorId } = Astro.props as Props;
 
-// ── helpers/consts
-const join = (...parts: (string | undefined)[]) => parts.filter(Boolean).map(s => s!.trim()).join(" ")
-const BADGE_CLASSES = ["bg-span-gray text-white","bg-span-sand text-black","bg-span-mint text-black"] as const
-const badgeClassByIndex = (i: number) => BADGE_CLASSES[i % BADGE_CLASSES.length]
+/* ================= Helpers ================= */
+const join = (...parts: (string | undefined | false)[]) =>
+  parts.filter(Boolean).map((s) => String(s).trim()).join(" ");
 
-// ── derived
-const bgClass = BG_CLASSES[(section.backgroundColor ?? 'white') as BgColor]
-const cards = section.cards ?? []
+const BADGE_CLASSES = [
+  "bg-span-gray text-white",
+  "bg-span-sand text-black",
+  "bg-span-mint text-black",
+] as const;
+const badgeClassByIndex = (i: number) => BADGE_CLASSES[i % BADGE_CLASSES.length];
 
+const isValidPadding = (s: string) =>
+  s.split(/\s+/).every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t));
 
-const htmlByIndex = cards.map(card =>
-  card.paragraphs?.length ? toHTML(card.paragraphs, { components: ptComponents }) : ''
-)
+/* ================= Derived ================= */
+const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
+const cards = section.cards ?? [];
+const padding = (section.paddingClass ?? "").trim();
 
-const baseSecondaryBtn = "py-2 border w-full orange-btn" 
-const basePrimaryBtn   = "py-2 border w-full transparent-btn"                            
+if (!padding) {
+  throw new Error('[areasOfStudyMainSection] Missing required "paddingClass" from Sanity');
+}
+if (!isValidPadding(padding)) {
+  throw new Error('[areasOfStudyMainSection] Invalid "paddingClass" value');
+}
 
-const secondaryBtnClassByIndex = cards.map(card =>
+const htmlByIndex = cards.map((card) =>
+  card.paragraphs?.length ? toHTML(card.paragraphs, { components: ptComponents }) : ""
+);
+
+const baseSecondaryBtn = "py-2 border text-lg w-full orange-btn";
+const basePrimaryBtn = "py-2 border w-full transparent-btn";
+
+const secondaryBtnClassByIndex = cards.map((card) =>
   join(baseSecondaryBtn, card.secondaryButtonClass)
-)
+);
 
-const baseSectionCta = "px-5 py-4 font-secondary font-medium text-lg orange-btn form-open"
-const finalSectionCta = join(baseSectionCta, section.sectionCtaClass)
+const baseSectionCta = "px-5 py-4 font-secondary font-medium text-lg orange-btn form-open";
+const finalSectionCta = join(baseSectionCta, section.sectionCtaClass);
 ---
 
-<section id={anchorId} class={`lg:py-section-top-bottom-padding ${bgClass} py-12`}>
+<section id={anchorId} class={join(bgClass, padding)}>
   <div class="container">
     <div class="flex justify-center mb-6 lg:mb-11 basis-1/4 lg:basis-1/12">
-      <h2 class="font-secondary text-2xl lg:text-3xl">{section?.heading}</h2>
+      {section?.heading && (
+        <h2 class="font-secondary text-2xl lg:text-3xl">{section.heading}</h2>
+      )}
     </div>
 
     <div class="items-stretch gap-5 grid grid-cols-1 lg:grid-cols-3 mb-11">
-      {cards.length > 0 && cards.map((card, idx) => (
-        <div class="grid grid-rows-[auto_1fr_auto] bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full h-full">
-          <div class="flex flex-col items-center space-y-3">
-            {card?.image?.url && <img src={card.image.url} alt={card.image.alt ?? ""} />}
+      {cards.length > 0 &&
+        cards.map((card, idx) => (
+          <div class="grid grid-rows-[auto_1fr_auto] bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full h-full">
+            <div class="flex flex-col items-center space-y-3">
+              {card?.image?.url && (
+                <img src={card.image.url} alt={card.image.alt ?? ""} />
+              )}
 
-            {card?.title && (
-              <h3 class="w-full font-secondary font-semibold text-2xl text-center">
-                {card.title}
-              </h3>
-            )}
+              {card?.title && (
+                <h3 class="w-full font-secondary font-semibold text-2xl text-center">
+                  {card.title}
+                </h3>
+              )}
 
-            {card?.ageText && (
-              <span class={`${badgeClassByIndex(idx)} px-4 py-1 rounded-lg`}>
-                {card.ageText}
-              </span>
-            )}
+              {card?.ageText && (
+                <span class={`${badgeClassByIndex(idx)} px-4 py-1 rounded-lg`}>
+                  {card.ageText}
+                </span>
+              )}
+            </div>
+
+            <div class="mt-3 min-h-0">
+              <Article>
+                <Excerpt wordLength={30}>
+                  {htmlByIndex[idx] && (
+                    <div class="max-w-none" set:html={htmlByIndex[idx]} />
+                  )}
+                </Excerpt>
+              </Article>
+            </div>
+
+            <div class="flex flex-col gap-3 w-full">
+              {card?.secondaryButtonText && (
+                <button class={secondaryBtnClassByIndex[idx]} type="button">
+                  {card.secondaryButtonText}
+                </button>
+              )}
+              {card?.primaryButtonText && (
+                <button class={basePrimaryBtn} type="button">
+                  {card.primaryButtonText}
+                </button>
+              )}
+            </div>
           </div>
-
-          <div class="mt-3 min-h-0">
-            <Article>
-              <Excerpt wordLength={30}>
-                {htmlByIndex[idx] && <div class="max-w-none" set:html={htmlByIndex[idx]} />}
-              </Excerpt>
-            </Article>
-          </div>
-
-          <div class="flex flex-col gap-3 w-full">
-            {card?.secondaryButtonText && (
-              <button class={secondaryBtnClassByIndex[idx]} type="button">
-                {card.secondaryButtonText}
-              </button>
-            )}
-            {card?.primaryButtonText && (
-              <button class={basePrimaryBtn} type="button">
-                {card.primaryButtonText}
-              </button>
-            )}
-          </div>
-        </div>
-      ))}
+        ))}
     </div>
 
     <div class="hidden lg:flex justify-center basis-1/4 lg:basis-1/12">
-      <button class={finalSectionCta} type="button">
-        {section.sectionCtaText}
-      </button>
+      {section.sectionCtaText && (
+        <button class={finalSectionCta} type="button">
+          {section.sectionCtaText}
+        </button>
+      )}
     </div>
   </div>
 </section>

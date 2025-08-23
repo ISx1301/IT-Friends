@@ -100,5 +100,15 @@ module.exports = {
       },
     },
   },
+  safelist: [
+    {
+      pattern: /^(pt|pb|py)-(px|0|1|2|3|4|5|6|8|10|12|14|16|20|24|28|32|36|40|48|56|64|72|80|96)$/,
+      variants: ['sm', 'md', 'lg', 'xl', '2xl'], 
+    },
+    {
+      pattern: /^(pt|pb|py)-\[[^\]]+\]$/,
+      variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+    },
+  ],
   plugins: [],
 }
