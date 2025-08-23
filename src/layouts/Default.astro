@@ -10,9 +10,9 @@ import Contacts from "@/components/Contacts.astro";
 
 const { settings, lang, seo } = Astro.props;
 
-if (!Astro.cookies.get('language')) {
+// if (!Astro.cookies.get('language')) {
   Astro.cookies.set('language', lang, { maxAge: 31536000 });
-}
+// }
 ---
 
 <html class="scroll-smooth" lang={lang}>

@@ -16,7 +16,6 @@ export const LOCALE: Record<
       telegramMenuTitle: string;
     };
 
-    phoneMenu: Array<{ label: string; href: string }>;
 
     onlineForm: {
       addressTitle: string;
@@ -92,14 +91,6 @@ export const LOCALE: Record<
       phoneMenuTitle: 'Оберіть, будь ласка, напрямок, який цікавить:',
       telegramMenuTitle: 'Оберіть, будь ласка, зручну для вас адресу:',
     },
-
-    phoneMenu: [
-      { label: 'Онлайн навчання',      href: 'tel:+38067' },
-      { label: 'IT школа',             href: 'tel:+38067' },
-      { label: 'Англійська для дітей', href: 'tel:+38098' },
-      { label: 'IT табори',            href: 'tel:+38093' },
-      { label: 'Франшиза',             href: 'tel:+38050' },
-    ],
 
     onlineForm: {
       addressTitle: 'Оберіть, будь ласка, що ви хочете вивчати',
@@ -177,13 +168,6 @@ export const LOCALE: Record<
       telegramMenuTitle: 'Please choose the most convenient address:',
     },
 
-    phoneMenu: [
-      { label: 'Online learning',  href: 'tel:+38067' },
-      { label: 'IT school',        href: 'tel:+38067' },
-      { label: 'English for kids', href: 'tel:+38098' },
-      { label: 'IT camps',         href: 'tel:+38093' },
-      { label: 'Franchise',        href: 'tel:+38050' },
-    ],
 
     onlineForm: {
       addressTitle: 'Оберіть, будь ласка, що ви хочете вивчати',
@@ -387,11 +371,65 @@ export const BRANCHES_ONLINE: Record<
   },
 };
 
-export const TELEGRAM_LINKS: Record<BranchId, string> = {
-  borshchahivka: 'https://t.me/user1',
-  kharkivska_poznyaky: 'https://t.me/user2',
-  poznyaky: 'https://t.me/user3',
-  troieshchyna: 'https://t.me/user4',
-  voskresenka: 'https://t.me/user5',
-  online: 'https://t.me/user5'
+
+export const BRANCH_ORDER_OFFLINE: Exclude<BranchId, 'online'>[] = [
+  'borshchahivka',
+  'kharkivska_poznyaky',
+  'poznyaky',
+  'troieshchyna',
+  'voskresenka',
+];
+
+export type DirectionKey =
+  | 'online_eng'
+  | 'online_it'
+  | 'it_school'
+  | 'english_kids'
+  | 'it_camps'
+  | 'franchise';
+
+export const DIRECTION_OPTIONS: Record<Lang, Array<{ key: DirectionKey; label: string }>> = {
+  uk: [
+    { key: 'online_eng',   label: 'Англійська онлайн' },
+    { key: 'online_it',    label: 'IT онлайн' },
+    { key: 'it_school',    label: 'IT школа' },
+    { key: 'english_kids', label: 'Англійська для дітей' },
+    { key: 'it_camps',     label: 'IT табори' },
+    { key: 'franchise',    label: 'Франшиза' },
+  ],
+  en: [
+    { key: 'online_eng',   label: 'English online' },
+    { key: 'online_it',    label: 'IT online' },
+    { key: 'it_school',    label: 'IT school' },
+    { key: 'english_kids', label: 'English for kids' },
+    { key: 'it_camps',     label: 'IT camps' },
+    { key: 'franchise',    label: 'Franchise' },
+  ],
+};
+
+export const PHONE_LINKS: Record<BranchId, Array<{ label: string; href: string }>> = {
+  borshchahivka:       [{ label: 'Борщагівка',         href: 'tel:+380971409292' }],
+  kharkivska_poznyaky: [{ label: 'Кошиця/Позняки',     href: 'tel:+380982617975' }],
+  poznyaky:            [{ label: 'Григоренка',         href: 'tel:+380984409447' }],
+  troieshchyna:        [{ label: 'Троєщина',           href: 'tel:+380964296130' }],
+  voskresenka:         [{ label: 'Воскресенка',        href: 'tel:+380989005905' }],
+  online: [
+    { label: 'IT онлайн',         href: 'tel:+380956217034' },
+    { label: 'Англійська онлайн', href: 'tel:+380989631223' },
+  ],
+};
+
+export const TELEGRAM_BRANCH_LINKS: Record<
+  Exclude<BranchId, 'online'>, string
+> = {
+  borshchahivka:       'https://t.me/itfriends_borshchagivka',
+  kharkivska_poznyaky: 'https://t.me/itfriendskosh',
+  poznyaky:            'https://t.me/itfriendsrigorenko',
+  troieshchyna:        'https://t.me/ITFRIENDSTroieschyna',
+  voskresenka:         'https://t.me/itfriendsvoskresenka',
+};
+
+export const TELEGRAM_ONLINE_LINKS: Record<'online_it' | 'online_eng', string> = {
+  online_it:  'https://t.me/Online_it_friends',
+  online_eng: 'https://t.me/eng0friends',
 };

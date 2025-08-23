@@ -88,30 +88,30 @@ const count = Math.min(tabs.length, panels.length);
 const ptPanelComponents = {
   block: {
     normal: ({ children }: any) =>
-      `<p class="max-w-md font-medium text-3xl text-center">${children}</p>`,
+      `<div class="max-w-md font-medium text-3xl text-center">${children.trim()}</div>`,
   },
   marks: {
-    strong: ({ children }: any) => `<strong class="font-semibold">${children}</strong>`,
-    em: ({ children }: any) => `<em class="italic">${children}</em>`,
+    strong: ({ children }: any) => `<strong class="font-semibold">${children.trim()}</strong>`,
+    em: ({ children }: any) => `<em class="italic">${children.trim()}</em>`,
     link: ({ value, children }: any) => {
       const href = escapeAttr(value?.href);
-      if (!href) return children;
-      return `<a class="text-primary-orange" href="${href}" target="_blank" rel="noopener noreferrer">${children}</a>`;
+      if (!href) return children.trim();
+      return `<a class="text-primary-orange" href="${href}" target="_blank" rel="noopener noreferrer">${children.trim()}</a>`;
     },
   },
 };
 
 const ptCardComponents = {
   block: {
-    normal: ({ children }: any) => `<p class="text-base lg:text-lg">${children}</p>`,
+    normal: ({ children }: any) => `<div class="text-base lg:text-lg">${children.trim()}</div>`,
   },
   marks: {
-    strong: ({ children }: any) => `<strong class="font-semibold">${children}</strong>`,
-    em: ({ children }: any) => `<em class="italic">${children}</em>`,
+    strong: ({ children }: any) => `<strong class="font-semibold">${children.trim()}</strong>`,
+    em: ({ children }: any) => `<em class="italic">${children.trim()}</em>`,
     link: ({ value, children }: any) => {
       const href = escapeAttr(value?.href);
-      if (!href) return children;
-      return `<a class="text-primary-orange" href="${href}" target="_blank" rel="noopener noreferrer">${children}</a>`;
+      if (!href) return children.trim();
+      return `<a class="text-primary-orange" href="${href}" target="_blank" rel="noopener noreferrer">${children.trim()}</a>`;
     },
   },
 };
@@ -179,7 +179,7 @@ const regularBtnClassByPanel = panels.map((p) =>
                 {cardsKind === "clickable" && (panel?.panelDescription?.length ?? 0) > 0 && (
                   <div class="flex justify-center lg:mb-12">
                     <Article>
-                      <div set:html={panelDescHtml[i]} />
+                      <Fragment set:html={panelDescHtml[i]} />
                     </Article>
                   </div>
                 )}
@@ -243,8 +243,8 @@ const regularBtnClassByPanel = panels.map((p) =>
                             </h3>
 
                             <Article class="flex-1">
-                              <Excerpt wordLength={30}>
-                                <div set:html={regularDescHtml[i][idx2]} />
+                              <Excerpt wordLength={40}>
+                                <Fragment set:html={regularDescHtml[i][idx2]} />
                               </Excerpt>
                             </Article>
 

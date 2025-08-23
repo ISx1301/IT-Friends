@@ -42,12 +42,15 @@ const excerptedWords = shouldTruncate ? words.slice(0, wordLength) : words;
 const excerptedText = excerptedWords.join(' ');
 const readMoreHtml = `<span class="font-bold cursor-pointer read-more">${dict.readMore}</span>`;
 ---
-<div class={`excerpt-container ${className}`}>
+<div class:list={['excerpt-container', className]}>
   <div class="text-base excerpt-text">
-    <Fragment set:html={excerptedText + (shouldTruncate ? `... ${readMoreHtml}` : '')}>
+    <Fragment set:html={excerptedText + (shouldTruncate ? `... ${readMoreHtml}` : '')} />
   </div>
-  <div set:html={plainText} class="hidden text-base full-text"></div>
+  <div class="hidden text-base full-text">
+    <Fragment set:html={plainText} />
+  </div>
 </div>
+
 
 {shouldTruncate && (
   <script>

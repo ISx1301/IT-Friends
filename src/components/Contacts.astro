@@ -6,9 +6,7 @@ import {
   DEFAULT_LANG,
   type Lang,
   LOCALE,
-  BRANCHES,
-  BRANCH_ORDER,
-  TELEGRAM_LINKS,
+  DIRECTION_OPTIONS,
 } from "@/constants";
 
 interface Props { lang?: Lang }
@@ -16,27 +14,24 @@ interface Props { lang?: Lang }
 const { lang = DEFAULT_LANG as Lang } = Astro.props;
 const t = LOCALE[lang];
 const ui = t.ui;
-const phoneItems = t.phoneMenu;
-const branches = BRANCHES[lang];
+const directions = DIRECTION_OPTIONS[lang];
 ---
 
-<!-- Кнопки открытия меню -->
-<div class="right-0 bottom-1 z-10 fixed flex flex-col">
-  <button type="button" class="phone-menu-btn" aria-label={ui.callAlt}>
+<div class="right-0 bottom-1 z-10 fixed flex flex-col gap-2">
+  <button type="button" class="qc-phone-btn" aria-label={ui.callAlt}>
     <Image src={import("@images/call-btn.svg")} format="svg" alt={ui.callAlt} />
   </button>
-  <button type="button" class="tg-menu-btn" aria-label={ui.telegramAlt}>
+  <button type="button" class="qc-telegram-btn" aria-label={ui.telegramAlt}>
     <Image src={import("@images/telegram-btn.svg")} format="svg" alt={ui.telegramAlt} />
   </button>
 </div>
 
-<!-- PHONE MENU -->
-<div class="top-0 left-0 z-50 fixed flex justify-center items-center w-full h-screen overflow-y-auto transition-transform -translate-x-full duration-300 ease-in-out transform phone-menu">
-  <div class="flex justify-center items-center h-screen overflow-y-auto phone-menu-close">
+<div class="top-0 left-0 z-50 fixed flex justify-center items-center w-full h-screen overflow-y-auto transition-transform -translate-x-full duration-300 ease-in-out transform qc-direction-menu">
+  <div class="flex justify-center items-center h-screen overflow-y-auto qc-direction-menu-close">
     <div class="left-0 absolute bg-white/10 backdrop-blur-md w-full h-screen overflow-y-auto"></div>
 
     <div class="relative flex flex-col items-center bg-white lg:shadow-2xl px-3 lg:px-14 py-9 rounded-lg w-11/12 lg:w-full">
-      <div class="top-4 right-4 absolute cursor-pointer phone-menu-close" aria-label={ui.close}>
+      <div class="top-4 right-4 absolute cursor-pointer qc-direction-menu-close" aria-label={ui.close}>
         <Image src={import("@images/green-close.svg")} format="svg" alt={ui.close} />
       </div>
 
@@ -45,44 +40,36 @@ const branches = BRANCHES[lang];
       </div>
 
       <div class="flex flex-col items-center gap-4 w-full">
-        {phoneItems.map((item) => (
-          <a href={item.href} class="contact-btn">{item.label}</a>
+        {directions.map((opt) => (
+          <button
+            type="button"
+            class="py-5 border rounded-lg w-full font-medium text-lg text-center qc-pick-direction"
+            data-direction={opt.key}
+          >
+            {opt.label}
+          </button>
         ))}
       </div>
     </div>
   </div>
 </div>
 
-<!-- TELEGRAM MENU -->
-<div class="top-0 left-0 z-50 fixed flex justify-center items-center w-full h-screen overflow-y-auto transition-transform -translate-x-full duration-300 ease-in-out transform telegram-menu">
-  <div class="flex justify-center items-center h-screen overflow-y-auto telegram-menu-close">
+<div class="top-0 left-0 z-50 fixed flex justify-center items-center w-full h-screen overflow-y-auto transition-transform -translate-x-full duration-300 ease-in-out transform qc-address-panel">
+  <div class="flex justify-center items-center h-screen overflow-y-auto qc-address-panel-close">
     <div class="left-0 absolute bg-white/10 backdrop-blur-md w-full h-screen overflow-y-auto"></div>
 
     <div class="relative flex flex-col items-center bg-white lg:shadow-2xl px-3 lg:px-14 py-9 rounded-lg w-11/12 lg:w-full">
-      <div class="top-4 right-4 absolute cursor-pointer telegram-menu-close" aria-label={ui.close}>
+      <div class="top-4 right-4 absolute cursor-pointer qc-address-panel-close" aria-label={ui.close}>
         <Image src={import("@images/green-close.svg")} format="svg" alt={ui.close} />
       </div>
 
       <div class="mb-5">
-        <h2 class="font-secondary font-medium text-xl text-center">{ui.telegramMenuTitle}</h2>
+        <h2 class="font-secondary font-medium text-xl text-center">{t.form.addressTitle}</h2>
       </div>
 
-      <div class="flex flex-col gap-4 w-full">
-        {BRANCH_ORDER.map((id) => (
-          <a
-            href={TELEGRAM_LINKS[id]}
-            target="_blank"
-            rel="noopener"
-            class="py-2 contact-btn"
-            aria-label={`${branches[id].district}, ${branches[id].address}`}
-          >
-            <span>{branches[id].district}</span>
-            <span>{branches[id].address}</span>
-          </a>
-        ))}
-      </div>
+      <div class="flex flex-col gap-4 w-full qc-address-list"></div>
     </div>
   </div>
 </div>
 
-<script src="@scripts/contacts"></script>
+<script src="@/scripts/contacts.ts" />

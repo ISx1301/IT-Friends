@@ -1,35 +1,25 @@
-// @scripts/languageToggle.ts
 type SetupOpts = {
-  locales?: string[];              // поддерживаемые префиксы
-  // порядок важен: первый сегмент URL считается языковым, если входит в locales
+  locales?: string[];              
 };
 
 function computeTargetPath(path: string, targetLang: string, locales: string[]): string {
-  // Нормализуем и разбираем путь на сегменты
   const cleaned = path.replace(/\/+/g, "/");
   let parts = cleaned.replace(/^\/|\/$/g, "").split("/").filter(Boolean);
 
-  // Есть ли текущий языковой префикс?
   const hasPrefix = parts.length > 0 && locales.includes(parts[0]);
 
-  // Сегменты "контента" = путь без языкового префикса
   const contentParts = hasPrefix ? parts.slice(1) : parts;
 
-  // Спец-правила из ТЗ:
-  // - uk: главная -> "/", иначе "/uk/<...>"
-  // - en: главная -> "/en", иначе "/en/<...>"
-
   if (targetLang === "uk") {
-    if (contentParts.length === 0) return "/";                          // главная укр
-    return "/uk/" + contentParts.join("/");                              // внутренняя укр
+    if (contentParts.length === 0) return "/";                          
+    return "/uk/" + contentParts.join("/");                              
   }
 
   if (targetLang === "en") {
-    if (contentParts.length === 0) return "/en";                         // главная англ
-    return "/en/" + contentParts.join("/");                              // внутренняя англ
+    if (contentParts.length === 0) return "/en";                         
+    return "/en/" + contentParts.join("/");
   }
 
-  // на всякий случай — если прилетел неизвестный язык, просто вернём исходный путь
   return cleaned.startsWith("/") ? cleaned : "/" + cleaned;
 }
 
@@ -72,7 +62,6 @@ export function setupToggleArrow(opts: SetupOpts = {}): void {
       });
     });
 
-    // Клик вне — закрыть
     document.addEventListener("click", (e) => {
       const t = e.target as HTMLElement | null;
       if (t && !container.contains(t)) {
