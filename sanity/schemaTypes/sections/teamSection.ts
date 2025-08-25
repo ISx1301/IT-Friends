@@ -10,6 +10,19 @@ const backgroundColors = [
   { title: 'Бірюзовий', value: 'turquoise' },
 ] as const
 
+const paddingValidation = (Rule: any) =>
+  Rule.required().custom((val: string) => {
+    if (typeof val !== 'string' || !val.trim()) {
+      return 'Заповніть відступи секції (Tailwind класи)'
+    }
+    const ok = val.trim().split(/\s+/).every((t) =>
+      /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t)
+    )
+    return ok
+      ? true
+      : 'Використовуйте лише pt-*/pb-* (наприклад: "pt-16 pb-16 lg:pt-32 lg:pb-32")'
+  })
+
 export const teamSection = defineType({
   name: 'teamSection',
   title: 'Секція «Наша команда»',
@@ -17,6 +30,23 @@ export const teamSection = defineType({
   icon: ImagesIcon,
 
   fields: [
+    defineField({
+      name: 'adminTitle',
+      title: 'Назва секції',
+      type: 'string',
+      description: 'Необовʼязково. Відображається лише у списку секцій у Studio.',
+      validation: (Rule) => Rule.max(80),
+    }),
+
+    defineField({
+      name: 'paddingClass',
+      title: 'Відступи секції (Tailwind класи)',
+      type: 'string',
+      description: 'Наприклад: pt-20 pb-20 lg:pt-32 lg:pb-32. Перелік значень та інструкції — у розділі «Інфо».',
+      initialValue: 'pt-16 pb-16 lg:pt-32 lg:pb-32',
+      validation: paddingValidation,
+    }),
+
     defineField({
       name: 'backgroundColor',
       title: 'Колір фону',
@@ -149,10 +179,13 @@ export const teamSection = defineType({
   ],
 
   preview: {
-    select: { title: 'heading', count: 'members' },
-    prepare({ count }) {
+    select: { adminTitle: 'adminTitle', count: 'members' },
+    prepare({ adminTitle, count }) {
       const n = Array.isArray(count) ? count.length : 0
-      return { title: 'Секція «Наша команда»', subtitle: `Учасників: ${n}` }
+      return {
+        title: (adminTitle && adminTitle.trim()) || 'Секція «Наша команда»',
+        subtitle: `Учасників: ${n}`,
+      }
     },
   },
 })

@@ -28,6 +28,7 @@ type TeamSectionData = {
   _key: string;
   backgroundColor?: BgColor;
   heading?: string;
+  paddingClass?: string; 
   description?: PTBlock[];
   members?: Member[];
 };
@@ -41,6 +42,17 @@ const { section, anchorId } = Astro.props as Props;
 
 const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
 const members = section.members ?? [];
+
+const join = (...parts: (string | undefined | false)[]) =>
+  parts.filter(Boolean).map(String).map(s => s.trim()).join(' ')
+
+const isValidPadding = (s: string) =>
+  s.split(/\s+/).every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t))
+
+// padding (required in Sanity)
+const padding = (section.paddingClass ?? '').trim()
+if (!padding) throw new Error('[teamSection] Missing required "paddingClass" from Sanity')
+if (!isValidPadding(padding)) throw new Error('[teamSection] Invalid "paddingClass" value')
 
 const escapeAttr = (s?: string) =>
   (s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -67,7 +79,7 @@ const photoUrl = (img?: SanityImage, w = 600, h = 900) =>
     : undefined;
 ---
 
-<section id={anchorId} class={`py-16 lg:py-32 w-full overflow-visible ${bgClass}`}>
+<section id={anchorId} class={join(bgClass, padding, "w-full overflow-visible ")}>
   <div class="container">
     <div class="m-auto mb-16 max-w-lg">
       {section.heading && (

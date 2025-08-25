@@ -6,6 +6,7 @@ type newSchoolMainSection = {
   _type: 'newSchoolMainSection';
   _key: string;
   heading?: string;
+  paddingClass?: string; 
   images: FourImages; 
 };
 
@@ -17,12 +18,22 @@ export interface Props {
 const { section, anchorId } = Astro.props as Props
 
 const group = section.images;
-
 const REPEAT = 4;
 const groups: FourImages[] = Array.from({ length: REPEAT }, () => group);
+
+const join = (...parts: (string | undefined | false)[]) =>
+  parts.filter(Boolean).map(String).map(s => s.trim()).join(' ')
+
+const isValidPadding = (s: string) =>
+  s.split(/\s+/).every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t))
+
+// padding (required in Sanity)
+const padding = (section.paddingClass ?? '').trim()
+if (!padding) throw new Error('[newSchoolMainSection] Missing required "paddingClass" from Sanity')
+if (!isValidPadding(padding)) throw new Error('[newSchoolMainSection] Invalid "paddingClass" value')
 ---
 
-<section id={anchorId} class={`py-0 w-full overflow-hidden`}>
+<section id={anchorId} class={join(padding, 'w-full overflow-hidden')}>
   {section.heading && (
     <div class="mb-6 lg:mb-12 max-w-2xl container">
       <h2 class="font-secondary font-medium text-2xl lg:text-4xl text-center">{section.heading}</h2>
@@ -32,34 +43,17 @@ const groups: FourImages[] = Array.from({ length: REPEAT }, () => group);
   <div class="flex gap-2 lg:gap-5 px-0 w-full h-fit animate-[marquee-to-left_60000ms_linear_alternate_infinite]">
     {groups.map((g) => (
       <div class="gap-2 lg:gap-5 grid grid-cols-12 min-w-full">
-
         <div class="flex flex-col gap-y-2 lg:gap-y-5 col-span-5 h-full">
-            <img
-              class="rounded-xl w-full h-full object-cover"
-              src={g[0].url}
-              alt={g[0].alt ?? ''}
-            />
-            <img
-              class="rounded-xl w-full h-full object-cover"
-              src={g[1].url}
-              alt={g[1].alt ?? ''}
-            />
+          <img class="rounded-xl w-full h-full object-cover" src={g[0].url} alt={g[0].alt ?? ''} />
+          <img class="rounded-xl w-full h-full object-cover" src={g[1].url} alt={g[1].alt ?? ''} />
         </div>
 
         <div class="col-span-3 rounded-xl h-full">
-            <img
-              class="w-full h-full object-cover"
-              src={g[2].url}
-              alt={g[2].alt ?? ''}
-            />
+          <img class="w-full h-full object-cover" src={g[2].url} alt={g[2].alt ?? ''} />
         </div>
 
         <div class="col-span-4 rounded-xl h-full">
-            <img
-              class="rounded-xl w-full h-full object-cover"
-              src={g[3].url}
-              alt={g[3].alt ?? ''}
-            />
+          <img class="rounded-xl w-full h-full object-cover" src={g[3].url} alt={g[3].alt ?? ''} />
         </div>
       </div>
     ))}

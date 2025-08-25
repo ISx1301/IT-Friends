@@ -27,6 +27,15 @@ const classValidation = (Rule: any) =>
       : 'Дозволені: літери, цифри, дефіс, підкреслення, двокрапка та пробіли'
   })
 
+const paddingValidation = (Rule: any) =>
+  Rule.required().custom((val: string) => {
+    if (typeof val !== 'string' || !val.trim()) return 'Заповніть відступи секції (Tailwind класи)'
+    const ok = val.trim().split(/\s+/).every((t) =>
+      /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t)
+    )
+    return ok ? true : 'Використовуйте лише pt-*/pb-* (напр.: "pt-16 pb-16 lg:pt-32 lg:pb-32")'
+  })
+
 export const withoutNestedTabsSection = defineType({
   name: 'withoutNestedTabsSection',
   title: 'Секція «Таби (only tabs)»',
@@ -35,6 +44,23 @@ export const withoutNestedTabsSection = defineType({
 
   fields: [
     defineField({
+      name: 'adminTitle',
+      title: 'Назва секції',
+      type: 'string',
+      description: 'Необовʼязково. Тільки для списку секцій у Studio.',
+      validation: (Rule) => Rule.max(80),
+    }),
+
+    defineField({
+      name: 'paddingClass',
+      title: 'Відступи секції (Tailwind класи)',
+      type: 'string',
+      description: 'Наприклад: pt-20 pb-20 lg:pt-32 lg:pb-32. Перелік значень та інструкції — у розділі «Інфо».',
+      initialValue: 'pt-16 pb-16 lg:pt-32 lg:pb-32',
+      validation: paddingValidation,
+    }),
+
+    defineField({
       name: 'backgroundColor',
       title: 'Колір фону',
       type: 'string',
@@ -42,12 +68,7 @@ export const withoutNestedTabsSection = defineType({
       description: 'Опціонально',
     }),
 
-    defineField({
-      name: 'heading',
-      title: 'Заголовок (H2)',
-      type: 'string',
-      description: 'Опціонально',
-    }),
+    defineField({ name: 'heading', title: 'Заголовок (H2)', type: 'string', description: 'Опціонально' }),
 
     defineField({
       name: 'tabsColorKey',
@@ -97,12 +118,7 @@ export const withoutNestedTabsSection = defineType({
               options: { hotspot: true },
               fields: [defineField({ name: 'alt', title: 'Alt текст', type: 'string' })],
             }),
-            defineField({
-              name: 'text',
-              title: 'Текст біля іконки',
-              type: 'string',
-              description: 'Опціонально',
-            }),
+            defineField({ name: 'text', title: 'Текст біля іконки', type: 'string', description: 'Опціонально' }),
           ],
           preview: {
             select: { title: 'label', media: 'icon' },
@@ -139,9 +155,7 @@ export const withoutNestedTabsSection = defineType({
                       { title: 'Strong', value: 'strong' },
                       { title: 'Emphasis', value: 'em' },
                     ],
-                    annotations: [
-                      { name: 'link', title: 'Link', type: 'object', fields: [{ name: 'href', title: 'URL', type: 'url' }] },
-                    ],
+                    annotations: [{ name: 'link', title: 'Link', type: 'object', fields: [{ name: 'href', title: 'URL', type: 'url' }] }],
                   },
                 },
               ],
@@ -206,12 +220,7 @@ export const withoutNestedTabsSection = defineType({
                       options: { hotspot: true },
                       fields: [defineField({ name: 'alt', title: 'Alt текст', type: 'string' })],
                     }),
-                    defineField({
-                      name: 'title',
-                      title: 'Підзаголовок (H3)',
-                      type: 'string',
-                      description: 'Опціонально',
-                    }),
+                    defineField({ name: 'title', title: 'Підзаголовок (H3)', type: 'string', description: 'Опціонально' }),
                     defineField({
                       name: 'ptDescription',
                       title: 'Опис (Portable Text)',
@@ -226,22 +235,13 @@ export const withoutNestedTabsSection = defineType({
                               { title: 'Strong', value: 'strong' },
                               { title: 'Emphasis', value: 'em' },
                             ],
-                            annotations: [
-                              { name: 'link', title: 'Link', type: 'object', fields: [{ name: 'href', title: 'URL', type: 'url' }] },
-                            ],
+                            annotations: [{ name: 'link', title: 'Link', type: 'object', fields: [{ name: 'href', title: 'URL', type: 'url' }] }],
                           },
                         },
                       ],
                     }),
                     defineField({ name: 'buttonText', title: 'Текст кнопки', type: 'string' }),
-
-                    defineField({
-                      name: 'buttonClass',
-                      title: 'CSS-клас (для розробника)',
-                      type: 'string',
-                      description: 'Опціонально.',
-                      validation: classValidation,
-                    }),
+                    defineField({ name: 'buttonClass', title: 'CSS-клас (для розробника)', type: 'string', description: 'Опціонально.', validation: classValidation }),
                   ],
                   preview: {
                     select: { title: 'title', media: 'image' },
@@ -271,24 +271,13 @@ export const withoutNestedTabsSection = defineType({
       description: 'Кількість панелей має відповідати кількості табів',
     }),
 
-    defineField({
-      name: 'showMoreText',
-      title: 'Текст кнопки «Дивитися більше»',
-      type: 'string',
-      description: 'Опціонально. Використовується для звичайних карток',
-    }),
-
-    defineField({
-      name: 'buttonText',
-      title: 'Текст кнопки в секції, де використовуються клікабельні картки',
-      type: 'string',
-      description: 'Опціонально. Використовується для клікабельних карток',
-    }),
+    defineField({ name: 'showMoreText', title: 'Текст кнопки «Дивитися більше»', type: 'string', description: 'Опціонально. Використовується для звичайних карток' }),
+    defineField({ name: 'buttonText', title: 'Текст кнопки в секції, де використовуються клікабельні картки', type: 'string', description: 'Опціонально. Використовується для клікабельних карток' }),
   ],
 
   preview: {
-    select: { title: 'heading', tabs: 'tabs', kind: 'cardsKind', tabsColorKey: 'tabsColorKey' },
-    prepare({ title, tabs, kind, tabsColorKey }) {
+    select: { adminTitle: 'adminTitle', title: 'heading', tabs: 'tabs', kind: 'cardsKind', tabsColorKey: 'tabsColorKey' },
+    prepare({ adminTitle, title, tabs, kind, tabsColorKey }) {
       const tabsCount = Array.isArray(tabs) ? tabs.length : 0
       const firstLabels = (Array.isArray(tabs) ? tabs : [])
         .map((t: any) => t?.label)
@@ -296,7 +285,7 @@ export const withoutNestedTabsSection = defineType({
         .slice(0, 3)
         .join(' • ')
       return {
-        title: 'Секція «Таби (only tabs)»',
+        title: (adminTitle && adminTitle.trim()) || 'Секція «Таби (only tabs)»',
         subtitle: `${kind === 'clickable' ? 'Клікабельні' : 'Звичайні'} | Таби: ${tabsCount}${firstLabels ? ' | ' + firstLabels : ''} | color: ${tabsColorKey || 'gray'}`,
       }
     },

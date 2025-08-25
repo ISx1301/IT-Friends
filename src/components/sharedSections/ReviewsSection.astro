@@ -24,6 +24,7 @@ type ReviewsSectionData = {
   _key: string;
   backgroundColor?: BgColor;
   heading?: string;
+  paddingClass?: string; // 👈 новое
   paragraphs?: PTBlock[];
   buttonText?: string;
   reviews?: Review[];
@@ -39,15 +40,22 @@ const { section, anchorId } = Astro.props as Props
 const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
 const reviews = section.reviews ?? [];
 
+const join = (...parts: (string | undefined | false)[]) =>
+  parts.filter(Boolean).map(String).map(s => s.trim()).join(' ')
 
+const isValidPadding = (s: string) =>
+  s.split(/\s+/).every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t))
+
+// padding (required in Sanity)
+const padding = (section.paddingClass ?? '').trim()
+if (!padding) throw new Error('[reviewsSection] Missing required "paddingClass" from Sanity')
+if (!isValidPadding(padding)) throw new Error('[reviewsSection] Invalid "paddingClass" value')
 
 const escapeAttr = (s?: string) =>
   (s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 const ptComponents = {
-  block: {
-    normal: ({ children }: any) => `<p>${children}</p>`,
-  },
+  block: { normal: ({ children }: any) => `<p>${children}</p>` },
   marks: {
     strong: ({ children }: any) => `<strong>${children}</strong>`,
     em: ({ children }: any) => `<em>${children}</em>`,
@@ -64,12 +72,11 @@ const paragraphsHtml = toHTML(section.paragraphs ?? [], { components: ptComponen
 const STRIPE_CLASSES = ["bg-primary-green", "bg-primary-orange", "bg-span-gray"] as const;
 const stripeClassByIndex = (i: number) => STRIPE_CLASSES[i % STRIPE_CLASSES.length];
 
-
 const seg = Astro.url.pathname.replace(/^\/+|\/+$/g, '').split('/')[0];
 const lang = seg === 'en' ? 'en' : 'uk';
 ---
 
-<section id={anchorId} class={`py-16 lg:py-32 ${bgClass} overflow-hidden`} id="reviews">
+<section id={anchorId} class={join(bgClass, padding, 'overflow-hidden')} id="reviews">
   <div class="container">
     <div class="flex lg:flex-row flex-col justify-between">
 
@@ -128,7 +135,6 @@ const lang = seg === 'en' ? 'en' : 'uk';
 
                   <div class="max-w-xs">
                     <Article>
-                      {/* LOOK AT IT COURSES PAGE */}
                       <Excerpt lang={lang} wordLength={15}>
                         <div class="text-center lg:text-start" set:html={reviewHtml} />
                       </Excerpt>

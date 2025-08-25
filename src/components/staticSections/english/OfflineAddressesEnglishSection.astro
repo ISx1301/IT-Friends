@@ -4,7 +4,6 @@ import Article from "@components/Article.astro";
 import { BG_CLASSES, type BgColor } from "@/constants";
 import { Image } from 'astro:assets';
 
-
 type SanityImage = { alt?: string; url?: string };
 type AddressItem = {
   image?: SanityImage;
@@ -18,6 +17,7 @@ type SchoolAddressesSection = {
   _key: string;
   backgroundColor?: BgColor;
   heading?: string;
+  paddingClass?: string; 
   items?: AddressItem[];
 };
 
@@ -29,9 +29,19 @@ export interface Props {
 const { section, anchorId } = Astro.props as Props;
 const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
 const items = section.items ?? [];
+
+const join = (...parts: (string | undefined | false)[]) =>
+  parts.filter(Boolean).map(String).map(s => s.trim()).join(" ");
+
+const isValidPadding = (s: string) =>
+  s.split(/\s+/).every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t));
+
+const padding = (section.paddingClass ?? "").trim();
+if (!padding) throw new Error('[offlineAddressesEnglishSection] Missing required "paddingClass" from Sanity');
+if (!isValidPadding(padding)) throw new Error('[offlineAddressesEnglishSection] Invalid "paddingClass" value');
 ---
 
-<section id={anchorId} class={`${bgClass} py-20 lg:py-32`}>
+<section id={anchorId} class={join(bgClass, padding)}>
   <div class="container">
     {section.heading && (
       <div class="mb-9">
@@ -101,33 +111,21 @@ const items = section.items ?? [];
           ))}
         </Fragment>
 
-          <Fragment slot="controls">
-            <div class="lg:hidden flex justify-center items-center gap-3 mt-4">
-              <button class="embla__prev" type="button" aria-label="Previous slide">
-                <Image
-                  class="w-6 h-6"
-                  src={import("@images/embla-prev-svg.svg")}
-                  alt="prev-btn"
-                />
-              </button>
-              <div
-                class="flex justify-center items-center gap-1 bg-gray rounded-2xl w-24 h-9"
-                aria-live="polite"
-                aria-atomic="true"
-              >
-                <p class="font-bold text-primary-orange embla-current"></p>
-                <p class="font-bold">/</p>
-                <p class="font-bold embla-total"></p>
-              </div>
-              <button class="embla__next" type="button" aria-label="Next slide">
-                <Image
-                  class="w-6 h-6"
-                  src={import("@images/embla-next-svg.svg")}
-                  alt="next-btn"
-                />
-              </button>
+        <Fragment slot="controls">
+          <div class="lg:hidden flex justify-center items-center gap-3 mt-4">
+            <button class="embla__prev" type="button" aria-label="Previous slide">
+              <Image class="w-6 h-6" src={import("@images/embla-prev-svg.svg")} alt="prev-btn" />
+            </button>
+            <div class="flex justify-center items-center gap-1 bg-gray rounded-2xl w-24 h-9" aria-live="polite" aria-atomic="true">
+              <p class="font-bold text-primary-orange embla-current"></p>
+              <p class="font-bold">/</p>
+              <p class="font-bold embla-total"></p>
             </div>
-          </Fragment>
+            <button class="embla__next" type="button" aria-label="Next slide">
+              <Image class="w-6 h-6" src={import("@images/embla-next-svg.svg")} alt="next-btn" />
+            </button>
+          </div>
+        </Fragment>
       </EmblaCarousel>
     </div>
   </div>

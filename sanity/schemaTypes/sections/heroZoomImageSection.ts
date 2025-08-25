@@ -10,7 +10,14 @@ export const backgroundColors = [
   { title: 'Бірюзовий', value: 'turquoise' },
 ] as const
 
-export type BgColor = typeof backgroundColors[number]['value']
+const paddingValidation = (Rule: any) =>
+  Rule.required().custom((val: string) => {
+    if (typeof val !== 'string' || !val.trim()) return 'Заповніть відступи секції (Tailwind класи)'
+    const ok = val.trim().split(/\s+/).every((t) =>
+      /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t)
+    )
+    return ok ? true : 'Використовуйте лише pt-*/pb-* (напр.: "pt-16 pb-16 lg:pt-32 lg:pb-32")'
+  })
 
 export const heroZoomImageSection = defineType({
   name: 'heroZoomImageSection',
@@ -19,6 +26,23 @@ export const heroZoomImageSection = defineType({
   icon: ImagesIcon,
 
   fields: [
+    defineField({
+      name: 'adminTitle',
+      title: 'Назва секції',
+      type: 'string',
+      description: 'Необовʼязково. Відображається лише у списку секцій у Studio.',
+      validation: (Rule) => Rule.max(80),
+    }),
+
+    defineField({
+      name: 'paddingClass',
+      title: 'Відступи секції (Tailwind класи)',
+      type: 'string',
+      description: 'Наприклад: pt-20 pb-20 lg:pt-32 lg:pb-32. Перелік значень та інструкції — у розділі «Інфо».',
+      initialValue: 'pt-16 pb-16 lg:pt-28 lg:pb-28',
+      validation: paddingValidation,
+    }),
+
     defineField({
       name: 'backgroundColor',
       title: 'Колір фону',
@@ -43,19 +67,8 @@ export const heroZoomImageSection = defineType({
       ],
     }),
 
-    defineField({
-      name: 'badgeText',
-      title: 'Текст бейджа',
-      type: 'string',
-      description: 'Короткий лейбл/спан (опціонально).',
-    }),
-
-    defineField({
-      name: 'heading',
-      title: 'Заголовок (H1)',
-      type: 'string',
-      description: 'Основний заголовок секції (опціонально).',
-    }),
+    defineField({ name: 'badgeText', title: 'Текст бейджа', type: 'string' }),
+    defineField({ name: 'heading', title: 'Заголовок (H1)', type: 'string' }),
 
     defineField({
       name: 'description',
@@ -85,11 +98,7 @@ export const heroZoomImageSection = defineType({
       ],
     }),
 
-    defineField({
-      name: 'buttonText',
-      title: 'Текст кнопки (опціонально).',
-      type: 'string',
-    }),
+    defineField({ name: 'buttonText', title: 'Текст кнопки (опціонально).', type: 'string' }),
 
     defineField({
       name: 'mainImage',
@@ -167,13 +176,13 @@ export const heroZoomImageSection = defineType({
   ],
 
   preview: {
-    select: { title: 'heading', order: 'order', media: 'mainImage' },
-    prepare({ title, order, media }) {
+    select: { adminTitle: 'adminTitle', title: 'heading', order: 'order', media: 'mainImage' },
+    prepare({ adminTitle, title, order, media }) {
       const seq = Array.isArray(order)
         ? order.map((o: any) => o?.kind).filter(Boolean).join(' → ')
         : ''
       return {
-        title: 'Секція з Zoom картинкою',
+        title: (adminTitle && adminTitle.trim()) || 'Секція з Zoom картинкою',
         subtitle: seq || (title || 'Без заголовку'),
         media,
       }

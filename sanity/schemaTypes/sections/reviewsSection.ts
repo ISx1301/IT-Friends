@@ -32,6 +32,19 @@ const portableTextBlocks = [
   },
 ] as const
 
+const paddingValidation = (Rule: any) =>
+  Rule.required().custom((val: string) => {
+    if (typeof val !== 'string' || !val.trim()) {
+      return 'Заповніть відступи секції (Tailwind класи)'
+    }
+    const ok = val.trim().split(/\s+/).every((t) =>
+      /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t)
+    )
+    return ok
+      ? true
+      : 'Використовуйте лише pt-*/pb-* (наприклад: "pt-16 pb-16 lg:pt-32 lg:pb-32")'
+  })
+
 export const reviewsSection = defineType({
   name: 'reviewsSection',
   title: 'Секція з відгуками',
@@ -39,6 +52,23 @@ export const reviewsSection = defineType({
   icon: ImagesIcon,
 
   fields: [
+    defineField({
+      name: 'adminTitle',
+      title: 'Назва секції',
+      type: 'string',
+      description: 'Необовʼязково. Відображається лише у списку секцій у Studio.',
+      validation: (Rule) => Rule.max(80),
+    }),
+
+    defineField({
+      name: 'paddingClass',
+      title: 'Відступи секції (Tailwind класи)',
+      type: 'string',
+      description: 'Наприклад: pt-20 pb-20 lg:pt-32 lg:pb-32. Перелік значень та інструкції — у розділі «Інфо».',
+      initialValue: 'pt-16 pb-16 lg:pt-32 lg:pb-32',
+      validation: paddingValidation,
+    }),
+
     defineField({
       name: 'backgroundColor',
       title: 'Колір фону',
@@ -54,7 +84,6 @@ export const reviewsSection = defineType({
       validation: (Rule) => Rule.required(),
     }),
 
-    
     defineField({
       name: 'paragraphs',
       title: 'Опис',
@@ -100,7 +129,6 @@ export const reviewsSection = defineType({
               type: 'string',
               validation: (Rule) => Rule.required(),
             }),
-            
             defineField({
               name: 'text',
               title: 'Текст відгуку',
@@ -112,11 +140,7 @@ export const reviewsSection = defineType({
           preview: {
             select: { title: 'name', media: 'avatar' },
             prepare({ title, media }) {
-              return {
-                title: title || 'Відгук',
-                subtitle: 'Rich text',
-                media,
-              }
+              return { title: title || 'Відгук', subtitle: 'Rich text', media }
             },
           },
         },
@@ -126,11 +150,11 @@ export const reviewsSection = defineType({
   ],
 
   preview: {
-    select: { reviews: 'reviews' },
-    prepare({ reviews }) {
+    select: { adminTitle: 'adminTitle', reviews: 'reviews' },
+    prepare({ adminTitle, reviews }) {
       const count = Array.isArray(reviews) ? reviews.length : 0
       return {
-        title: 'Секція з відгуками',
+        title: (adminTitle && adminTitle.trim()) || 'Секція з відгуками',
         subtitle: `Відгуків: ${count}`,
       }
     },

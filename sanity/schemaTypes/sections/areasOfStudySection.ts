@@ -13,6 +13,7 @@ const backgroundColors = [
 const classValidation = (Rule: any) =>
   Rule.custom((val: string) => {
     if (!val) return true
+    // eslint-disable-next-line no-useless-escape
     return /^[A-Za-z0-9\-\_: ]+$/.test(val)
       ? true
       : 'Дозволені: літери, цифри, дефіс, підкреслення, двокрапка та пробіли'
@@ -118,6 +119,7 @@ export const areasOfStudyMainSection = defineType({
                 defineArrayMember({
                   type: 'block',
                   styles: [{ title: 'Звичайний', value: 'normal' }],
+                  lists: [], // <- ВАЖНО: отключает маркированные и нумерованные списки
                   marks: {
                     decorators: [
                       { title: 'Жирний', value: 'strong' },
@@ -133,8 +135,7 @@ export const areasOfStudyMainSection = defineType({
                             name: 'href',
                             title: 'URL',
                             type: 'url',
-                            validation: (Rule) =>
-                              Rule.required().uri({ allowRelative: true }),
+                            validation: (Rule) => Rule.required().uri({ allowRelative: true }),
                           },
                           {
                             name: 'openInNewTab',
@@ -151,6 +152,7 @@ export const areasOfStudyMainSection = defineType({
               options: { sortable: true },
               validation: (Rule) => Rule.min(1).required(),
             }),
+
             defineField({
               name: 'primaryButtonText',
               title: 'Текст першої кнопки',

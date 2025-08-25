@@ -10,7 +10,18 @@ export const backgroundColors = [
   { title: 'Бірюзовий', value: 'turquoise' },
 ] as const
 
-export type BgColor = typeof backgroundColors[number]['value']
+const paddingValidation = (Rule: any) =>
+  Rule.required().custom((val: string) => {
+    if (typeof val !== 'string' || !val.trim()) {
+      return 'Заповніть відступи секції (Tailwind класи)'
+    }
+    const ok = val.trim().split(/\s+/).every((t) =>
+      /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t)
+    )
+    return ok
+      ? true
+      : 'Використовуйте лише pt-*/pb-* (напр.: "pt-16 pb-16 lg:pt-32 lg:pb-32")'
+  })
 
 export const interestingThingsSection = defineType({
   name: 'interestingThingsSection',
@@ -19,6 +30,23 @@ export const interestingThingsSection = defineType({
   icon: ImagesIcon,
 
   fields: [
+    defineField({
+      name: 'adminTitle',
+      title: 'Назва секції',
+      type: 'string',
+      description: 'Необовʼязково. Тільки для списку секцій у Studio.',
+      validation: (Rule) => Rule.max(80),
+    }),
+
+    defineField({
+      name: 'paddingClass',
+      title: 'Відступи секції (Tailwind класи)',
+      type: 'string',
+      description: 'Наприклад: pt-20 pb-20 lg:pt-32 lg:pb-32. Перелік значень та інструкції — у розділі «Інфо».',
+      initialValue: 'pt-16 pb-16 lg:pt-32 lg:pb-32',
+      validation: paddingValidation,
+    }),
+
     defineField({
       name: 'backgroundColor',
       title: 'Колір фону',
@@ -72,30 +100,18 @@ export const interestingThingsSection = defineType({
                       { title: 'Emphasis', value: 'em' },
                     ],
                     annotations: [
-                      {
-                        name: 'link',
-                        title: 'Link',
-                        type: 'object',
-                        fields: [{ name: 'href', title: 'URL', type: 'url' }],
-                      },
+                      { name: 'link', title: 'Link', type: 'object', fields: [{ name: 'href', title: 'URL', type: 'url' }] },
                     ],
                   },
                 },
               ],
               description: 'Невеликий абзац під заголовком',
             }),
-            defineField({
-              name: 'buttonText',
-              title: 'Текст кнопки',
-              type: 'string',
-            }),
+            defineField({ name: 'buttonText', title: 'Текст кнопки', type: 'string' }),
           ],
           preview: {
             select: { title: 'title', media: 'image' },
-            prepare: ({ title, media }) => ({
-              title: title || 'Картка',
-              media,
-            }),
+            prepare: ({ title, media }) => ({ title: title || 'Картка', media }),
           },
         }),
       ],
@@ -103,11 +119,12 @@ export const interestingThingsSection = defineType({
   ],
 
   preview: {
-    select: { title: 'heading', items: 'items' },
-    prepare({ title, items }) {
+    select: { adminTitle: 'adminTitle', heading: 'heading', items: 'items' },
+    prepare({ adminTitle, heading, items }) {
+      const n = Array.isArray(items) ? items.length : 0
       return {
-        title: 'Секція «Що може зацікавити»',
-        subtitle: `Карток: ${Array.isArray(items) ? items.length : 0}`,
+        title: (adminTitle && adminTitle.trim()) || 'Секція «Що може зацікавити»',
+        subtitle: heading ? `“${heading}” • Карток: ${n}` : `Карток: ${n}`,
       }
     },
   },

@@ -26,6 +26,7 @@ type GeneralDescriptionSection = {
   _key: string;
   backgroundColor?: BgColor;
   heading?: string;
+  paddingClass?: string; 
   cards?: Card[];
   buttonText?: string;
   buttonClass?: string;
@@ -40,6 +41,16 @@ const { section, anchorId } = Astro.props as Props;
 
 const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
 const cards = section.cards ?? [];
+
+const join = (...parts: (string | undefined | false)[]) =>
+  parts.filter(Boolean).map(String).map(s => s.trim()).join(' ')
+const isValidPadding = (s: string) =>
+  s.split(/\s+/).every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t))
+
+// padding (required in Sanity)
+const padding = (section.paddingClass ?? '').trim()
+if (!padding) throw new Error('[generalDescriptionSection] Missing required "paddingClass" from Sanity')
+if (!isValidPadding(padding)) throw new Error('[generalDescriptionSection] Invalid "paddingClass" value')
 
 const escapeAttr = (s?: string) =>
   (s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -67,12 +78,12 @@ const extraBtn = (section.buttonClass ?? "").trim();
 const finalBtnClass = (baseBtn + " " + extraBtn).trim();
 ---
 
-<section id={anchorId} class={`${bgClass} my-20 lg:my-28`}>
+<section id={anchorId} class={join(bgClass, padding)}>
   <div class="container">
 
     {section.heading && (
       <div class="flex justify-center mx-auto mb-6 lg:mb-8 py-0.5">
-        <h2 class="mb-6 lg:mb-7 font-secondary font-medium text-2xl lg:text-4xl text-center">
+        <h2 class="mb-3 lg:mb-7 font-secondary font-medium text-2xl lg:text-4xl text-center">
           {section.heading}
         </h2>
       </div>
@@ -81,7 +92,7 @@ const finalBtnClass = (baseBtn + " " + extraBtn).trim();
     {cards.length > 0 && (
       <div class="flex lg:flex-row flex-col items-stretch gap-5">
         {cards.map((card, idx) => (
-          <div class="flex flex-col items-center gap-7 bg-white shadow-lg px-8 lg:px-6 py-10 rounded-lg w-full">
+          <div class="flex flex-col items-center gap-3 lg:gap-7 bg-white shadow-lg px-8 lg:px-6 py-8 lg:py-10 rounded-lg w-full">
             {card.image?.url && (
               <img
                 src={card.image.url}

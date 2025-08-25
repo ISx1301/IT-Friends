@@ -6,6 +6,7 @@ import Article from "@components/Article.astro";
 import { BG_CLASSES, type BgColor } from "@/constants";
 import { toHTML } from "@portabletext/to-html";
 import Excerpt from "@components/Excerpt.astro";
+import { DEFAULT_LANG } from '@/constants';
 
 type PTSpan = { _type: "span"; text: string; marks?: string[] };
 type PTMarkDef = { _key: string; _type: string; href?: string };
@@ -32,7 +33,7 @@ type RegularCard = {
   title?: string;
   ptDescription?: PTBlock[];
   buttonText?: string;
-  buttonClass?: string; 
+  buttonClass?: string;
 };
 
 type Tab = {
@@ -52,6 +53,7 @@ type withoutNestedTabsSection = {
   _key: string;
   backgroundColor?: BgColor;
   heading?: string;
+  paddingClass?: string; 
   cardsKind?: "clickable" | "regular";
   tabs?: Tab[];
   panels?: Panel[];
@@ -66,18 +68,24 @@ export interface Props {
 }
 
 const { section, anchorId } = Astro.props as Props;
+const { lang = DEFAULT_LANG } = Astro.params
 
 // helpers
 const join = (...parts: (string | undefined)[]) =>
   parts.filter(p => typeof p === "string" && p.trim().length > 0)
        .map(s => s!.trim())
        .join(" ");
-
+const isValidPadding = (s: string) =>
+  s.split(/\s+/).every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t))
 const escapeAttr = (s?: string) =>
   (s ?? "").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 // derived
 const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
+const padding = (section.paddingClass ?? '').trim()
+if (!padding) throw new Error('[withoutNestedTabsSection] Missing required "paddingClass" from Sanity')
+if (!isValidPadding(padding)) throw new Error('[withoutNestedTabsSection] Invalid "paddingClass" value')
+
 const tabs = section.tabs ?? [];
 const panels = section.panels ?? [];
 const cardsKind = section.cardsKind ?? "regular";
@@ -126,13 +134,12 @@ const regularDescHtml = panels.map((p) =>
 );
 
 const baseRegularBtn = "mt-auto py-5 w-full font-secondary font-medium text-lg orange-btn";
-
 const regularBtnClassByPanel = panels.map((p) =>
   (p?.regularCards ?? []).map((c) => join(baseRegularBtn, c?.buttonClass))
 );
 ---
 
-<section id={anchorId} class={`${bgClass} `}>
+<section id={anchorId} class={join(bgClass, padding)}>
   <div class="container">
     {section.heading && (
       <div class="mx-auto mb-10 lg:mb-16 max-w-md">
@@ -243,7 +250,7 @@ const regularBtnClassByPanel = panels.map((p) =>
                             </h3>
 
                             <Article class="flex-1">
-                              <Excerpt wordLength={40}>
+                              <Excerpt lineCount={7} lang={lang}>
                                 <Fragment set:html={regularDescHtml[i][idx2]} />
                               </Excerpt>
                             </Article>

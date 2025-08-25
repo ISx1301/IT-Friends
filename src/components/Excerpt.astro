@@ -1,31 +1,24 @@
 ---
 import { LOCALE, DEFAULT_LANG } from '../constants';
 
-type Lang = keyof typeof LOCALE; // "uk" | "en"
+type Lang = keyof typeof LOCALE; 
 
 interface Props {
   class?: string;
-  wordLength?: number;
+  lineCount?: number; // <-- Now it was possible to compose a line
   lang?: Lang;
 }
 
 const props = Astro.props as Props;
 
 const className = props.class ?? '';
-const wordLength = props.wordLength;
+const lineCount = props.lineCount ?? 7; // by default we cut to 3 lines
 
-
-
-// TODO: переписать функцию и константу resolvedLang / isLang
-
-
-// type-guard, чтобы не было any
+// type-guard
 const isLang = (v: unknown): v is Lang =>
   typeof v === 'string' && (v === 'uk' || v === 'en');
 
-
-
-// жёстко резолвим язык (fallback на DEFAULT_LANG -> 'uk')
+// we strictly resolve the language (fallback на DEFAULT_LANG -> 'uk')
 const resolvedLang: Lang = isLang(props.lang)
   ? props.lang
   : isLang(DEFAULT_LANG)
@@ -35,26 +28,38 @@ const resolvedLang: Lang = isLang(props.lang)
 const dict = LOCALE[resolvedLang];
 
 const html = await Astro.slots.render('default');
-const plainText = html.trim(); //replace(/<[^>]+>/g, '')
-const words = plainText.split(/\s+/);
-const shouldTruncate = wordLength !== undefined && words.length > wordLength;
-const excerptedWords = shouldTruncate ? words.slice(0, wordLength) : words;
-const excerptedText = excerptedWords.join(' ');
-const readMoreHtml = `<span class="font-bold cursor-pointer read-more">${dict.readMore}</span>`;
+const plainText = html.trim();
 ---
-<div class:list={['excerpt-container', className]}>
-  <div class="text-base excerpt-text">
-    <Fragment set:html={excerptedText + (shouldTruncate ? `... ${readMoreHtml}` : '')} />
+
+<div class:list={['excerpt-container', className]} data-lines={lineCount}>
+  <!-- The cropped portion (via CSS line-clamp). By default, the original HTML is here -->
+  <div class="text-base excerpt-text excerpt--clamped" style={`--lines:${lineCount}`}>
+    <Fragment set:html={plainText} />
   </div>
+
+  <!-- Full text (needed to quickly replace the content with a click) -->
   <div class="hidden text-base full-text">
     <Fragment set:html={plainText} />
   </div>
+
+  <!-- The "read more" button will be hidden until the overflow is checked by JS -->
+  <span class="hidden font-bold cursor-pointer read-more">
+    {dict.readMore}
+  </span>
 </div>
 
+<style>
+/* universal clamping by number of lines */
+.excerpt--clamped {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: var(--lines);
+}
 
-{shouldTruncate && (
-  <script>
-    import { setupExcerpt } from '@scripts/excerpt.ts';
-    setupExcerpt();
-  </script>
-)}
+</style>
+
+<script>
+  import { setupExcerpt } from '@scripts/excerpt.ts';
+  setupExcerpt();
+</script>

@@ -3,6 +3,8 @@ import Article from "@components/Article.astro";
 import Excerpt from "@components/Excerpt.astro";
 import { BG_CLASSES, type BgColor } from "@/constants";
 import { toHTML } from "@portabletext/to-html";
+import { DEFAULT_LANG } from '@/constants';
+
 
 /* ================= Portable Text types ================= */
 type PTSpan = { _type: "span"; _key: string; text: string; marks?: string[] };
@@ -59,6 +61,9 @@ export interface Props {
 }
 
 const { section, anchorId } = Astro.props as Props;
+
+const { lang = DEFAULT_LANG } = Astro.params
+
 
 /* ================= Helpers ================= */
 const join = (...parts: (string | undefined | false)[]) =>
@@ -133,7 +138,7 @@ const finalSectionCta = join(baseSectionCta, section.sectionCtaClass);
 
             <div class="mt-3 min-h-0">
               <Article>
-                <Excerpt wordLength={30}>
+                <Excerpt lineCount={4} lang={lang}>
                   {htmlByIndex[idx] && (
                     <div class="max-w-none" set:html={htmlByIndex[idx]} />
                   )}

@@ -19,6 +19,7 @@ type HeroZoomImageSection = {
   _type: "heroZoomImageSection";
   _key: string;
   backgroundColor?: BgColor;
+  paddingClass?: string; 
   logo?: SanityImage;
   badgeText?: string;
   heading?: string;
@@ -36,6 +37,16 @@ export interface Props {
 const { section, anchorId } = Astro.props as Props;
 
 const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
+
+const join = (...parts: (string | undefined | false)[]) =>
+  parts.filter(Boolean).map(String).map(s => s.trim()).join(' ')
+const isValidPadding = (s: string) =>
+  s.split(/\s+/).every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t))
+
+// padding (required in Sanity)
+const padding = (section.paddingClass ?? '').trim()
+if (!padding) throw new Error('[heroZoomImageSection] Missing required "paddingClass" from Sanity')
+if (!isValidPadding(padding)) throw new Error('[heroZoomImageSection] Invalid "paddingClass" value')
 
 const escapeAttr = (s?: string) =>
   (s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -59,9 +70,10 @@ const defaultOrder: Kind[] = ['logo','badge','heading','description','button','i
 const order: Kind[] = (section.order?.map(i => i?.kind).filter(Boolean) as Kind[])?.length
   ? (section.order!.map(i => i!.kind!) as Kind[])
   : defaultOrder;
----
 
-<section id={anchorId} class={`${bgClass} relative mt-11 lg:mt-16`}>
+// , 'relative mt-11 lg:mt-16' 
+---
+<section id={anchorId} class={join(bgClass, padding)}>
   <div class="container">
     {order.map((k) => {
       switch (k) {

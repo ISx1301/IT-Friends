@@ -122,7 +122,7 @@ export const PAGE_WITH_SETTINGS = `
 
       // reviewsSection
       _type == "reviewsSection" => {
-        _type, _key, backgroundColor, heading,
+        _type, _key, backgroundColor, heading, paddingClass,
         "paragraphs": coalesce(
           paragraphs[style == "normal"]{ _type, _key, style, children[]{ _type, text, marks }, markDefs[]{ _key, _type, href } }, []
         ),
@@ -136,12 +136,16 @@ export const PAGE_WITH_SETTINGS = `
         }, [])
       },
 
+
+      // newSchoolMainSection
       _type == "newSchoolMainSection" => {
-        _type, _key, heading, "images": images[]{ alt, "url": asset->url }
+        _type, _key, heading, paddingClass,
+        "images": images[]{ alt, "url": asset->url }
       },
 
+      // teamSection
       _type == "teamSection" => {
-        _type, _key, backgroundColor, heading,
+        _type, _key, backgroundColor, heading, paddingClass,
         "description": coalesce(
           description[style == "normal"]{
             _type, _key, style,
@@ -171,8 +175,9 @@ export const PAGE_WITH_SETTINGS = `
       },
 
 
+      // accordionSection
       _type == "accordionSection" => {
-        _type, _key, backgroundColor, heading,
+        _type, _key, backgroundColor, heading, paddingClass,
         "description": coalesce(
           description[style == "normal"]{ _type, _key, style, children[]{ _type, text, marks }, markDefs[]{ _key, _type, href } }, []
         ),
@@ -185,8 +190,9 @@ export const PAGE_WITH_SETTINGS = `
         }, [])
       },
 
+      // heroZoomImageSection
       _type == "heroZoomImageSection" => {
-        _type, _key, backgroundColor,
+        _type, _key, backgroundColor, paddingClass,
         "logo": logo{ alt, "url": asset->url },
         badgeText, heading,
         "description": coalesce(
@@ -196,8 +202,10 @@ export const PAGE_WITH_SETTINGS = `
         "order": coalesce(order[]{ kind }, [])
       },
 
+
+      // generalDescriptionSection
       _type == "generalDescriptionSection" => {
-        _type, _key, backgroundColor, heading,
+        _type, _key, backgroundColor, heading, paddingClass,
         "cards": coalesce(
           cards[]{
             "image": image{ alt, "url": asset->url }, title,
@@ -209,15 +217,12 @@ export const PAGE_WITH_SETTINGS = `
         buttonText
       },
 
+
+      // withoutNestedTabsSection
       _type == "withoutNestedTabsSection" => {
-        _type, _key, backgroundColor, heading, cardsKind, tabsColorKey,
+        _type, _key, backgroundColor, heading, paddingClass, cardsKind, tabsColorKey,
         "tabs": coalesce(
-          tabs[]{
-            label,
-            text,
-            "icon": icon{ alt, "url": asset->url }
-          },
-          []
+          tabs[]{ label, text, "icon": icon{ alt, "url": asset->url } }, []
         ),
         "panels": coalesce(
           panels[]{
@@ -226,18 +231,13 @@ export const PAGE_WITH_SETTINGS = `
                 _type, _key, style,
                 children[]{ _type, text, marks },
                 markDefs[]{ _key, _type, href }
-              },
-              []
+              }, []
             ),
             "clickableCards": coalesce(
               clickableCards[]{
                 "image": image{ alt, "url": asset->url },
-                title,
-                plainDescription,
-                phone,
-                href
-              },
-              []
+                title, plainDescription, phone, href
+              }, []
             ),
             "regularCards": coalesce(
               regularCards[]{
@@ -257,12 +257,10 @@ export const PAGE_WITH_SETTINGS = `
                   []
                 ),
                 buttonText,
-                "buttonClass": coalesce(buttonClass, "")   
-              },
-              []
+                "buttonClass": coalesce(buttonClass, "")
+              }, []
             )
-          },
-          []
+          }, []
         ),
         buttonText,
         showMoreText
@@ -299,20 +297,30 @@ export const PAGE_WITH_SETTINGS = `
         )
       },
 
+      // interestingThingsSection
       _type == "interestingThingsSection" => {
-        _type, _key, backgroundColor, heading,
+        _type, _key, backgroundColor, heading, paddingClass,
         "items": coalesce(
           items[]{
             "image": image{ alt, "url": asset->url }, title, buttonText,
-            "ptDescription": coalesce(ptDescription[style == "normal"]{ _type, _key, style, children[]{ _type, text, marks }, markDefs[]{ _key, _type, href } }, [])
+            "ptDescription": coalesce(
+              ptDescription[style == "normal"]{
+                _type, _key, style,
+                children[]{ _type, text, marks },
+                markDefs[]{ _key, _type, href }
+              }, []
+            )
           }, []
         )
       },
 
+
+      // offlineAddressesEnglishSection
       _type == "offlineAddressesEnglishSection" => {
-        _type, _key, backgroundColor, heading,
+        _type, _key, backgroundColor, heading, paddingClass,
         "items": coalesce(items[]{ "image": image{ alt, "url": asset->url }, title, address, phone, href }, [])
       },
+
 
       _type == "videoCampsSection" => {
         _type, _key, backgroundColor, "image": image{ alt, "url": asset->url }, videoHref

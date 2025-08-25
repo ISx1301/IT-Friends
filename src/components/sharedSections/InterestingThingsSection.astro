@@ -27,6 +27,7 @@ type InterestingThingsSection = {
   _key: string;
   backgroundColor?: BgColor;
   heading?: string;
+  paddingClass?: string; 
   items?: InterestingItem[];
 };
 
@@ -39,6 +40,17 @@ const { section, anchorId } = Astro.props as Props;
 
 const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
 const items = section.items ?? [];
+
+const join = (...parts: (string | undefined | false)[]) =>
+  parts.filter(Boolean).map(String).map(s => s.trim()).join(' ');
+
+const isValidPadding = (s: string) =>
+  s.split(/\s+/).every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t));
+
+// padding (required)
+const padding = (section.paddingClass ?? '').trim();
+if (!padding) throw new Error('[interestingThingsSection] Missing required "paddingClass" from Sanity');
+if (!isValidPadding(padding)) throw new Error('[interestingThingsSection] Invalid "paddingClass" value');
 
 const escapeAttr = (s?: string) =>
   (s ?? "").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -62,7 +74,7 @@ const ptComponents = {
 const itemsDescHtml = items.map((it) => toHTML(it?.ptDescription ?? [], { components: ptComponents }));
 ---
 
-<section id={anchorId} class={` px-20 ${bgClass}  py-32`}>
+<section id={anchorId} class={join(bgClass, padding)}>
   <div class="container">
     {section.heading && (
       <div class="mx-auto mb-5 lg:mb-11 max-w-xs lg:max-w-2xl">
@@ -109,6 +121,5 @@ const itemsDescHtml = items.map((it) => toHTML(it?.ptDescription ?? [], { compon
         </div>
       ))}
     </div>
-    
   </div>
 </section>
