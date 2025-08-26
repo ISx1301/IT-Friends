@@ -149,3 +149,24 @@ body {
   display: none; 
 }
 
+// Animations
+[data-watch] {
+  @apply transition-all duration-300;
+}
+
+[data-watch="fade-to-top"] {
+  opacity: 0;
+  transform: translateY(15%);
+  &.is-inview {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+[data-watch="fade-to-bot"] {
+  opacity: 0;
+  transform: translateY(-15%);
+  &.is-inview {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

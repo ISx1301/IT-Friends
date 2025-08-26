@@ -10,9 +10,7 @@ import Contacts from "@/components/Contacts.astro";
 
 const { settings, lang, seo } = Astro.props;
 
-// if (!Astro.cookies.get('language')) {
-  Astro.cookies.set('language', lang, { maxAge: 31536000 });
-// }
+Astro.cookies.set('language', lang, { maxAge: 31536000 });
 ---
 
 <html class="scroll-smooth" lang={lang}>
@@ -28,7 +26,6 @@ const { settings, lang, seo } = Astro.props;
     <EnglishLessonForm lang={lang}/>
 
     <OnlineForm lang={lang} />
-    
 
     <main aria-label="Content">
       <slot />
@@ -38,7 +35,7 @@ const { settings, lang, seo } = Astro.props;
     <Footer data={settings?.footer}/>
   </body>
   <script>
-    // import "@scripts/app.ts";
+    import "@scripts/app.ts";
   </script>
 </html>
 
