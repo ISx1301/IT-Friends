@@ -100,7 +100,7 @@ export function PrefixedSlugInput(props: SlugInputProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.currentTarget.value
     const withLeadingSlash = raw.startsWith('/') ? raw : `/${raw}`
-    const full = buildStored(withLeadingSlash, {collapse: false})
+    const full = buildStored(withLeadingSlash, {collapse: false}).trim()
     onChange([
       setIfMissing({_type: 'slug'}),
       set({_type: 'slug', current: full}),
@@ -110,7 +110,7 @@ export function PrefixedSlugInput(props: SlugInputProps) {
   const handleBlur = () => {
   const current = (value as SlugValue | undefined)?.current ?? ''
     if (!current) return
-    const normalized = buildStored(current, {collapse: true})
+    const normalized = buildStored(current, {collapse: true}).trim()
     if (normalized !== current) {
       onChange([
         setIfMissing({_type: 'slug'}),
@@ -135,7 +135,7 @@ export function PrefixedSlugInput(props: SlugInputProps) {
 
     const raw = (externalSlugify ? externalSlugify(baseInput) : basicSlugify(baseInput)) || ''
     const full = buildStored(raw, {collapse: true})
-    const clipped = full.slice(0, maxLength)
+    const clipped = full.slice(0, maxLength).trim()
     onChange([
       setIfMissing({_type: 'slug'}),
       set({_type: 'slug', current: clipped}),
