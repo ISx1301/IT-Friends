@@ -1,14 +1,14 @@
-import sanity from '@sanity/astro'
+import sanity from '@sanity/astro';
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import { loadEnv } from 'vite';
-import vercel from '@astrojs/vercel'
-
+import vercel from '@astrojs/vercel';
+import sitemap from '@astrojs/sitemap';
 
 const { PROJECT_ID, SECRET_API_TOKEN } = loadEnv(process.env.NODE_ENV, process.cwd(), '');
 
 export default defineConfig({
-  site: 'http://localhost:4321',
+  site: 'https://www.itfriends-school.com',
 
   output: 'server',
   server: {
@@ -26,6 +26,7 @@ export default defineConfig({
       useCdn: false,
       token: process.env.SECRET_API_TOKEN ?? SECRET_API_TOKEN
     }),
+    sitemap(),
   ],
 
   i18n: {

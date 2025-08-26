@@ -1,51 +1,59 @@
 ---
-import { query } from '../../../lib/sanity';
-import { BLOG_POST_WITH_SETTINGS, BLOG_POST_SLUGS } from '../../../lib/queries';
 import DefaultLayout from "@layouts/Default.astro";
-import PostContentSection from '@/components/staticSections/blog/PostContentSection.astro';
 import { DEFAULT_LANG } from '@/constants';
+
+import { query } from '../../../lib/sanity';
+import { BLOG_POST_WITH_SETTINGS } from '../../../lib/queries';
+import NotFound from '../../404.astro';
 
 type Post = {
   title: string;
-  image: { url: string; alt?: string };
-  content: any[];   
+  image?: { url?: string; alt?: string };
+  content?: any;
   date?: string;
+  seo?: { title: string; description?: string | null; image?: string | null };
 };
-
-type Data = {
-  post: Post | null;
-  settings: any | null;
-};
+type SettingsDoc = { header?: any; footer?: any };
+type Data = { post: Post | null; settings: SettingsDoc | null };
 
 export const prerender = false;
 
-const { lang = DEFAULT_LANG, slug } = Astro.params;
+const { lang = DEFAULT_LANG, slug = '' } = Astro.params;
+const LOCALES = new Set(['uk','en']);
 
-export async function getStaticPaths() {
-  const rows = await query<{ lang: string; rawSlug: string }[]>(BLOG_POST_SLUGS);
-  if (!rows?.length) return [];
+let notFound = false;
+let post: Post | null = null;
+let settings: SettingsDoc | null = null;
 
-  const paths = rows
-    .map(({ lang, rawSlug }) => {
-      let s = String(rawSlug || '').replace(/^\/+|\/+$/g, '');
-      if (s.startsWith(`${lang}/`)) s = s.slice(lang.length + 1);
-      if (s === '' || s === lang) s = 'index';
-      if (s.includes('/')) s = s.split('/').pop() as string;
-      return { params: { lang, slug: s } };
-    })
-    .filter(p => p.params.slug !== 'index' && p.params.slug !== 'blog');
-
-  return paths;
+if (!LOCALES.has(String(lang).toLowerCase())) {
+  notFound = true;
+  Astro.response.status = 404;
+} else {
+  const data = await query<Data>(BLOG_POST_WITH_SETTINGS, { lang, slug });
+  if (!data?.post) {
+    notFound = true;
+    Astro.response.status = 404;
+  } else {
+    post = data.post;
+    settings = data.settings ?? null;
+  }
 }
 
-const data = await query<Data>(BLOG_POST_WITH_SETTINGS, { lang, slug });
-if (!data?.post) {
-  return Astro.redirect(`/404`, 302);
-}
-
-const { post, settings } = data;
+const seo = post?.seo ?? {
+  title: post?.title ?? 'Post',
+  description: undefined,
+  image: post?.image?.url ?? null
+};
 ---
-
-<DefaultLayout settings={settings} lang={lang} seo={{ title: post.title }}>
-  <PostContentSection post={post} />
-</DefaultLayout>
+{ notFound ? (
+  <NotFound />
+) : (
+  <DefaultLayout settings={settings!} lang={lang} seo={seo}>
+    <article class="py-10 container">
+      <h1 class="mb-6 font-secondary font-medium text-3xl lg:text-5xl">{post!.title}</h1>
+      {post?.image?.url && (
+        <img src={post.image.url} alt={post.image.alt ?? post.title} class="mx-auto mb-6 max-w-full" />
+      )}
+    </article>
+  </DefaultLayout>
+)}

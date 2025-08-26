@@ -1,11 +1,13 @@
 {
   "redirects": [
-    { "source": "/contact",      "destination": "/", "permanent": true },
-    { "source": "/it-friends-club",      "destination": "/", "permanent": true },
-    { "source": "/tabir",      "destination": "/", "permanent": true },
-
-
-    { "source": "/ru",        "destination": "/", "permanent": true },
-    { "source": "/ru/:path*", "destination": "/", "permanent": true }
+    { "source": "/contact", "destination": "/", "permanent": true },
+    { "source": "/it-friends-club", "destination": "/", "permanent": true },
+    { "source": "/tabir", "destination": "/", "permanent": true },
+    { "source": "/ru", "destination": "/", "permanent": true },
+    { "source": "/ru/:path*", "destination": "/", "permanent": true },
+    { "source": "/classes", "destination": "/", "permanent": true },
+    { "source": "/it-табори-в-карпатах", "destination": "/", "permanent": true },
+    { "source": "/it-friends-camp-карпати-2025", "destination": "/", "permanent": true },
+    { "source": "/it-friends-camp-bulgaria", "destination": "/", "permanent": true }
   ]
 }

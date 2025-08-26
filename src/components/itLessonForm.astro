@@ -54,12 +54,12 @@ const branches = BRANCHES[lang];
 
   <div class="flex justify-center items-center w-full h-full">
     <form
-      class="relative flex flex-col items-center bg-white lg:shadow-2xl mx-auto px-3 lg:px-14 py-9 rounded-3xl w-11/12 lg:w-2/4 max-h-[85vh] overflow-hidden overflow-y-auto free-lesson-form"
+      class="relative flex flex-col items-center bg-white lg:shadow-2xl mx-auto px-3 lg:px-14 py-9 rounded-3xl w-11/12 lg:w-1/2 max-h-[85vh] overflow-hidden overflow-y-auto free-lesson-form"
       method="POST"
       action="/api/submit"
       novalidate
     >
-      <button type="button" class="top-4 right-4 absolute mb-5 lg:mb-0 cursor-pointer form-close" aria-label={t.close}>
+      <button type="button" class="top-0 lg:sticky mb-5 lg:mb-0 ml-auto cursor-pointer form-close" aria-label={t.close}>
         <Image src={import("@images/green-close.svg")} format="svg" alt={t.close} />
       </button>
 

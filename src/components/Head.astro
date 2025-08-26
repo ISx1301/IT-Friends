@@ -7,10 +7,29 @@ interface SeoHead {
 
 const { title, description, image } = Astro.props as SeoHead;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const ogImageAbsolute = image ? new URL(image, Astro.site).toString() : null;
----
+const ENV_ORIGIN = import.meta.env.PUBLIC_SITE_URL as string | undefined;
+const CONFIG_ORIGIN = Astro.site?.origin as string | undefined;
+const ORIGIN = ENV_ORIGIN ?? CONFIG_ORIGIN; 
 
+const canonical =
+  ORIGIN
+    ? new URL(Astro.url.pathname, ORIGIN).toString()
+    : undefined;
+
+const isAbsoluteUrl = (u?: string | null) =>
+  !!u && /^(?:[a-z]+:)?\/\//i.test(u);
+
+let ogImageAbsolute: string | null = null;
+if (image) {
+  if (isAbsoluteUrl(image)) {
+    ogImageAbsolute = image;
+  } else if (ORIGIN) {
+    ogImageAbsolute = new URL(image, ORIGIN).toString();
+  } else {
+    ogImageAbsolute = null; 
+  }
+}
+---
 <head>
   <!-- Global Metadata -->
   <meta charset="utf-8" />
@@ -19,7 +38,7 @@ const ogImageAbsolute = image ? new URL(image, Astro.site).toString() : null;
   <meta name="generator" content={Astro.generator} />
 
   <!-- Canonical URL -->
-  <link rel="canonical" href={canonicalURL} />
+  {canonical && <link rel="canonical" href={canonical} />}
 
   <!-- Primary Meta Tags -->
   <title>{title}</title>
@@ -28,14 +47,14 @@ const ogImageAbsolute = image ? new URL(image, Astro.site).toString() : null;
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content={canonicalURL} />
+  {canonical && <meta property="og:url" content={canonical} />}
   <meta property="og:title" content={title} />
   {description && <meta property="og:description" content={description} />}
   {ogImageAbsolute && <meta property="og:image" content={ogImageAbsolute} />}
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content={canonicalURL} />
+  {canonical && <meta name="twitter:url" content={canonical} />}
   <meta name="twitter:title" content={title} />
   {description && <meta name="twitter:description" content={description} />}
   {ogImageAbsolute && <meta name="twitter:image" content={ogImageAbsolute} />}

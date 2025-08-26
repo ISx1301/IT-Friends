@@ -1,41 +1,14 @@
 ---
-import { query } from '../lib/sanity'
-import { PAGE_WITH_SETTINGS } from '../lib/queries'
-import DefaultLayout from "@layouts/Default.astro";
 import { DEFAULT_LANG } from '@/constants';
-import { sectionsRegistry } from '../lib/sections-registry'
 
-type SeoHead = { title: string; description?: string | null; image?: string | null }
-type Section = { _type: string; _key?: string } & Record<string, any>
-type PageDoc = { _id: string; title: string; body?: any[]; sections?: Section[]; mainImage?: any; seo: SeoHead }
-type SettingsDoc = { header?: any; footer?: any }
-type PageData = { page: PageDoc | null; settings: SettingsDoc | null }
+export const prerender = false;
 
-export const prerender = false;  
+const raw = (typeof Astro.cookies?.get === 'function')
+  ? Astro.cookies.get('language')?.value
+  : undefined;
 
-const { lang = DEFAULT_LANG, slug='/' } = Astro.params
+const lang = (raw === 'uk' || raw === 'en') ? raw : DEFAULT_LANG;
 
-const data = await query<PageData>(PAGE_WITH_SETTINGS, { lang, slug })
-
-if (!data?.page) {
-  return Astro.redirect(`/404`, 302)
-}
-
-const { page, settings } = data
-
-const renderableSections = (page.sections ?? []).filter(
-  (s) => !!sectionsRegistry[s._type]
-)
+const location = new URL(`/${lang}/`, Astro.request.url).toString();
+return Astro.redirect(location, 308);
 ---
-
-<DefaultLayout settings={settings} lang={lang} seo={page!.seo}>
-  {
-    page?.sections?.map((sec, index) => {
-      const Cmp = sectionsRegistry[sec._type]
-      const anchorId = `section${index + 1}`
-      return Cmp
-        ? <Cmp section={sec} anchorId={anchorId}/>     
-        : <section class="py-6"><div class="container">Unknown section: {sec._type}</div></section>
-    })
-  }
-</DefaultLayout>

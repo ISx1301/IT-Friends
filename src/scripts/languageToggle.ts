@@ -1,30 +1,40 @@
+type Lang = "uk" | "en";
+
 type SetupOpts = {
-  locales?: string[];              
+  locales?: ReadonlyArray<Lang>;
 };
 
-function computeTargetPath(path: string, targetLang: string, locales: string[]): string {
-  const cleaned = path.replace(/\/+/g, "/");
-  let parts = cleaned.replace(/^\/|\/$/g, "").split("/").filter(Boolean);
+function isLang(x: string): x is Lang {
+  return x === "uk" || x === "en";
+}
 
-  const hasPrefix = parts.length > 0 && locales.includes(parts[0]);
+function computeTargetPath(
+  path: string,
+  targetLang: Lang,
+  locales: ReadonlyArray<Lang>
+): string {
+  const cleaned = "/" + String(path || "/").replace(/\/+/g, "/").replace(/^\/|\/$/g, "");
+  const parts = cleaned === "/" ? [] : cleaned.split("/").filter(Boolean);
 
+  const hasPrefix = parts.length > 0 && locales.includes(parts[0] as Lang);
+  const currentLang = hasPrefix ? (parts[0] as Lang) : undefined;
   const contentParts = hasPrefix ? parts.slice(1) : parts;
 
-  if (targetLang === "uk") {
-    if (contentParts.length === 0) return "/";                          
-    return "/uk/" + contentParts.join("/");                              
+  const isHome =
+    (!hasPrefix && parts.length === 0) ||
+    (currentLang === "uk" && (contentParts.length === 0 || (contentParts.length === 1 && (contentParts[0] === "index" || contentParts[0] === "uk")))) ||
+    (currentLang === "en" && (contentParts.length === 0 || (contentParts.length === 1 && (contentParts[0] === "index" || contentParts[0] === "en"))));
+
+  if (isHome) {
+    return targetLang === "uk" ? "/uk/" : "/en/en";
   }
 
-  if (targetLang === "en") {
-    if (contentParts.length === 0) return "/en";                         
-    return "/en/" + contentParts.join("/");
-  }
-
-  return cleaned.startsWith("/") ? cleaned : "/" + cleaned;
+  const tail = "/" + contentParts.join("/");
+  return targetLang === "uk" ? `/uk${tail}` : `/en${tail}`;
 }
 
 export function setupToggleArrow(opts: SetupOpts = {}): void {
-  const { locales = ["uk", "en"] } = opts;
+  const { locales = ["uk", "en"] as const } = opts;
 
   const langContainers = document.querySelectorAll<HTMLElement>(".lang-select");
 
@@ -34,23 +44,23 @@ export function setupToggleArrow(opts: SetupOpts = {}): void {
     const currentLang = container.querySelector<HTMLElement>(".current-lang");
     if (!arrow || !menu || !currentLang) return;
 
-    // Open/close menu
     container.addEventListener("click", (e) => {
       e.stopPropagation();
       menu.classList.toggle("hidden");
       arrow.classList.toggle("-rotate-180");
     });
 
-    // Lang choose
     menu.querySelectorAll<HTMLLIElement>("li[data-lang]").forEach((item) => {
       item.addEventListener("click", (e) => {
         e.stopPropagation();
 
         // "UA"/"EN" -> "uk"/"en"
         const raw = (item.getAttribute("data-lang") || "").toLowerCase();
-        const targetLang = raw === "ua" ? "uk" : raw;
+        const normalized = raw === "ua" ? "uk" : raw;
 
-        if (!locales.includes(targetLang)) return;
+        if (!isLang(normalized)) return; 
+
+        const targetLang: Lang = normalized;
 
         currentLang.textContent = targetLang.toUpperCase();
         menu.classList.add("hidden");
@@ -58,7 +68,7 @@ export function setupToggleArrow(opts: SetupOpts = {}): void {
 
         const nextPath = computeTargetPath(window.location.pathname, targetLang, locales);
         document.cookie = `language=${targetLang}; path=/; max-age=31536000`;
-        window.location.assign(nextPath);
+        window.location.assign(nextPath + window.location.search + window.location.hash);
       });
     });
 

@@ -1,57 +1,54 @@
 ---
-import { query } from '../../../lib/sanity';
-import { PAGE_WITH_SETTINGS } from '../../../lib/queries';
 import DefaultLayout from "@layouts/Default.astro";
 import { DEFAULT_LANG } from '@/constants';
+
+import { query } from '../../../lib/sanity';
+import { PAGE_WITH_SETTINGS } from '../../../lib/queries';
 import { sectionsRegistry } from '../../../lib/sections-registry';
+import NotFound from '../../404.astro';
 
 type SeoHead = { title: string; description?: string | null; image?: string | null }
 type Section = { _type: string; _key?: string } & Record<string, any>
-type PageDoc = { _id: string; title: string; sections?: Section[]; seo: SeoHead }
+type PageDoc = { _id: string; title: string; body?: any[]; sections?: Section[]; mainImage?: any; seo: SeoHead }
 type SettingsDoc = { header?: any; footer?: any }
 type PageData = { page: PageDoc | null; settings: SettingsDoc | null }
 
 export const prerender = false;
 
 const { lang = DEFAULT_LANG } = Astro.params;
-const slug = 'blog';
+const LOCALES = new Set(['uk','en']);
 
-export async function getStaticPaths() {
-  const rows = await query<{ lang: string; rawSlug: string }[]>(/* groq */`
-    *[
-      _type == "page" && defined(slug.current) && defined(language)
-    ]{ "lang": language, "rawSlug": slug.current }
-  `);
+let notFound = false;
+let page: PageDoc | null = null;
+let settings: SettingsDoc | null = null;
 
-  if (!rows?.length) return [];
-
-  const langs = new Set<string>();
-  for (const { lang, rawSlug } of rows) {
-    let s = String(rawSlug || '').replace(/^\/+|\/+$/g, '');
-    if (s.startsWith(`${lang}/`)) s = s.slice(lang.length + 1);
-    if (s.includes('/')) s = s.split('/').pop() as string;
-    if (s === 'blog') langs.add(lang);
+if (!LOCALES.has(String(lang).toLowerCase())) {
+  notFound = true;
+  Astro.response.status = 404;
+} else {
+  const slug = 'blog';
+  const data = await query<PageData>(PAGE_WITH_SETTINGS, { lang, slug });
+  if (!data?.page) {
+    notFound = true;
+    Astro.response.status = 404;
+  } else {
+    page = data.page;
+    settings = data.settings ?? null;
   }
-  return Array.from(langs).map((lang) => ({ params: { lang } }));
 }
-
-const data = await query<PageData>(PAGE_WITH_SETTINGS, { lang, slug });
-
-if (!data?.page) {
-  return Astro.redirect(`/404`, 302);
-}
-
-const { page, settings } = data;
 ---
-
-<DefaultLayout settings={settings} lang={lang} seo={page!.seo}>
-  {
-    page?.sections?.map((sec, index) => {
-      const Cmp = sectionsRegistry[sec._type];
-      const anchorId = `section${index + 1}`;
-      return Cmp
-        ? <Cmp section={sec} anchorId={anchorId}/>
-        : <section class="py-6"><div class="container">Unknown section: {sec._type}</div></section>
-    })
-  }
-</DefaultLayout>
+{ notFound ? (
+  <NotFound />
+) : (
+  <DefaultLayout settings={settings!} lang={lang} seo={page!.seo}>
+    {
+      page?.sections?.map((sec, index) => {
+        const Cmp = sectionsRegistry[sec._type];
+        const anchorId = `section${index + 1}`;
+        return Cmp
+          ? <Cmp section={sec} anchorId={anchorId}/>
+          : <section class="py-6"><div class="container">Unknown section: {sec._type}</div></section>
+      })
+    }
+  </DefaultLayout>
+)}
