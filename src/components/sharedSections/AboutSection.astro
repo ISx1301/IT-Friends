@@ -86,7 +86,14 @@ if (!padding) throw new Error('[aboutSection] Missing required "paddingClass" fr
 if (!isValidPadding(padding)) throw new Error('[aboutSection] Invalid "paddingClass" value')
 ---
 
-<section id={anchorId} class={join(bgClass, padding)}>
+<section 
+  id={anchorId} 
+  class={join(bgClass, padding)} 
+  data-watch="fade-to-top" 
+  data-watch-repeat
+  data-watch-delay="320"
+  data-watch-duration="1000"
+>
   <div class="container">
     <div class={`mb-8 basis-1/4 lg:basis-1/12 ${headingAlignClass}`}>
       {section.heading && (

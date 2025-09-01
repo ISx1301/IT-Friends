@@ -1,7 +1,7 @@
 ---
 import { BG_CLASSES, type BgColor } from "@/constants";
 import { Image as AstroImage } from "astro:assets";
-import playPng from "@images/play.png"; // статический импорт, чтобы путь всегда был корректным
+import playPng from "@images/play.png"; 
 
 type SanityImage = { alt?: string; url?: string }
 
@@ -9,8 +9,8 @@ type VideoTeaserSection = {
   _type: "videoTeaserSection";
   _key: string;
   backgroundColor?: BgColor;
-  image?: SanityImage;   // превью из Sanity (remote URL)
-  videoHref: string;     // ссылка точно приходит
+  image?: SanityImage;   
+  videoHref: string;     
 }
 
 export interface Props {
@@ -22,7 +22,14 @@ const { section, anchorId } = Astro.props as Props;
 const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
 ---
 
-<section id={anchorId} class={`${bgClass} [.${bgClass}+&]:!pt-0 px-20 border py-32`}>
+<section 
+  id={anchorId} 
+  class={`${bgClass} [.${bgClass}+&]:!pt-0 px-20 border py-32`}
+  data-watch="fade-to-top" 
+  data-watch-repeat
+  data-watch-delay="320"
+  data-watch-duration="1000"  
+>
   <div class="container">
     <a href={section.videoHref} target="_blank" rel="noopener noreferrer" aria-label="Відтворити відео">
       <div class="group relative rounded-xl aspect-[3/4] lg:aspect-[2/1] overflow-hidden">

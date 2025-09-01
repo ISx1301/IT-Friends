@@ -79,7 +79,14 @@ const photoUrl = (img?: SanityImage, w = 600, h = 900) =>
     : undefined;
 ---
 
-<section id={anchorId} class={join(bgClass, padding, "w-full overflow-visible ")}>
+<section 
+  id={anchorId} 
+  class={join(bgClass, padding, "w-full overflow-visible ")}
+  data-watch="fade-to-top" 
+  data-watch-repeat
+  data-watch-delay="320"
+  data-watch-duration="1000"  
+>
   <div class="container">
     <div class="m-auto mb-16 max-w-lg">
       {section.heading && (

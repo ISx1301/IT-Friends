@@ -33,7 +33,14 @@ if (!padding) throw new Error('[newSchoolMainSection] Missing required "paddingC
 if (!isValidPadding(padding)) throw new Error('[newSchoolMainSection] Invalid "paddingClass" value')
 ---
 
-<section id={anchorId} class={join(padding, 'w-full overflow-hidden')}>
+<section 
+  id={anchorId} 
+  class={join(padding, 'w-full overflow-hidden')}
+  data-watch="fade-to-top" 
+  data-watch-repeat
+  data-watch-delay="320"
+  data-watch-duration="1000"  
+>
   {section.heading && (
     <div class="mb-6 lg:mb-12 max-w-2xl container">
       <h2 class="font-secondary font-medium text-2xl lg:text-4xl text-center">{section.heading}</h2>

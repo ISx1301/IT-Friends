@@ -73,7 +73,14 @@ const order: Kind[] = (section.order?.map(i => i?.kind).filter(Boolean) as Kind[
 
 // , 'relative mt-11 lg:mt-16' 
 ---
-<section id={anchorId} class={join(bgClass, padding)}>
+<section 
+  id={anchorId} 
+  class={join(bgClass, padding)}
+  data-watch="fade-to-top" 
+  data-watch-repeat
+  data-watch-delay="320"
+  data-watch-duration="1000"
+>
   <div class="container">
     {order.map((k) => {
       switch (k) {

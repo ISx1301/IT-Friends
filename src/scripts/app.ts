@@ -1,7 +1,5 @@
 // import sliders from './sliders';
 
-/** ------------------ Types & Utils ------------------ **/
-
 type WatchCallback = (
   intersect: boolean,
   entry: IntersectionObserverEntry,
@@ -31,7 +29,6 @@ const setCSSVar = (el: HTMLElement, name: string, value?: string | number) => {
 
 /** ------------------ Observer (per-element options) ------------------ **/
 
-// threshold: 0 — триггерим сразу, как только элемент попал во вьюпорт
 const setIntersectionObserver: SetObserverFn = (el, callback) => {
   const threshold = toNumber(el.dataset.watchThreshold ?? '0', 0);
   const rootMargin = el.dataset.watchRootMargin ?? '0px';
@@ -56,7 +53,6 @@ class App implements AppInterface {
   constructor() {
     this.addEventListeners();
 
-    // Ждём готовности DOM, чтобы точно увидеть все [data-watch]
     const boot = () => this.init();
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', boot, { once: true });
@@ -64,7 +60,6 @@ class App implements AppInterface {
       boot();
     }
 
-    // На полный load (картинки/шрифты) — перескан
     window.addEventListener('load', () => {
       this.watchBlocks();
     }, { once: true });
@@ -79,7 +74,6 @@ class App implements AppInterface {
     // this.sliders = sliders;
   }
 
-  // Авто-«лесенка»: data-stagger="120" на родителе → детям [data-watch] проставляются задержки 0/120/240…
   initStagger(selector = '[data-stagger]') {
     document.querySelectorAll<HTMLElement>(selector).forEach((parent) => {
       const step = toNumber(parent.dataset.stagger ?? '100', 100);
@@ -89,19 +83,10 @@ class App implements AppInterface {
     });
   }
 
-  /**
-   * Пер-элементный контроль:
-   *  - data-watch-delay="350" (ms)       → --watch-delay
-   *  - data-watch-duration="600" (ms)    → --watch-duration
-   *  - data-watch-ease="cubic-bezier(...)" → --watch-ease
-   *  - data-watch-add-class-delay="0" (ms) — если хочешь задерживать сам момент добавления класса
-   *  - data-watch-once / data-watch-repeat
-   */
   watchBlocks(selector = '[data-watch]') {
     const els = Array.from(document.querySelectorAll<HTMLElement>(selector));
 
     els.forEach((el) => {
-      // Не дублируем биндинг
       if (hasData(el, 'watchBound')) return;
       el.dataset.watchBound = '1';
 
@@ -113,7 +98,6 @@ class App implements AppInterface {
       const once = hasData(el, 'watchOnce');
       const repeat = hasData(el, 'watchRepeat');
 
-      // Прокидываем в CSS-переменные → delay/duration реально работают
       setCSSVar(el, '--watch-delay', `${delayMs}ms`);
       setCSSVar(el, '--watch-duration', `${durationMs}ms`);
       setCSSVar(el, '--watch-ease', ease);
@@ -125,7 +109,6 @@ class App implements AppInterface {
         if (intersect) {
           if (outTimer) window.clearTimeout(outTimer);
 
-          // По умолчанию — добавляем класс сразу, задержку делает CSS через --watch-delay
           const wait = addClassDelayMs > 0 ? addClassDelayMs : 0;
 
           if (inTimer) window.clearTimeout(inTimer);
@@ -161,7 +144,6 @@ class App implements AppInterface {
       console.log(`App start\n`);
     });
 
-    // Плавный скролл к якорям на этой же странице
     document.querySelectorAll<HTMLAnchorElement>('a[href*="#"]').forEach((el) => {
       el.addEventListener('click', (ev: Event) => {
         const url = new URL(el.href, window.location.href);

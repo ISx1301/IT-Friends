@@ -41,7 +41,14 @@ if (!padding) throw new Error('[offlineAddressesEnglishSection] Missing required
 if (!isValidPadding(padding)) throw new Error('[offlineAddressesEnglishSection] Invalid "paddingClass" value');
 ---
 
-<section id={anchorId} class={join(bgClass, padding)}>
+<section 
+  id={anchorId} 
+  class={join(bgClass, padding)}
+  data-watch="fade-to-top" 
+  data-watch-repeat
+  data-watch-delay="320"
+  data-watch-duration="1000"  
+>
   <div class="container">
     {section.heading && (
       <div class="mb-9">

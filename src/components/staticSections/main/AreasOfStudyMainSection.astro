@@ -100,7 +100,7 @@ const htmlByIndex = cards.map((card) =>
   card.paragraphs?.length ? toHTML(card.paragraphs, { components: ptComponents }) : ""
 );
 
-const baseSecondaryBtn = "py-2 border text-lg w-full orange-btn";
+const baseSecondaryBtn = "py-2 border text-lg w-full orange-btn mt-5";
 const basePrimaryBtn = "py-2 border w-full transparent-btn text-center";
 
 const secondaryBtnClassByIndex = cards.map((card) =>
@@ -111,73 +111,90 @@ const baseSectionCta = "px-5 py-4 font-secondary font-medium text-lg orange-btn 
 const finalSectionCta = join(baseSectionCta, section.sectionCtaClass);
 ---
 
-<section id={anchorId} class={join(bgClass, padding)}>
+<section id={anchorId} class={join(bgClass, padding)} data-watch-repeat data-watch="fade-to-top">
   <div class="container">
     <div class="flex justify-center mb-6 lg:mb-11 basis-1/4 lg:basis-1/12">
       {section?.heading && (
-        <h2 class="font-secondary text-2xl lg:text-3xl">{section.heading}</h2>
+        <h2 class="font-secondary text-2xl lg:text-4xl">{section.heading}</h2>
       )}
     </div>
 
-    <div class="items-stretch gap-5 grid grid-cols-1 lg:grid-cols-3 mb-11">
-      {cards.length > 0 &&
-        cards.map((card, idx) => {
-          const primaryHref = normalizeRelHref(card.primaryButtonHref);
-          return (
-            <div class="grid grid-rows-[auto_1fr_auto] bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full h-full">
-              <div class="flex flex-col items-center space-y-3">
-                {card?.image?.url && (
-                  <img src={card.image.url} alt={card.image.alt ?? ""} />
+<div class="items-stretch gap-5 grid grid-cols-1 lg:grid-cols-3 mb-11">
+  {cards.length > 0 &&
+    cards.map((card, idx) => {
+      const primaryHref = normalizeRelHref(card.primaryButtonHref);
+      const BASE_DELAY = 160;      
+      const STEP = 500;
+      const delay = BASE_DELAY + idx * STEP;
+
+      return (
+        <div
+          class="grid grid-rows-[auto_1fr_auto] bg-white shadow-2xl px-6 lg:px-8 pt-4 pb-9 rounded-lg w-full h-full"
+          data-watch="fade-to-top"
+          data-watch-delay={String(delay)}
+          data-watch-duration="1500"
+        >
+          <div class="flex flex-col items-center space-y-3">
+            {card?.image?.url && (
+              <img src={card.image.url} alt={card.image.alt ?? ""} />
+            )}
+
+            {card?.title && (
+              <h3 class="w-full font-secondary font-semibold text-2xl text-center">
+                {card.title}
+              </h3>
+            )}
+
+            {card?.ageText && (
+              <span class={`${badgeClassByIndex(idx)} px-4 py-1 rounded-lg`}>
+                {card.ageText}
+              </span>
+            )}
+          </div>
+
+          <div class="mt-3 min-h-0">
+            <Article>
+              <Excerpt lineCount={7} lang={lang}>
+                {htmlByIndex[idx] && (
+                  <div class="max-w-none" set:html={htmlByIndex[idx]} />
                 )}
+              </Excerpt>
+            </Article>
+          </div>
 
-                {card?.title && (
-                  <h3 class="w-full font-secondary font-semibold text-2xl text-center">
-                    {card.title}
-                  </h3>
-                )}
+          <div class="flex flex-col gap-3 w-full">
+            {card?.secondaryButtonText && (
+              <button class={secondaryBtnClassByIndex[idx]} type="button">
+                {card.secondaryButtonText}
+              </button>
+            )}
 
-                {card?.ageText && (
-                  <span class={`${badgeClassByIndex(idx)} px-4 py-1 rounded-lg`}>
-                    {card.ageText}
-                  </span>
-                )}
-              </div>
-
-              <div class="mt-3 min-h-0">
-                <Article>
-                  <Excerpt lineCount={4} lang={lang}>
-                    {htmlByIndex[idx] && (
-                      <div class="max-w-none" set:html={htmlByIndex[idx]} />
-                    )}
-                  </Excerpt>
-                </Article>
-              </div>
-
-              <div class="flex flex-col gap-3 w-full">
-                {card?.secondaryButtonText && (
-                  <button class={secondaryBtnClassByIndex[idx]} type="button">
-                    {card.secondaryButtonText}
-                  </button>
-                )}
-
-                {card?.primaryButtonText && primaryHref ? (
-                  <a href={primaryHref} class={basePrimaryBtn}>
-                    {card.primaryButtonText}
-                  </a>
-                ) : card?.primaryButtonText ? (
-                  <button class={basePrimaryBtn} type="button">
-                    {card.primaryButtonText}
-                  </button>
-                ) : null}
-              </div>
-            </div>
-          );
-        })}
-    </div>
+            {card?.primaryButtonText && primaryHref ? (
+              <a href={primaryHref} class={basePrimaryBtn}>
+                {card.primaryButtonText}
+              </a>
+            ) : card?.primaryButtonText ? (
+              <button class={basePrimaryBtn} type="button">
+                {card.primaryButtonText}
+              </button>
+            ) : null}
+          </div>
+        </div>
+      );
+    })}
+</div>
 
     <div class="hidden lg:flex justify-center basis-1/4 lg:basis-1/12">
       {section.sectionCtaText && (
-        <button class={finalSectionCta} type="button">
+        <button 
+          class={finalSectionCta} 
+          type="button"
+          data-watch="fade-from-bottom"
+          data-watch-delay="320"
+          data-watch-duration="1000"
+          data-watch-repeat
+        >
+
           {section.sectionCtaText}
         </button>
       )}

@@ -65,7 +65,14 @@ const ptComponents = {
 };
 ---
 
-<section id={anchorId} class={join(bgClass, padding)}>
+<section 
+  id={anchorId} 
+  class={join(bgClass, padding)}
+  data-watch="fade-to-top" 
+  data-watch-repeat
+  data-watch-delay="300"
+  data-watch-duration="1000"
+>
   <div class="container">
     <div class="w-full">
       {section.heading && (

@@ -127,7 +127,14 @@ const badgeClassByIndex = (i: number) => BADGE_CLASSES[i % BADGE_CLASSES.length]
 ---
 
 
-<section id={anchorId} class={`${bgClass} `}>  
+<section 
+  id={anchorId} 
+  class={`${bgClass} `}
+  data-watch="fade-to-top" 
+  data-watch-repeat
+  data-watch-delay="320"
+  data-watch-duration="1000"  
+>  
   <div class="container">
     {section.heading && (
       <div class="mx-auto mb-6 lg:mb-8 max-w-md">

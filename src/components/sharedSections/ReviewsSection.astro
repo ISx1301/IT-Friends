@@ -76,7 +76,15 @@ const seg = Astro.url.pathname.replace(/^\/+|\/+$/g, '').split('/')[0];
 const lang = seg === 'en' ? 'en' : 'uk';
 ---
 
-<section id={anchorId} class={join(bgClass, padding, 'overflow-hidden')} id="reviews">
+<section 
+  id={anchorId} 
+  class={join(bgClass, padding, 'overflow-hidden')} 
+  id="reviews"
+  data-watch="fade-to-top" 
+  data-watch-repeat
+  data-watch-delay="320"
+  data-watch-duration="1000"  
+>
   <div class="container">
     <div class="flex lg:flex-row flex-col justify-between">
 

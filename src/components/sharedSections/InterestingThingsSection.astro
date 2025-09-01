@@ -81,7 +81,14 @@ const ptComponents = {
 const itemsDescHtml = items.map((it) => toHTML(it?.ptDescription ?? [], { components: ptComponents }));
 ---
 
-<section id={anchorId} class={join(bgClass, padding)}>
+<section 
+  id={anchorId} 
+  class={join(bgClass, padding)}
+  data-watch="fade-to-top" 
+  data-watch-repeat
+  data-watch-delay="320"
+  data-watch-duration="1000"  
+>
   <div class="container">
     {section.heading && (
       <div class="mx-auto mb-5 lg:mb-11 max-w-xs lg:max-w-2xl">

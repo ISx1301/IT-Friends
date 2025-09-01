@@ -78,7 +78,14 @@ const extraBtn = (section.buttonClass ?? "").trim();
 const finalBtnClass = (baseBtn + " " + extraBtn).trim();
 ---
 
-<section id={anchorId} class={join(bgClass, padding)}>
+<section 
+  id={anchorId} 
+  class={join(bgClass, padding)}
+  data-watch="fade-to-top" 
+  data-watch-repeat
+  data-watch-delay="320"
+  data-watch-duration="1000"  
+>
   <div class="container">
 
     {section.heading && (
