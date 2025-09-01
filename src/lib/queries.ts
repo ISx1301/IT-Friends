@@ -27,6 +27,14 @@ export const PAGE_WITH_SETTINGS = `
       ...,
 
       // hero helpers
+      "heading": coalesce(
+        heading[style == "normal"]{
+          _type, _key, style,
+          children[]{ _type, text, marks },
+          markDefs[]{ _key, _type, href, openInNewTab }
+        }, []
+      ),
+
       "description": coalesce(description, []),
 
       "button": select(
@@ -34,22 +42,25 @@ export const PAGE_WITH_SETTINGS = `
           "text": button.text,
           "linkType": button.linkType,
           "page": select(
-            button.linkType == "page" => button.page->{ "slug": slug.current, "lang": coalesce(language, __i18n_lang) }
+            button.linkType == "page" => button.page->{
+              "slug": slug.current,
+              "lang": coalesce(language, __i18n_lang)
+            }
           ),
           "anchor": select(button.linkType == "anchor" => button.anchor),
           "externalUrl": select(button.linkType == "external" => button.externalUrl),
-
           "href": select(
             button.linkType == "page" => select(
               string::startsWith(button.page->slug.current, "/")
                 => button.page->slug.current,
               "/" + button.page->slug.current
             ),
-            button.linkType == "anchor" => button.anchor,
+            button.linkType == "anchor"   => button.anchor,
             button.linkType == "external" => button.externalUrl
           )
         }
       ),
+
 
       "imageColumns": select(
         _type == "heroSectionMainSection" => imageColumns[]{
@@ -57,7 +68,6 @@ export const PAGE_WITH_SETTINGS = `
         },
         imageColumns
       ),
-
 
       // areasOfStudyMainSection
       _type == "areasOfStudyMainSection" => {
@@ -68,12 +78,16 @@ export const PAGE_WITH_SETTINGS = `
         paddingClass,
         sectionCtaText,
         sectionCtaClass,
-        "cards": cards[]{
+        "cards": coalesce(cards, [])[]{
           _key,
           title,
           ageText,
           "paragraphs": coalesce(paragraphs, []),
           primaryButtonText,
+          "primaryButtonHref": select(
+            defined(primaryButtonHref) && primaryButtonHref != "" => primaryButtonHref,
+            null
+          ),
           secondaryButtonText,
           secondaryButtonClass,
           "image": image{
@@ -82,6 +96,7 @@ export const PAGE_WITH_SETTINGS = `
           }
         }
       },
+
 
 
 
@@ -302,7 +317,13 @@ export const PAGE_WITH_SETTINGS = `
         _type, _key, backgroundColor, heading, paddingClass,
         "items": coalesce(
           items[]{
-            "image": image{ alt, "url": asset->url }, title, buttonText,
+            "image": image{ alt, "url": asset->url },
+            title,
+            buttonText,
+            "buttonHref": select(
+              defined(buttonHref) && buttonHref != "" => buttonHref,
+              null
+            ),
             "ptDescription": coalesce(
               ptDescription[style == "normal"]{
                 _type, _key, style,
@@ -313,6 +334,7 @@ export const PAGE_WITH_SETTINGS = `
           }, []
         )
       },
+
 
 
       // offlineAddressesEnglishSection

@@ -20,6 +20,7 @@ type InterestingItem = {
   title?: string;
   ptDescription?: PTBlock[];
   buttonText?: string;
+  buttonHref?: string | null;
 };
 
 type InterestingThingsSection = {
@@ -47,13 +48,19 @@ const join = (...parts: (string | undefined | false)[]) =>
 const isValidPadding = (s: string) =>
   s.split(/\s+/).every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t));
 
-// padding (required)
 const padding = (section.paddingClass ?? '').trim();
 if (!padding) throw new Error('[interestingThingsSection] Missing required "paddingClass" from Sanity');
 if (!isValidPadding(padding)) throw new Error('[interestingThingsSection] Invalid "paddingClass" value');
 
 const escapeAttr = (s?: string) =>
   (s ?? "").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+const normalizeRelHref = (v?: string | null) => {
+  if (!v) return undefined;
+  const trimmed = String(v).trim();
+  if (!trimmed) return undefined;
+  return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+};
 
 const ptComponents = {
   block: {
@@ -85,41 +92,50 @@ const itemsDescHtml = items.map((it) => toHTML(it?.ptDescription ?? [], { compon
     )}
 
     <div class="items-stretch gap-11 lg:gap-5 grid grid-cols-1 lg:grid-cols-2">
-      {items.map((it, i) => (
-        <div class="h-full">
-          <div class="flex flex-col gap-y-5 h-full">
-            {it?.image?.url && (
-              <div>
-                <img
-                  class="rounded-lg w-full h-auto object-cover aspect-2/1"
-                  src={it.image.url}
-                  alt={it.image.alt ?? ""}
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-            )}
+      {items.map((it, i) => {
+        const href = normalizeRelHref(it?.buttonHref ?? undefined);
+        return (
+          <div class="h-full">
+            <div class="flex flex-col gap-y-5 h-full">
+              {it?.image?.url && (
+                <div>
+                  <img
+                    class="rounded-lg w-full h-auto object-cover aspect-2/1"
+                    src={it.image.url}
+                    alt={it.image.alt ?? ""}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              )}
 
-            {it?.title && (
-              <div class="max-w-md">
-                <h3 class="font-bold text-xl">{it.title}</h3>
-              </div>
-            )}
+              {it?.title && (
+                <div class="max-w-md">
+                  <h3 class="font-bold text-xl">{it.title}</h3>
+                </div>
+              )}
 
-            {(it?.ptDescription?.length ?? 0) > 0 && (
-              <Article class="mt-auto max-w-sm text-left">
-                <div set:html={itemsDescHtml[i]} />
-              </Article>
-            )}
+              {(it?.ptDescription?.length ?? 0) > 0 && (
+                <Article class="mt-auto max-w-sm text-left">
+                  <div set:html={itemsDescHtml[i]} />
+                </Article>
+              )}
 
-            {it?.buttonText && (
-              <button type="button" class="mt-auto px-1 py-3 lg:w-64 transparent-btn">
-                {it.buttonText}
-              </button>
-            )}
+              {it?.buttonText && (
+                href ? (
+                  <a href={href} class="mt-auto px-1 py-3 lg:w-64 text-center transparent-btn">
+                    {it.buttonText}
+                  </a>
+                ) : (
+                  <button type="button" class="mt-auto px-1 py-3 lg:w-64 transparent-btn">
+                    {it.buttonText}
+                  </button>
+                )
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   </div>
 </section>

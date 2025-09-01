@@ -1,3 +1,4 @@
+// /sanity/schemas/areasOfStudyMainSection.ts
 import { defineType, defineField, defineArrayMember } from 'sanity'
 import { ImagesIcon } from '@sanity/icons'
 
@@ -13,7 +14,6 @@ const backgroundColors = [
 const classValidation = (Rule: any) =>
   Rule.custom((val: string) => {
     if (!val) return true
-    // eslint-disable-next-line no-useless-escape
     return /^[A-Za-z0-9\-\_: ]+$/.test(val)
       ? true
       : 'Дозволені: літери, цифри, дефіс, підкреслення, двокрапка та пробіли'
@@ -119,7 +119,7 @@ export const areasOfStudyMainSection = defineType({
                 defineArrayMember({
                   type: 'block',
                   styles: [{ title: 'Звичайний', value: 'normal' }],
-                  lists: [], // <- ВАЖНО: отключает маркированные и нумерованные списки
+                  lists: [],
                   marks: {
                     decorators: [
                       { title: 'Жирний', value: 'strong' },
@@ -153,12 +153,30 @@ export const areasOfStudyMainSection = defineType({
               validation: (Rule) => Rule.min(1).required(),
             }),
 
+            // --- КНОПКИ ---
             defineField({
               name: 'primaryButtonText',
               title: 'Текст першої кнопки',
               type: 'string',
               validation: (Rule) => Rule.required(),
             }),
+            defineField({
+              name: 'primaryButtonHref',
+              title: 'Посилання першої кнопки',
+              type: 'string',
+              description: 'Опціонально. Вкажіть відносний шлях: наприклад, "/uk/it_courses" або "/en/contacts".',
+              initialValue: '',
+              validation: (Rule: any) =>
+                Rule.custom((val: null | undefined) => {
+                  if (val === undefined || val === null) return true
+                  const v = String(val).trim()
+                  if (v === '') return true
+                  return /^\/[A-Za-z0-9\-._~\/%?#=&]*$/.test(v)
+                    ? true
+                    : 'Використовуйте відносний шлях, що починається з "/" (без домену).'
+                }),
+            }),
+
             defineField({
               name: 'secondaryButtonText',
               title: 'Текст другої кнопки',

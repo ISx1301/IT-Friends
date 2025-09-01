@@ -15,6 +15,7 @@ export const heroSectionMainSection = defineType({
   title: 'Hero секція (головна сторінка)',
   type: 'object',
   icon: ImagesIcon,
+
   fields: [
     defineField({
       name: 'backgroundColor',
@@ -27,19 +28,12 @@ export const heroSectionMainSection = defineType({
     defineField({
       name: 'heading',
       title: 'Заголовок (H1)',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    }),
-
-    defineField({
-      name: 'description',
-      title: 'Опис',
       type: 'array',
       of: [
         defineArrayMember({
           type: 'block',
           styles: [{ title: 'Звичайний', value: 'normal' }],
-          lists: [], 
+          lists: [],
           marks: {
             decorators: [
               { title: 'Жирний', value: 'strong' },
@@ -70,7 +64,61 @@ export const heroSectionMainSection = defineType({
           },
         }),
       ],
-      validation: (Rule) => Rule.required(), 
+      validation: (Rule) =>
+        Rule.custom((val: any) => {
+          if (!Array.isArray(val) || val.length === 0) return 'Заповніть заголовок'
+          const hasText = val.some(
+            (blk: any) =>
+              blk?._type === 'block' &&
+              Array.isArray(blk.children) &&
+              blk.children.some(
+                (ch: any) => ch?._type === 'span' && String(ch.text || '').trim().length > 0
+              )
+          )
+          return hasText || 'Заголовок не може бути порожнім'
+        }),
+    }),
+
+    defineField({
+      name: 'description',
+      title: 'Опис',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'block',
+          styles: [{ title: 'Звичайний', value: 'normal' }],
+          lists: [],
+          marks: {
+            decorators: [
+              { title: 'Жирний', value: 'strong' },
+              { title: 'Курсив', value: 'em' },
+            ],
+            annotations: [
+              {
+                name: 'link',
+                title: 'Посилання',
+                type: 'object',
+                fields: [
+                  {
+                    name: 'href',
+                    title: 'URL',
+                    type: 'url',
+                    validation: (Rule) =>
+                      Rule.required().uri({ allowRelative: true }),
+                  },
+                  {
+                    name: 'openInNewTab',
+                    title: 'Відкрити в новій вкладці',
+                    type: 'boolean',
+                    initialValue: true,
+                  },
+                ],
+              },
+            ],
+          },
+        }),
+      ],
+      validation: (Rule) => Rule.required(),
     }),
 
     defineField({
@@ -192,8 +240,7 @@ export const heroSectionMainSection = defineType({
                       name: 'alt',
                       title: 'Alt текст',
                       type: 'string',
-                      validation: (Rule) =>
-                        Rule.required().error('Alt обовʼязковий'),
+                      validation: (Rule) => Rule.required().error('Alt обовʼязковий'),
                     }),
                   ],
                 },
@@ -207,9 +254,5 @@ export const heroSectionMainSection = defineType({
     }),
   ],
 
-  preview: {
-    prepare() {
-      return { title: 'Hero секція (головна сторінка)' }
-    },
-  },
+  preview: { prepare() { return { title: 'Hero секція (головна сторінка)' } } },
 })

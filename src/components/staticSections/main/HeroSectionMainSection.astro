@@ -4,8 +4,9 @@ import { Image } from "astro:assets";
 import { BG_CLASSES, type BgColor } from '@/constants';
 import { toHTML } from '@portabletext/to-html';
 
-type PTSpan = { _type: 'span'; _key: string; text: string; marks?: string[] }
-type PTLink = { _key: string; _type: 'link'; href: string; openInNewTab?: boolean }
+/* ================== PT types ================== */
+type PTSpan = { _type: 'span'; _key?: string; text: string; marks?: string[] }
+type PTLink = { _key: string; _type: 'link'; href?: string; openInNewTab?: boolean }
 type PTBlock = {
   _type: 'block'
   _key: string
@@ -14,20 +15,41 @@ type PTBlock = {
   markDefs?: PTLink[]
 }
 
-const ptComponents = {
-  marks: {
-    em: ({ children }: any) => `<em>${children}</em>`,
-    strong: ({ children }: any) => `<strong>${children}</strong>`,
-    link: ({ value, children }: any) => {
-      const href = value?.href || '#'
-      const blank = value?.openInNewTab
-      const target = blank ? ' target="_blank" rel="noopener noreferrer"' : ''
-      return `<a href="${href}" class="text-primary-orange"${target}>${children}</a>`
-    },
-  },
-}
+/* ================== Helpers ================== */
+const escapeAttr = (s?: string) =>
+  (s ?? "").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-type SanityImageAsset = { _ref?: string; _id?: string; url?: string }
+const join = (...parts: (string | undefined | false)[]) =>
+  parts.filter(Boolean).map(String).map(s => s.trim()).join(' ');
+
+const isValidPadding = (s: string) =>
+  s.split(/\s+/).every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t));
+
+const ptMarksCommon = {
+  em: ({ children }: any) => `<em>${children}</em>`,
+  strong: ({ children }: any) => `<strong>${children}</strong>`,
+  link: ({ value, children }: any) => {
+    const href = escapeAttr(value?.href);
+    if (!href) return children;
+    const blank = value?.openInNewTab;
+    const target = blank ? ' target="_blank" rel="noopener noreferrer"' : '';
+    return `<a href="${href}" class="text-primary-orange"${target}>${children}</a>`;
+  },
+};
+
+const ptHeadingComponents = {
+  block: { normal: ({ children }: any) => `<span>${children}</span>` },
+  marks: ptMarksCommon,
+};
+
+const ptDescComponents = {
+  block: {
+    normal: ({ children }: any) => `<p class="text-base lg:text-lg">${children}</p>`,
+  },
+  marks: ptMarksCommon,
+};
+
+type SanityImageAsset = { url?: string }
 type SanityImageWithAlt = { alt?: string; asset?: SanityImageAsset }
 type ImageColumn = { images: SanityImageWithAlt[] }
 type StatItem = { number: string; label: string }
@@ -36,42 +58,69 @@ export interface HeroSectionMainSectionProps {
   _type?: 'heroSectionMainSection';
   _key?: string;
   backgroundColor?: BgColor;
-  heading?: string;
-  description?: PTBlock[];   
+  heading?: PTBlock[];
+  description?: PTBlock[];
   button: { text: string; href: string };
   stats?: StatItem[];
   imageColumns?: ImageColumn[];
+  paddingClass?: string;        
 }
 
-export interface Props { 
-  section: HeroSectionMainSectionProps 
-  anchorId?: string 
+export interface Props {
+  section: HeroSectionMainSectionProps;
+  anchorId?: string;
 }
 
-const { section, anchorId  } = Astro.props;
+const { section, anchorId } = Astro.props;
 
 const bgClass = BG_CLASSES[(section.backgroundColor ?? 'white') as BgColor];
 
+// padding 
+const padding = (section as any).paddingClass ? String((section as any).paddingClass).trim() : '';
+if (padding && !isValidPadding(padding)) {
+  throw new Error('[heroSectionMainSection] Invalid "paddingClass" value');
+}
 
-const descHtml = section.description?.length
-  ? toHTML(section.description, { components: ptComponents })
+const headingBlocks = (Array.isArray(section.heading) ? section.heading : []).filter((b: { _type: string; }) => b?._type === 'block');
+
+const nonEmptyHeadingBlocks = headingBlocks.filter((b: { children: any[]; }) =>
+  Array.isArray(b.children) && b.children.some((ch: { _type: string; text: any; }) => ch?._type === 'span' && String(ch.text || '').trim().length > 0)
+);
+
+// <span>…</span>
+const headingParts = nonEmptyHeadingBlocks.map((b: any) =>
+  toHTML([b], { components: ptHeadingComponents })
+);
+
+// <br/> 
+const headingHtml = headingParts.join('<br/>');
+
+// description PT -> HTML
+const descHtml = (section.description?.length ?? 0)
+  ? toHTML(section.description as PTBlock[], { components: ptDescComponents })
   : '';
 ---
 
-<section id={anchorId} class={`flex ${bgClass} items-stretch min-h-80 lg:min-h-[80vh]`}>
+<section id={anchorId} class={join('flex items-stretch min-h-80 lg:min-h-[80vh]', bgClass, padding)}>
   <div class="container">
     <div class="flex lg:flex-row flex-col justify-between items-center gap-5">
-      <div class="flex flex-col items-center lg:items-start order-1 lg:order-0 basis-1/2">
-        <h1 class="mb-5 font-secondary font-medium text-3xl lg:text-4xl-custom lg:text-left text-center">
-          {section?.heading}
-        </h1>
+      <div class="flex flex-col justify-center items-center lg:items-start order-1 lg:order-0 basis-1/2">
+        <h1
+          class="mb-5 font-secondary font-medium text-3xl lg:text-4xl lg:text-left text-center"
+          set:html={headingHtml}
+        />
 
         <Article class="hidden lg:block mb-9 w-96">
-          {descHtml && <div class="max-w-none prose" set:html={descHtml} />}
+          {descHtml && (
+            <div class="max-w-none prose" set:html={descHtml} />
+          )}
         </Article>
 
         <a
-          class="group inline-flex items-center bg-primary-green lg:bg-black hover:bg-opacity-0 px-10 py-4 border border-primary-green lg:border-black hover:border-black rounded-lg text-white hover:text-black text-lg transition duration-100"
+          class="group inline-flex items-center bg-primary-green lg:bg-black hover:bg-opacity-0 px-10 py-4 border border-primary-green lg:border-black hover:border-black rounded-lg text-white hover:text-black text-lg"
+          data-watch="fade-from-zero"
+          data-watch-delay="320"
+          data-watch-duration="1000"
           href={section.button.href}
         >
           {section.button.text}
@@ -84,19 +133,22 @@ const descHtml = section.description?.length
         </a>
 
         {Array.isArray(section.stats) && section.stats.length > 0 && (
-          <div class="mt-14 mb-20">
-            <div class="flex lg:flex-row flex-col items-center lg:items-start gap-8 lg:gap-0 -mx-14">
+          <div class="mt-14">
+            <div
+              class="flex lg:flex-row flex-col items-center lg:items-start gap-8 lg:gap-0 -mx-14"
+              data-watch="fade-from-zero"
+              data-watch-delay="320"
+              data-watch-duration="1000"
+            >
               {
-                section.stats.slice(0, 3).flatMap((s, idx, arr) => ([
+                section.stats.slice(0, 3).flatMap((s: { number: unknown; label: unknown; }, idx: number, arr: string | any[]) => ([
                   <div class="px-7 text-center">
                     <p class="font-secondary font-bold text-primary-green text-3xl">{s.number}</p>
                     <p class="font-secondary text-xl">
                       <span set:html={s.label} />
                     </p>
                   </div>,
-                  ...(idx < arr.length - 1 ? [
-                    <div class="bg-primary-green w-14 lg:w-[1px] h-[1px] lg:h-14"></div>
-                  ] : [])
+                  ...(idx < arr.length - 1 ? [<div class="bg-primary-green w-14 lg:w-[1px] h-[1px] lg:h-14"></div>] : [])
                 ]))
               }
             </div>
@@ -108,34 +160,47 @@ const descHtml = section.description?.length
         {Array.isArray(section.imageColumns) && section.imageColumns.length > 0 && (
           <div class="order-0 lg:order-1 mb-10 lg:mb-0 lg:basis-5/12">
             <div class="flex gap-x-4 lg:gap-x-5 max-h-80 lg:max-h-[80vh] overflow-hidden">
-              {section.imageColumns.slice(0, 4).map((col, idx) => {
-                const anim = idx % 2 === 0
-                  ? 'animate-[marquee-to-top_90000ms_linear_alternate_infinite]'
-                  : 'animate-[marquee-to-bottom_110000ms_linear_alternate_infinite]'
-                const align = (idx === 1 || idx === 3) ? 'self-end' : ''
-                const lgVisibility = idx === 3 ? 'lg:hidden' : 'lg:basis-1/3'
+              {section.imageColumns.slice(0, 4).map((col: { images: any[]; }, idx: number) => {
+                const anim =
+                  idx % 2 === 0
+                    ? 'animate-[marquee-to-top_90000ms_linear_alternate_infinite]'
+                    : 'animate-[marquee-to-bottom_110000ms_linear_alternate_infinite]';
+
+                const align = (idx === 1 || idx === 3) ? 'self-end' : '';
+                const lgVisibility = idx === 3 ? 'lg:hidden' : 'lg:basis-1/3';
+
+                const baseImgs =
+                  Array.isArray(col.images)
+                    ? col.images.filter((img: { asset: { url: any; }; }) => img?.asset?.url)
+                    : [];
+
+                const dupImgs = baseImgs.length
+                  ? Array.from({ length: Math.ceil(6 / baseImgs.length) }, () => baseImgs)
+                      .flat()
+                      .slice(0, 6)
+                  : [];
+
                 return (
                   <div class={`flex flex-col gap-y-4 lg:gap-y-5 h-fit ${anim} ${align} basis-1/4 ${lgVisibility}`}>
-                    {Array.isArray(col.images) && col.images.map((img) => (
-                      img?.asset?.url && (
-                        <div class="rounded-full aspect-4/11 overflow-hidden shrink-0">
-                          <img
-                            class="w-full h-full object-cover"
-                            src={img.asset.url}
-                            alt={img.alt ?? ''}
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        </div>
-                      )
+                    {dupImgs.map((img, i) => (
+                      <div class="rounded-full aspect-4/11 overflow-hidden shrink-0" data-dup={i}>
+                        <img
+                          class="w-full h-full object-cover"
+                          src={img.asset!.url}
+                          alt={img.alt ?? ''}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
                     ))}
                   </div>
-                )
+                );
               })}
             </div>
           </div>
         )}
       </div>
+
     </div>
   </div>
 </section>
