@@ -69,14 +69,15 @@ const ptComponents = {
   id={anchorId} 
   class={join(bgClass, padding)}
   data-watch="fade-to-top" 
-  data-watch-repeat
   data-watch-delay="300"
   data-watch-duration="1000"
 >
   <div class="container">
     <div class="w-full">
       {section.heading && (
-        <h2 class="mb-9 lg:mb-14 text-3xl lg:text-4xl text-center">{section.heading}</h2>
+        <h2 
+          class="mb-9 lg:mb-14 text-3xl lg:text-4xl text-center" 
+        >{section.heading}</h2>
       )}
     </div>
 
@@ -85,7 +86,12 @@ const ptComponents = {
         const html = toHTML(card.description ?? [], { components: ptComponents })
         const row = i === 0 ? 'lg:row-start-1' : 'lg:row-start-2'
         return (
-          <div class={`bg-white px-5 py-7 rounded-md w-full ${row} lg:col-start-1 flex flex-col h-full`}>
+          <div 
+            class={`bg-white px-5 py-7 rounded-md w-full ${row} lg:col-start-1 flex flex-col h-full`}
+            data-watch="fade-to-right" 
+            data-watch-delay="300"
+            data-watch-duration="1000"  
+          >
             {card.image?.url && (
               <img class="mb-3 rounded-md w-12 object-cover"
                 src={card.image.url}
@@ -113,7 +119,12 @@ const ptComponents = {
         const html = toHTML(card.description ?? [], { components: ptComponents })
         const row = i === 0 ? 'lg:row-start-1' : 'lg:row-start-2'
         return (
-          <div class={`bg-white px-5 py-7 rounded-md w-full ${row} lg:col-start-3 flex flex-col h-full`}>
+          <div 
+            class={`bg-white px-5 py-7 rounded-md w-full ${row} lg:col-start-3 flex flex-col h-full`}
+            data-watch="fade-to-left" 
+            data-watch-delay="300"
+            data-watch-duration="1000"  
+          >
             {card.image?.url && (
               <img class="mb-3 rounded-md w-12 object-cover"
                   src={card.image.url} 

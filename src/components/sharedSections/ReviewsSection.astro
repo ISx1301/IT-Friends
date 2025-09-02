@@ -81,8 +81,7 @@ const lang = seg === 'en' ? 'en' : 'uk';
   class={join(bgClass, padding, 'overflow-hidden')} 
   id="reviews"
   data-watch="fade-to-top" 
-  data-watch-repeat
-  data-watch-delay="320"
+  data-watch-delay="300"
   data-watch-duration="1000"  
 >
   <div class="container">
@@ -90,7 +89,12 @@ const lang = seg === 'en' ? 'en' : 'uk';
 
       <div class="py-14 basis-4/12">
         {section.heading && (
-          <h2 class="mb-8 font-secondary font-medium text-2xl lg:text-3xl lg:text-left text-center">
+          <h2 
+            class="mb-8 font-secondary font-medium text-2xl lg:text-3xl lg:text-left text-center"
+            data-watch="fade-to-right" 
+            data-watch-delay="300"
+            data-watch-duration="1000" 
+          >
             {section.heading}
           </h2>
         )}

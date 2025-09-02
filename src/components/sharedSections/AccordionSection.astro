@@ -70,7 +70,6 @@ const descriptionHtml = toHTML(section.description ?? [], { components: ptCompon
   id={anchorId} 
   class={join(bgClass, padding)}
   data-watch="fade-to-top" 
-  data-watch-repeat
   data-watch-delay="320"
   data-watch-duration="1000"  
 >
@@ -79,7 +78,12 @@ const descriptionHtml = toHTML(section.description ?? [], { components: ptCompon
       <div class="lg:py-14 basis-4/12">
         <div class="m-auto lg:mx-0 mb-6 max-w-xs">
           {section.heading && (
-            <h2 class="mb-8 font-secondary font-medium text-2xl lg:text-3xl lg:text-left text-center">
+            <h2 
+              class="mb-8 font-secondary font-medium text-2xl lg:text-3xl lg:text-left text-center"
+              data-watch="fade-to-right" 
+              data-watch-delay="320"
+              data-watch-duration="1000"   
+            >
               {section.heading}
             </h2>
           )}
@@ -92,7 +96,7 @@ const descriptionHtml = toHTML(section.description ?? [], { components: ptCompon
         )}
 
         {section.buttonText && (
-          <button type="button" class="hidden lg:inline-block px-7 py-3 leading-none transparent-btn">
+          <button type="button" class="hidden lg:inline-block px-7 py-3 leading-none transparent-btn free-lesson-open">
             {section.buttonText}
           </button>
         )}
@@ -103,7 +107,12 @@ const descriptionHtml = toHTML(section.description ?? [], { components: ptCompon
         {items.map((it) => {
           const answerHtml = toHTML(it.answer ?? [], { components: ptComponents });
           return (
-            <div class="border rounded-md overflow-hidden accordion-item">
+            <div 
+              class="border rounded-md overflow-hidden accordion-item"
+              data-watch="fade-to-top" 
+              data-watch-delay="320"
+              data-watch-duration="1000"   
+            >
               <h2 class="accordion-header">
                 <button
                   type="button"

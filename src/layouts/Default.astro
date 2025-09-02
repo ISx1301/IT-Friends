@@ -2,40 +2,79 @@
 import "@styles/global.scss";
 import HeadBase from "@components/Head.astro";
 import Header from "@components/Header.astro";
-import Footer from "@components/Footer.astro"
+import Footer from "@components/Footer.astro";
 import ItLessonForm from "@components/ItLessonForm.astro";
 import EnglishLessonForm from "@components/EnglishLessonForm.astro";
 import OnlineForm from "@components/OnlineForm.astro";
 import Contacts from "@/components/Contacts.astro";
 
-const { settings, lang, seo } = Astro.props;
+const { settings, lang, seo: pageSeo } = Astro.props as {
+  settings?: any;
+  lang: 'uk' | 'en';
+  seo?: { title?: string; description?: string; image?: string };
+};
+
+const seoGlobal = settings?.seo ?? null;
+
+const isProd = import.meta.env.PROD;
+const allowedByEnv = seoGlobal?.onlyInProd ? isProd : true;
+const enabled = seoGlobal?.enabled !== false;
+const renderSEO = enabled && allowedByEnv;
+
+// JSON-LD
+const jsonLdObjects = Array.isArray(seoGlobal?.jsonLd)
+  ? (seoGlobal.jsonLd as string[])
+      .map((s) => { try { return JSON.parse(s) } catch { return null } })
+      .filter(Boolean)
+  : [];
 
 Astro.cookies.set('language', lang, { maxAge: 31536000 });
 ---
 
 <html class="scroll-smooth" lang={lang}>
-  <HeadBase {...seo} />
+  <head>
+    <HeadBase {...pageSeo} />
+
+    <!-- HEAD -->
+    {renderSEO && seoGlobal?.headHtml && <Fragment set:html={seoGlobal.headHtml} />}
+
+    <!-- JSON-LD -->
+    {renderSEO && jsonLdObjects.length > 0 && (
+      <>
+        {jsonLdObjects.map((obj) => (
+          <script type="application/ld+json">{JSON.stringify(obj)}</script>
+        ))}
+      </>
+    )}
+  </head>
 
   <body class="flex flex-col min-h-[100svh]">
-    <Header data={settings?.header} lang={lang}/>
+    <!-- BODY TOP -->
+    {renderSEO && seoGlobal?.bodyTopHtml && <Fragment set:html={seoGlobal.bodyTopHtml} />}
 
+    <Header data={settings?.header} lang={lang} />
     <Contacts lang={lang} />
-
     <ItLessonForm lang={lang} />
-
-    <EnglishLessonForm lang={lang}/>
-
+    <EnglishLessonForm lang={lang} />
     <OnlineForm lang={lang} />
 
     <main aria-label="Content">
       <slot />
     </main>
 
-    
-    <Footer data={settings?.footer}/>
+    <Footer data={settings?.footer} />
+
+    <!-- BODY BOTTOM -->
+    {renderSEO && seoGlobal?.bodyBottomHtml && <Fragment set:html={seoGlobal.bodyBottomHtml} />}
+
+    <script>
+      import "@scripts/app.ts";
+    </script>
   </body>
-  <script>
-    import "@scripts/app.ts";
-  </script>
 </html>
+
+
+
+
+
 

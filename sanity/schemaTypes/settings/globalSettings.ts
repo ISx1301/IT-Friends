@@ -1,9 +1,10 @@
-// ./schemaTypes/settings/globalSettings.ts
-import { defineType, defineField, defineArrayMember  } from 'sanity'
+
+import { defineType, defineField, defineArrayMember } from 'sanity'
+import { EarthGlobeIcon } from '@sanity/icons'
 
 export const globalSettings = defineType({
   name: 'globalSettings',
-  title: 'Налаштування Header & Footer (для всіх сторінок)',
+  title: 'Налаштування Header & Footer, скрипти для SEO',
   type: 'document',
   fields: [
     defineField({
@@ -26,14 +27,6 @@ export const globalSettings = defineType({
             }),
           ],
         }),
-        // defineField({
-        //   name: 'logoLink',
-        //   title: 'Куди веде клік на логотип',
-        //   type: 'reference',
-        //   to: [{ type: 'page' }],
-        //   validation: (Rule) =>
-        //     Rule.required().error('Потрібно вибрати сторінку'),
-        // }),
 
         defineField({
           name: 'socials',
@@ -84,7 +77,6 @@ export const globalSettings = defineType({
               title: 'Пункт меню',
               type: 'object',
               fields: [
-
                 defineField({
                   name: 'text',
                   title: 'Текст пункту',
@@ -138,11 +130,7 @@ export const globalSettings = defineType({
                           validation: (Rule) =>
                             Rule.custom((value, context) => {
                               const p = context.parent as any
-                              if (
-                                Array.isArray(p.submenu) &&
-                                p.submenu.length > 0
-                              )
-                                return true
+                              if (Array.isArray(p.submenu) && p.submenu.length > 0) return true
                               if (p.linkType !== 'page') return true
                               return value ? true : 'Оберіть сторінку'
                             }),
@@ -157,17 +145,10 @@ export const globalSettings = defineType({
                           validation: (Rule) =>
                             Rule.custom((value, context) => {
                               const p = context.parent as any
-                              if (
-                                Array.isArray(p.submenu) &&
-                                p.submenu.length > 0
-                              )
-                                return true
+                              if (Array.isArray(p.submenu) && p.submenu.length > 0) return true
                               if (p.linkType !== 'anchor') return true
                               if (!value) return 'Вкажіть якiр'
-                              return  true
-                              // return value.startsWith('#')
-                              //   ? true
-                              //   : 'Якір повинен починатися з #'
+                              return true
                             }),
                         }),
                       ],
@@ -192,9 +173,8 @@ export const globalSettings = defineType({
                     (parent as any).submenu.length > 0,
                   validation: (Rule) =>
                     Rule.custom((_, context) => {
-                      const p = (context.parent as any)
-                      if (Array.isArray(p.submenu) && p.submenu.length > 0)
-                        return true
+                      const p = context.parent as any
+                      if (Array.isArray(p.submenu) && p.submenu.length > 0) return true
                       return p.linkType ? true : 'Вкажіть тип посилання'
                     }),
                 }),
@@ -214,11 +194,7 @@ export const globalSettings = defineType({
                   validation: (Rule) =>
                     Rule.custom((value, context) => {
                       const p = context.parent as any
-                      if (
-                        Array.isArray(p.submenu) &&
-                        p.submenu.length > 0
-                      )
-                        return true
+                      if (Array.isArray(p.submenu) && p.submenu.length > 0) return true
                       if (p.linkType !== 'page') return true
                       return value ? true : 'Оберіть сторінку'
                     }),
@@ -238,17 +214,10 @@ export const globalSettings = defineType({
                   validation: (Rule) =>
                     Rule.custom((value, context) => {
                       const p = context.parent as any
-                      if (
-                        Array.isArray(p.submenu) &&
-                        p.submenu.length > 0
-                      )
-                        return true
+                      if (Array.isArray(p.submenu) && p.submenu.length > 0) return true
                       if (p.linkType !== 'anchor') return true
                       if (!value) return 'Вкажіть якір'
                       return true
-                      // return value.startsWith('#')
-                      //   ? true
-                      //   : 'Якір повинен починатися з #'
                     }),
                 }),
 
@@ -270,7 +239,6 @@ export const globalSettings = defineType({
       title: 'Футер',
       type: 'object',
       fields: [
-
         defineField({
           name: 'logo',
           title: 'Логотип футера',
@@ -286,14 +254,6 @@ export const globalSettings = defineType({
             }),
           ],
         }),
-        // defineField({
-        //   name: 'logoLink',
-        //   title: 'Куди веде клік на логотип футера',
-        //   type: 'reference',
-        //   to: [{ type: 'page' }],
-        //   validation: (Rule) =>
-        //     Rule.required().error('Потрібно вибрати сторінку'),
-        // }),
 
         defineField({
           name: 'description',
@@ -332,7 +292,6 @@ export const globalSettings = defineType({
                     type: 'string',
                     validation: (Rule) => Rule.required().error('Вкажіть текст'),
                   }),
-
                   defineField({
                     name: 'linkType',
                     title: 'Тип посилання',
@@ -348,8 +307,6 @@ export const globalSettings = defineType({
                     },
                     validation: (Rule) => Rule.required(),
                   }),
-
-                  // СТОРІНКА (reference)
                   defineField({
                     name: 'page',
                     title: 'Сторінка',
@@ -363,8 +320,6 @@ export const globalSettings = defineType({
                         return value ? true : 'Оберіть сторінку'
                       }),
                   }),
-
-                  // ЯКІР
                   defineField({
                     name: 'anchor',
                     title: 'Якір (починається з "#")',
@@ -378,8 +333,6 @@ export const globalSettings = defineType({
                         return val.startsWith('#') ? true : 'Якір має починатися з #'
                       }),
                   }),
-
-                  // ЗОВНІШНІЙ URL
                   defineField({
                     name: 'externalUrl',
                     title: 'Зовнішній URL',
@@ -442,6 +395,74 @@ export const globalSettings = defineType({
           type: 'string',
         }),
       ],
+    }),
+
+    // SEO (global) 
+    defineField({
+      name: 'seo',
+      title: 'SEO (глобальні вставки)',
+      type: 'object',
+      icon: EarthGlobeIcon,
+      fields: [
+        defineField({
+          name: 'enabled',
+          title: 'Увімкнути рендер',
+          type: 'boolean',
+          initialValue: true,
+        }),
+        defineField({
+          name: 'onlyInProd',
+          title: 'Показувати лише у проді',
+          type: 'boolean',
+          initialValue: true,
+        }),
+        defineField({
+          name: 'headHtml',
+          title: 'HEAD HTML (meta/link/script/verification)',
+          type: 'text',
+          rows: 6,
+          description: 'HTML, який буде вставлено у <head>.',
+        }),
+        defineField({
+          name: 'jsonLd',
+          title: 'JSON-LD (глобально, без <script>)',
+          type: 'array',
+          of: [{
+            type: 'text',
+            rows: 6,
+            description: 'Вставляйте ЧИСТИЙ JSON; ми обгорнемо у script',
+            validation: (Rule: any) => Rule.custom((v: string) => {
+              if (!v) return true
+              try { JSON.parse(v); return true } catch { return 'Некоректний JSON' }
+            }),
+          }],
+        }),
+        defineField({
+          name: 'bodyTopHtml',
+          title: 'BODY TOP HTML',
+          type: 'text',
+          rows: 4,
+          description: 'Вставки одразу після <body> (напр., <noscript> для GTM).',
+        }),
+        defineField({
+          name: 'bodyBottomHtml',
+          title: 'BODY BOTTOM HTML',
+          type: 'text',
+          rows: 6,
+          description: 'Перед </body>: чати, пікселі, A/B, віджети.',
+        }),
+        defineField({
+          name: 'ids',
+          title: 'Ідентифікатори (опційно)',
+          type: 'object',
+          fields: [
+            defineField({ name: 'gtmId', title: 'GTM ID (GTM-XXXX)', type: 'string' }),
+            defineField({ name: 'gaId', title: 'GA4 ID (G-XXXX)', type: 'string' }),
+            defineField({ name: 'fbPixelId', title: 'Facebook Pixel ID', type: 'string' }),
+          ],
+        }),
+      ],
+      options: { collapsible: true, collapsed: false },
     }),
   ],
 })

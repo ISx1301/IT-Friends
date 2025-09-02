@@ -1,8 +1,6 @@
-// ./schemaTypes/sections/nestedTabsSection.ts
 import { defineType, defineField } from 'sanity'
 import { ImagesIcon } from '@sanity/icons'
 
-// ==== Загальні кольори фону (як і раніше)
 export const backgroundColors = [
   { title: 'Білий', value: 'white' },
   { title: 'Сірий', value: 'gray' },
@@ -14,11 +12,6 @@ export const backgroundColors = [
 
 export type BgColor = typeof backgroundColors[number]['value']
 
-/**
- * Визначаємо тип карток для поточної панелі через пошук у document.sections.
- * Шукаємо секцію, в якій є pillGroups[].panels[] з _key панелі, що редагується.
- * Не прив’язуємося до конкретного імені _type секції — так надійніше.
- */
 function sectionCardsKindForNestedPanel(
   document: any,
   panelParent: any
@@ -43,7 +36,6 @@ export const withNestedTabsCampsSection = defineType({
   icon: ImagesIcon,
 
   fields: [
-    // Колір фону
     defineField({
       name: 'backgroundColor',
       title: 'Колір фону',
@@ -52,7 +44,6 @@ export const withNestedTabsCampsSection = defineType({
       description: 'Опціонально',
     }),
 
-    // Заголовок H2
     defineField({
       name: 'heading',
       title: 'Заголовок (H2)',
@@ -60,7 +51,7 @@ export const withNestedTabsCampsSection = defineType({
       description: 'Опціонально',
     }),
 
-    // Короткий опис під заголовком (Portable Text)
+    // (Portable Text)
     defineField({
       name: 'intro',
       title: 'Короткий опис під заголовком',
@@ -84,7 +75,6 @@ export const withNestedTabsCampsSection = defineType({
       ],
     }),
 
-    // Колір внутрішніх табів
     defineField({
       name: 'innerTabsColorKey',
       title: 'Колір внутрішніх табів',
@@ -100,7 +90,6 @@ export const withNestedTabsCampsSection = defineType({
       description: 'Опціонально',
     }),
 
-    // Тип карток для всієї секції
     defineField({
       name: 'cardsKind',
       title: 'Тип карток у секції',
@@ -116,7 +105,6 @@ export const withNestedTabsCampsSection = defineType({
       description: 'Застосовується до всіх вкладених табів і карток',
     }),
 
-    // Зовнішні PILLS-групи
     defineField({
       name: 'pillGroups',
       title: 'Pills-групи (зовнішні таби)',
@@ -141,7 +129,6 @@ export const withNestedTabsCampsSection = defineType({
               type: 'string',
             }),
 
-            // Внутрішні таби для цієї групи
             defineField({
               name: 'tabs',
               title: 'Внутрішні таби',
@@ -171,7 +158,6 @@ export const withNestedTabsCampsSection = defineType({
               description: 'Порядок табів відповідає порядку панелей нижче',
             }),
 
-            // Панелі (контент) для внутрішніх табів
             defineField({
               name: 'panels',
               title: 'Панелі (контент внутрішніх табів)',
@@ -182,7 +168,6 @@ export const withNestedTabsCampsSection = defineType({
                   name: 'panel',
                   title: 'Панель таба',
                   fields: [
-                    // Опис панелі (лише для клікабельних карток)
                     defineField({
                       name: 'panelDescription',
                       title: 'Опис контенту',
@@ -208,7 +193,6 @@ export const withNestedTabsCampsSection = defineType({
                       ],
                     }),
 
-                    // Клікабельні картки
                     defineField({
                       name: 'clickableCards',
                       title: 'Картки (клікабельні)',
@@ -250,7 +234,6 @@ export const withNestedTabsCampsSection = defineType({
                       ],
                     }),
 
-                    // Звичайні картки (оновлений склад полів)
                     defineField({
                       name: 'regularCards',
                       title: 'Картки (звичайні блоки)',
@@ -263,7 +246,6 @@ export const withNestedTabsCampsSection = defineType({
                           name: 'regularCard',
                           title: 'Картка (блок)',
                           fields: [
-                            // Картинка
                             defineField({
                               name: 'image',
                               title: 'Картинка',
@@ -272,7 +254,6 @@ export const withNestedTabsCampsSection = defineType({
                               fields: [defineField({ name: 'alt', title: 'Alt текст', type: 'string' })],
                             }),
 
-                            // Заголовок
                             defineField({
                               name: 'title',
                               title: 'Підзаголовок (H3)',
@@ -280,7 +261,6 @@ export const withNestedTabsCampsSection = defineType({
                               description: 'Опціонально',
                             }),
 
-                            // Вік / вікова група (простий текст)
                             defineField({
                               name: 'ageText',
                               title: 'Вік / Вікова група',
@@ -288,7 +268,6 @@ export const withNestedTabsCampsSection = defineType({
                               description: 'Опціонально, напр.: “7–8 років”',
                             }),
 
-                            // Локація: іконка + заголовок
                             defineField({
                               name: 'location',
                               title: 'Локація',
@@ -309,7 +288,7 @@ export const withNestedTabsCampsSection = defineType({
                               ],
                             }),
 
-                            // Опис (Portable Text)
+                            // (Portable Text)
                             defineField({
                               name: 'ptDescription',
                               title: 'Опис (Portable Text)',
@@ -332,7 +311,6 @@ export const withNestedTabsCampsSection = defineType({
                               ],
                             }),
 
-                            // Текст кнопки
                             defineField({
                               name: 'buttonText',
                               title: 'Текст кнопки',
@@ -366,7 +344,6 @@ export const withNestedTabsCampsSection = defineType({
                   },
                 }),
               ],
-              // tabs і panels всередині групи мають збігатися за кількістю
               validation: (Rule) =>
                 Rule.custom((panels, ctx) => {
                   const group = ctx?.parent as any

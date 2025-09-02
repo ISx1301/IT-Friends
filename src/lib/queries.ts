@@ -454,10 +454,18 @@ export const PAGE_WITH_SETTINGS = `
       buttonText,
       socials[]{ _key, alt, "icon": { "src": icon.asset->url }, "link": link },
       copyright
+    },
+      seo{
+        enabled,
+        onlyInProd,
+        headHtml,
+        bodyTopHtml,
+        bodyBottomHtml,
+        ids,
+        "jsonLd": coalesce(jsonLd, [])
+      }
     }
-  }
-}
-`;
+  }`;
 
 // === СЛАГИ СТАТЕЙ (для getStaticPaths) ===
 export const BLOG_POST_SLUGS = /* groq */ `

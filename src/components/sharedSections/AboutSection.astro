@@ -90,14 +90,18 @@ if (!isValidPadding(padding)) throw new Error('[aboutSection] Invalid "paddingCl
   id={anchorId} 
   class={join(bgClass, padding)} 
   data-watch="fade-to-top" 
-  data-watch-repeat
-  data-watch-delay="320"
+  data-watch-delay="300"
   data-watch-duration="1000"
 >
   <div class="container">
     <div class={`mb-8 basis-1/4 lg:basis-1/12 ${headingAlignClass}`}>
       {section.heading && (
-        <h2 class="font-secondary font-medium text-2xl lg:text-3xl">
+        <h2 
+          class="font-secondary font-medium text-2xl lg:text-3xl"
+          data-watch="fade-to-right" 
+          data-watch-delay="300"
+          data-watch-duration="1000"  
+        >
           {section.heading}
         </h2>
       )}
@@ -121,7 +125,12 @@ if (!isValidPadding(padding)) throw new Error('[aboutSection] Invalid "paddingCl
           switch (kind) {
             case 'h3':
               return section.content?.h3 ? (
-                <h3 class="mb-5 font-secondary font-semibold text-xl lg:text-3xl">
+                <h3 
+                  class="mb-5 font-secondary font-semibold text-xl lg:text-3xl"
+                  data-watch="fade-to-left" 
+                  data-watch-delay="300"
+                  data-watch-duration="1000"  
+                >
                   {section.content.h3}
                 </h3>
               ) : null;
@@ -140,7 +149,9 @@ if (!isValidPadding(padding)) throw new Error('[aboutSection] Invalid "paddingCl
 
             case 'h4':
               return section.content?.h4 ? (
-                <h4 class="lg:mt-auto lg:mb-4 font-bold text-2xl">
+                <h4 
+                  class="lg:mt-auto lg:mb-4 font-bold text-2xl" 
+                >
                   {section.content.h4}
                 </h4>
               ) : null;
