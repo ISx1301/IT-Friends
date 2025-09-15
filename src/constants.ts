@@ -461,6 +461,6 @@ export type AnyOnlineKey = 'default' | 'online_it' | 'online_eng';
 
 export const TELEGRAM_CHAT_IDS_ONLINE: Partial<Record<AnyOnlineKey, number>> & { default: number } = {
   default: TELEGRAM_CHAT_IDS.default,
-  // online_it:  5746018867,             
-  // online_eng: 6260129820,             
+  online_it:  5746018867,             
+  online_eng: 6260129820,             
 };

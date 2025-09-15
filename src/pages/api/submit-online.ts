@@ -5,9 +5,12 @@ import { TELEGRAM_CHAT_IDS_ONLINE } from "@/constants";
 
 export const prerender = false;
 
-// const TG_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN as string | undefined;
-const TG_BOT_TOKEN = import.meta.env.TELEGRAM_BOT_TOKEN as string | undefined;
+const TG_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN as string | undefined;
+// const TG_BOT_TOKEN = import.meta.env.TELEGRAM_BOT_TOKEN as string | undefined;
 
+// const TG_ONLY_IN_DEV =
+//   import.meta.env.DEV &&
+//   String(process.env.TG_ONLY_IN_DEV || "false").toLowerCase() === "true";
 
 function pickTelegramChatIdOnline(branchRaw: string): number {
   const key = (branchRaw || "default").toLowerCase() as keyof typeof TELEGRAM_CHAT_IDS_ONLINE;
@@ -24,7 +27,7 @@ type TgmOnlineParams = {
   country: string | null;
   phone: string;
   itCourse: string | null;
-  wantCombined: string | null; 
+  wantCombined: string | null;
   referral: string | null;
 };
 
@@ -55,7 +58,6 @@ async function sendTelegramMessage(chatId: number, text: string) {
   }
 }
 
-
 const C = {
   cyan: (s: string) => `\x1b[36m${s}\x1b[0m`,
   yellow: (s: string) => `\x1b[33m${s}\x1b[0m`,
@@ -63,7 +65,7 @@ const C = {
   magenta: (s: string) => `\x1b[35m${s}\x1b[0m`,
 };
 
-/* ───────────── ENV helpers ───────────── */
+/* ─── ENV helpers ─── */
 function envGet(name: string): string | undefined { return process.env[name]; }
 function envNeed(name: string): string {
   const v = envGet(name);
@@ -80,7 +82,7 @@ function normalizeKeyMultiline(raw: string): string {
   return v.replace(/\\n/g, "\n");
 }
 
-/* ───────────── SMTP ───────────── */
+/* ─── SMTP ─── */
 function getTransport(): Transporter {
   console.log(C.magenta("[MAIL] init transport…"));
   const host = envNeed("SMTP_HOST");
@@ -92,7 +94,7 @@ function getTransport(): Transporter {
   return nodemailer.createTransport({ host, port, secure, auth: { user, pass } });
 }
 
-/* ───────────── Google Sheets auth ───────────── */
+/* ─── Google Sheets auth ─── */
 function getSheetsAuth() {
   console.log(C.magenta("[SHEETS] init auth…"));
   const email = envNeed("G_SERVICE_EMAIL");
@@ -100,7 +102,7 @@ function getSheetsAuth() {
   return new google.auth.JWT({ email, key, scopes: ["https://www.googleapis.com/auth/spreadsheets"] });
 }
 
-/* ───────────── Sheets helpers ───────────── */
+/* ─── Sheets helpers ─── */
 async function listSheets(spreadsheetId: string) {
   console.log("[SHEETS] list sheets in", spreadsheetId);
   const auth = getSheetsAuth();
@@ -117,15 +119,11 @@ async function appendRowAppendAPI(
   values: (string | null)[]
 ) {
   console.log("[SHEETS] append (INSERT_ROWS) START", { spreadsheetId, sheetName });
-
   const auth = getSheetsAuth();
   const sheets = google.sheets({ version: "v4", auth });
-
-  await listSheets(spreadsheetId); 
-
+  await listSheets(spreadsheetId);
   const range = `${sheetName}!A:L`;
   console.log("[SHEETS] append →", { range, values });
-
   const res = await sheets.spreadsheets.values.append({
     spreadsheetId,
     range,
@@ -133,7 +131,6 @@ async function appendRowAppendAPI(
     insertDataOption: "INSERT_ROWS",
     requestBody: { values: [values] },
   });
-
   console.log("[SHEETS] append result:", res.status, res.statusText);
 }
 
@@ -147,16 +144,13 @@ function resolveBranchStrict(branchRaw: string): BranchConfig | null {
   const sheetTab = envGet(tabEnv) || "Заявки";
   return sheetId ? { idEnv, tabEnv, sheetId, sheetTab } : null;
 }
-
 function listConfiguredBranches(): string[] {
   return envKeysWithPrefix("G_SHEETS_ONLINE_ID_").map((k) => k.replace("G_SHEETS_ONLINE_ID_", ""));
 }
 
-/* ───────────── Handler ───────────── */
+/* ─── Handler ─── */
 export const POST: APIRoute = async ({ request }) => {
   console.log(C.magenta("=== [ONLINE Form] submit START ==="));
-
-  
 
   try {
     const form = await request.formData();
@@ -170,34 +164,10 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // branch
-    const branchRaw = String(form.get("branch") || "").trim();
-    const branch = branchRaw.toUpperCase();
+    const branchRaw = String(form.get("branch") || "").trim(); // "online_it"|"online_eng"
+    const branch = branchRaw.toUpperCase();                     // "ONLINE_IT"|"ONLINE_ENG"
     console.log("[FORM] branch resolved:", { branchRaw, branch });
 
-    const cfg = resolveBranchStrict(branch);
-    const configured = listConfiguredBranches();
-    console.log("[SHEETS] configured branches from ENV:", configured);
-
-    if (!cfg) {
-      console.error(C.red("[SHEETS] Missing per-branch env for"), branch);
-      return new Response(
-        JSON.stringify({
-          ok: false,
-          error: `No per-branch env found for "${branch}". Expected G_SHEETS_ONLINE_ID_${branch} (and optional G_SHEETS_ONLINE_TAB_${branch}). Configured branches: ${configured.join(", ") || "(none)"}`,
-        }),
-        { status: 400 }
-      );
-    }
-
-    console.log("[SHEETS] resolve (STRICT)", {
-      branch,
-      idEnv: cfg.idEnv,
-      tabEnv: cfg.tabEnv,
-      sheetId: "FOUND",
-      sheetTab: cfg.sheetTab,
-    });
-
-    
     const parentName     = String(form.get("parentName") ?? "").trim();
     const childFirstName = String(form.get("childFirstName") ?? "").trim();
     const childLastName  = String(form.get("childLastName") ?? "").trim();
@@ -209,16 +179,12 @@ export const POST: APIRoute = async ({ request }) => {
     const itCourse       = (String(form.get("itCourse") ?? "").trim() || null);
     const wantEnglish    = String(form.get("wantEnglish") ?? "").trim();
     const wantIt         = String(form.get("wantIt") ?? "").trim();
-    const wantCombined   = (wantEnglish || wantIt || "") || null; 
+    const wantCombined   = (wantEnglish || wantIt || "") || null;
     const referral       = (String(form.get("referral") ?? "").trim() || null);
     const timestamp      = new Date().toLocaleString("uk-UA", { timeZone: "Europe/Kyiv" });
 
-    
-    const colA = parentName || `${childFirstName} ${childLastName}`.trim() || timestamp;
-
-    // A..L
     const values: (string | null)[] = [
-      colA,                // A 
+      parentName || `${childFirstName} ${childLastName}`.trim() || timestamp, // A
       childFirstName,      // B
       childLastName,       // C
       childAge,            // D
@@ -233,72 +199,95 @@ export const POST: APIRoute = async ({ request }) => {
     ];
     console.log("[FORM] prepared values:", values);
 
-    // 1) Telegram
-
+    // 1) Telegram 
     try {
       const tgChatId = pickTelegramChatIdOnline(branchRaw);
-
       const tgText = getTelegramMessageOnline({
-        parentName:      parentName || "—",
+        parentName: parentName || "—",
         childFirstName,
         childLastName,
-        childAge:        childAge || "—",
-        addressStreet:   addressStreet || "—",
-        city:            city || "—",
-        country:         country || null,
-        phone:           phone || "—",
-        itCourse:        itCourse || null,
-        wantCombined:    wantCombined || null,
-        referral:        referral || null,
+        childAge: childAge || "—",
+        addressStreet: addressStreet || "—",
+        city: city || "—",
+        country: country || null,
+        phone: phone || "—",
+        itCourse: itCourse || null,
+        wantCombined: wantCombined || null,
+        referral: referral || null,
       });
-
       await sendTelegramMessage(tgChatId, tgText);
       console.log("[Telegram ONLINE] sent OK →", tgChatId);
-    } catch (e: any) {
+    } catch (e:any) {
       console.error("[Telegram ONLINE] ERROR:", e?.message || e);
     }
 
+    // if (TG_ONLY_IN_DEV) {
+    //   console.warn(C.yellow("[DEV] TG_ONLY_IN_DEV=true → skip Sheets & Mail"));
+    //   return new Response(JSON.stringify({ ok: true, dev: { skipped: ["sheets", "mail"] } }), { status: 200 });
+    // }
 
-    // 2) Google Sheets 
+    const cfg = resolveBranchStrict(branch);
+    if (!cfg) {
+      console.error(C.red("[SHEETS] Missing per-branch env for"), branch, "Configured:", listConfiguredBranches());
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          error: `No per-branch env found for "${branch}". Expected G_SHEETS_ONLINE_ID_${branch} (and optional G_SHEETS_ONLINE_TAB_${branch}).`,
+        }),
+        { status: 400 }
+      );
+    }
     try {
       await appendRowAppendAPI(cfg.sheetId, cfg.sheetTab, values);
       console.log(C.cyan("[SHEETS] append OK"));
-    } catch (e: any) {
+    } catch (e:any) {
       console.error(C.red("[SHEETS] append ERROR:"), e?.message || e);
-      throw e;
     }
 
-    // 3) Email 
-    const transport = getTransport();
-    const mailFrom = envNeed("MAIL_FROM");
-    const mailTo = envNeed("MAIL_TO");
 
-    const textMessage =
-      `📩 Нова заявка (ОНЛАЙН, ${branch})\n\n` +
-      `👤 Ім'я батьків: ${parentName || "—"}\n` +
-      `🧒 Ім’я дитини: ${childFirstName} ${childLastName}\n` +
-      `🎂 Вік: ${childAge || "—"}\n` +
-      `🏠 Адреса: ${addressStreet || "—"}\n` +
-      `🏙️ Місто: ${city || "—"}\n` +
-      `🌍 Країна: ${country || "—"}\n` +
-      `📞 Телефон: ${phone || "—"}\n` +
-      `💻 IT курс: ${itCourse || "—"}\n` +
-      `➕ Додатково (англ/IT): ${wantCombined || "—"}\n` +
-      `👥 Звідки дізнались: ${referral || "—"}\n` +
-      `⏰ Дата: ${timestamp}`;
+    const hasSMTP =
+      !!process.env.SMTP_HOST &&
+      !!process.env.SMTP_USER &&
+      !!process.env.SMTP_PASS &&
+      !!process.env.MAIL_FROM &&
+      !!process.env.MAIL_TO;
 
-    console.log("[MAIL] sending…", { mailFrom, mailTo });
-    const info = await transport.sendMail({
-      from: mailFrom,
-      to: mailTo,
-      subject: `Нова заявка (Онлайн, ${branch})`,
-      text: textMessage,
-    });
-    console.log(C.cyan("[MAIL] sent OK:"), info.messageId);
+    if (hasSMTP) {
+      try {
+        const transport = getTransport();
+        const mailFrom = envNeed("MAIL_FROM");
+        const mailTo   = envNeed("MAIL_TO");
+        const textMessage =
+          `📩 Нова заявка (ОНЛАЙН, ${branch})\n\n` +
+          `👤 Ім'я батьків: ${parentName || "—"}\n` +
+          `🧒 Ім’я дитини: ${childFirstName} ${childLastName}\n` +
+          `🎂 Вік: ${childAge || "—"}\n` +
+          `🏠 Адреса: ${addressStreet || "—"}\n` +
+          `🏙️ Місто: ${city || "—"}\n` +
+          `🌍 Країна: ${country || "—"}\n` +
+          `📞 Телефон: ${phone || "—"}\n` +
+          `💻 IT курс: ${itCourse || "—"}\n` +
+          `➕ Додатково (англ/IT): ${wantCombined || "—"}\n` +
+          `👥 Звідки дізнались: ${referral || "—"}\n` +
+          `⏰ Дата: ${timestamp}`;
+        const info = await transport.sendMail({
+          from: mailFrom,
+          to: mailTo,
+          subject: `Нова заявка (Онлайн, ${branch})`,
+          text: textMessage,
+        });
+        console.log(C.cyan("[MAIL] sent OK:"), info.messageId);
+      } catch (e:any) {
+        console.error(C.red("[MAIL] FAILED:"), e?.message || e);
+      }
+    } else {
+      console.warn("[MAIL] skipped: missing SMTP envs");
+    }
 
     console.log(C.magenta("=== [ONLINE Form] submit SUCCESS ==="));
     return new Response(JSON.stringify({ ok: true }), { status: 200 });
-  } catch (err: any) {
+
+  } catch (err:any) {
     console.error(C.red("=== [ONLINE Form] ERROR ==="), err?.message || err);
     return new Response(JSON.stringify({ ok: false, error: err?.message || "unknown" }), { status: 500 });
   }
