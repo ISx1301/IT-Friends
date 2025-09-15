@@ -433,3 +433,34 @@ export const TELEGRAM_ONLINE_LINKS: Record<'online_it' | 'online_eng', string> =
   online_it:  'https://t.me/Online_it_friends',
   online_eng: 'https://t.me/eng0friends',
 };
+
+
+// ==== TELEGRAM per-branch ====
+
+export type AnyBranchKey =
+  | 'default'
+  | 'kharkivska_poznyaky'
+  | 'poznyaky'
+  | 'borshchahivka'
+  | 'voskresenka'
+  | 'troieshchyna'
+
+
+export const TELEGRAM_CHAT_IDS: Partial<Record<AnyBranchKey, number>> & { default: number } = {
+  default: 483797133,
+  kharkivska_poznyaky: 6621389302,
+  poznyaky: 5309454463,
+  borshchahivka: 1350158841,
+  voskresenka: 1073048977,
+  troieshchyna: 979493901
+};
+
+// ==== TELEGRAM per-online-branch 
+export type AnyOnlineKey = 'default' | 'online_it' | 'online_eng';
+
+
+export const TELEGRAM_CHAT_IDS_ONLINE: Partial<Record<AnyOnlineKey, number>> & { default: number } = {
+  default: TELEGRAM_CHAT_IDS.default,
+  // online_it:  5746018867,             
+  // online_eng: 6260129820,             
+};

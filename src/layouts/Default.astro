@@ -7,10 +7,13 @@ import ItLessonForm from "@components/ItLessonForm.astro";
 import EnglishLessonForm from "@components/EnglishLessonForm.astro";
 import OnlineForm from "@components/OnlineForm.astro";
 import Contacts from "@/components/Contacts.astro";
+import ChooseForm from "@components/ChooseForm.astro";
+
+type Lang = 'uk' | 'en';
 
 const { settings, lang, seo: pageSeo } = Astro.props as {
   settings?: any;
-  lang: 'uk' | 'en';
+  lang: Lang;
   seo?: { title?: string; description?: string; image?: string };
 };
 
@@ -28,6 +31,9 @@ const jsonLdObjects = Array.isArray(seoGlobal?.jsonLd)
       .filter(Boolean)
   : [];
 
+// Facebook Pixel ID (Sanity → SEO → ids.fbPixelId)
+const fbPixelId: string | undefined = seoGlobal?.ids?.fbPixelId;
+
 Astro.cookies.set('language', lang, { maxAge: 31536000 });
 ---
 
@@ -35,10 +41,8 @@ Astro.cookies.set('language', lang, { maxAge: 31536000 });
   <head>
     <HeadBase {...pageSeo} />
 
-    <!-- HEAD -->
     {renderSEO && seoGlobal?.headHtml && <Fragment set:html={seoGlobal.headHtml} />}
 
-    <!-- JSON-LD -->
     {renderSEO && jsonLdObjects.length > 0 && (
       <>
         {jsonLdObjects.map((obj) => (
@@ -46,17 +50,41 @@ Astro.cookies.set('language', lang, { maxAge: 31536000 });
         ))}
       </>
     )}
+
+    {/* Facebook Pixel  */}
+    {renderSEO && fbPixelId && (
+    <Fragment set:html={`<script>
+      !function(f,b,e,v,n,t,s){
+        if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', ${fbPixelId});
+        fbq('track','PageView');
+    </script>`} />
+    )}
   </head>
 
   <body class="flex flex-col min-h-[100svh]">
-    <!-- BODY TOP -->
     {renderSEO && seoGlobal?.bodyTopHtml && <Fragment set:html={seoGlobal.bodyTopHtml} />}
+
+    {/* noscript */}
+    {renderSEO && fbPixelId && (
+      <noscript>
+        <img height="1" width="1" style="display:none"
+             src={`https://www.facebook.com/tr?id=${fbPixelId}&ev=PageView&noscript=1`} />
+      </noscript>
+    )}
 
     <Header data={settings?.header} lang={lang} />
     <Contacts lang={lang} />
     <ItLessonForm lang={lang} />
     <EnglishLessonForm lang={lang} />
     <OnlineForm lang={lang} />
+    <ChooseForm lang={lang} />
 
     <main aria-label="Content">
       <slot />
@@ -64,7 +92,6 @@ Astro.cookies.set('language', lang, { maxAge: 31536000 });
 
     <Footer data={settings?.footer} />
 
-    <!-- BODY BOTTOM -->
     {renderSEO && seoGlobal?.bodyBottomHtml && <Fragment set:html={seoGlobal.bodyBottomHtml} />}
 
     <script>
@@ -72,9 +99,3 @@ Astro.cookies.set('language', lang, { maxAge: 31536000 });
     </script>
   </body>
 </html>
-
-
-
-
-
-

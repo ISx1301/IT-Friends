@@ -44,7 +44,7 @@ type AboutSectionData = {
   heading?: string;
   headingAlign?: Align;
   layout?: AboutLayout;
-  paddingClass?: string; // 👈 новое
+  paddingClass?: string; 
   image?: { url?: string; alt?: string };
   content?: {
     h3?: string;
@@ -127,7 +127,7 @@ if (!isValidPadding(padding)) throw new Error('[aboutSection] Invalid "paddingCl
               return section.content?.h3 ? (
                 <h3 
                   class="mb-5 font-secondary font-semibold text-xl lg:text-3xl"
-                  data-watch="fade-to-left" 
+                  data-watch="fade-to-top" 
                   data-watch-delay="300"
                   data-watch-duration="1000"  
                 >

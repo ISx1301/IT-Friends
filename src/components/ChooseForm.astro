@@ -1,0 +1,43 @@
+---
+import { Image } from "astro:assets";
+import "@styles/global.scss";
+---
+
+<div class="top-0 left-0 z-50 fixed flex justify-center items-center w-full h-screen overflow-y-auto transition-transform -translate-x-full duration-300 ease-in-out transform choose-form-panel">
+  <div class="flex justify-center items-center h-screen overflow-y-auto qc-direction-menu-close">
+    <div class="left-0 absolute bg-white/10 backdrop-blur-md w-full h-screen overflow-y-auto"></div>
+
+    <div class="relative flex flex-col items-center bg-white lg:shadow-2xl px-3 lg:px-14 py-9 rounded-lg w-11/12 lg:w-full">
+      <div class="top-4 right-4 absolute cursor-pointer qc-direction-menu-close">
+        <Image src={import("@images/green-close.svg")} format="svg" alt='close' />
+      </div>
+
+      <div class="mb-5">
+        <h2 class="font-secondary font-medium text-xl text-center">Оберіть, будь ласка, напрямок, який цікавить:</h2>
+      </div>
+
+      <div class="flex flex-col items-center gap-4 w-full">
+          <button
+            type="button"
+            class="py-5 border rounded-lg w-full font-medium text-lg text-center free-lesson-open"
+          >
+            IT заняття
+          </button>
+          <button
+            type="button"
+            class="py-5 border rounded-lg w-full font-medium text-lg text-center english-lesson-form-open"
+          >
+            Англійська
+          </button>
+          <button
+            type="button"
+            class="py-5 border rounded-lg w-full font-medium text-lg text-center online-lesson-form-open"
+          >
+            Заняття Онлайн
+          </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="@/scripts/chooseForm.ts" />

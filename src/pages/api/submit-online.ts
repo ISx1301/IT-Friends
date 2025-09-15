@@ -1,8 +1,60 @@
 import type { APIRoute } from "astro";
 import nodemailer, { type Transporter } from "nodemailer";
 import { google } from "googleapis";
+import { TELEGRAM_CHAT_IDS_ONLINE } from "@/constants";
 
 export const prerender = false;
+
+// const TG_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN as string | undefined;
+const TG_BOT_TOKEN = import.meta.env.TELEGRAM_BOT_TOKEN as string | undefined;
+
+
+function pickTelegramChatIdOnline(branchRaw: string): number {
+  const key = (branchRaw || "default").toLowerCase() as keyof typeof TELEGRAM_CHAT_IDS_ONLINE;
+  return TELEGRAM_CHAT_IDS_ONLINE[key] ?? TELEGRAM_CHAT_IDS_ONLINE.default;
+}
+
+type TgmOnlineParams = {
+  parentName: string;
+  childFirstName: string;
+  childLastName: string;
+  childAge: string;
+  addressStreet: string;
+  city: string;
+  country: string | null;
+  phone: string;
+  itCourse: string | null;
+  wantCombined: string | null; 
+  referral: string | null;
+};
+
+const getTelegramMessageOnline = (p: TgmOnlineParams) => `
+📩 Нова заявка (ОНЛАЙН)
+👤 Ім'я батьків: ${p.parentName}
+🧒 Ім’я дитини: ${[p.childFirstName, p.childLastName].filter(Boolean).join(" ")}
+🎂 Вік: ${p.childAge}
+🏠 Адреса: ${p.addressStreet}
+🏙️ Місто: ${p.city}
+🌍 Країна: ${p.country}
+📞 Телефон: ${p.phone}
+💻 IT курс: ${p.itCourse}
+➕ Додатково (англ/IT): ${p.wantCombined}
+👥 Звідки дізнались: ${p.referral}
+`.trim();
+
+async function sendTelegramMessage(chatId: number, text: string) {
+  if (!TG_BOT_TOKEN) throw new Error("Missing TELEGRAM_BOT_TOKEN");
+  const url =
+    `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage` +
+    `?chat_id=${chatId}` +
+    `&text=${encodeURIComponent(text)}`;
+  const res = await fetch(url);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || data?.ok === false) {
+    throw new Error(`Telegram error: ${res.status} ${JSON.stringify(data)}`);
+  }
+}
+
 
 const C = {
   cyan: (s: string) => `\x1b[36m${s}\x1b[0m`,
@@ -104,6 +156,8 @@ function listConfiguredBranches(): string[] {
 export const POST: APIRoute = async ({ request }) => {
   console.log(C.magenta("=== [ONLINE Form] submit START ==="));
 
+  
+
   try {
     const form = await request.formData();
     console.log("[FORM] raw entries:", Array.from(form.entries()));
@@ -179,7 +233,33 @@ export const POST: APIRoute = async ({ request }) => {
     ];
     console.log("[FORM] prepared values:", values);
 
-    // 1) Google Sheets 
+    // 1) Telegram
+
+    try {
+      const tgChatId = pickTelegramChatIdOnline(branchRaw);
+
+      const tgText = getTelegramMessageOnline({
+        parentName:      parentName || "—",
+        childFirstName,
+        childLastName,
+        childAge:        childAge || "—",
+        addressStreet:   addressStreet || "—",
+        city:            city || "—",
+        country:         country || null,
+        phone:           phone || "—",
+        itCourse:        itCourse || null,
+        wantCombined:    wantCombined || null,
+        referral:        referral || null,
+      });
+
+      await sendTelegramMessage(tgChatId, tgText);
+      console.log("[Telegram ONLINE] sent OK →", tgChatId);
+    } catch (e: any) {
+      console.error("[Telegram ONLINE] ERROR:", e?.message || e);
+    }
+
+
+    // 2) Google Sheets 
     try {
       await appendRowAppendAPI(cfg.sheetId, cfg.sheetTab, values);
       console.log(C.cyan("[SHEETS] append OK"));
@@ -188,7 +268,7 @@ export const POST: APIRoute = async ({ request }) => {
       throw e;
     }
 
-    // 2) Email 
+    // 3) Email 
     const transport = getTransport();
     const mailFrom = envNeed("MAIL_FROM");
     const mailTo = envNeed("MAIL_TO");

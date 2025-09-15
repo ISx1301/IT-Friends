@@ -2,9 +2,60 @@
 import type { APIRoute } from "astro";
 import nodemailer, { type Transporter } from "nodemailer";
 import { google } from "googleapis";
+import { TELEGRAM_CHAT_IDS } from "@/constants";
+
+
 
 export const prerender = false;
 
+
+const TG_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN as string | undefined;
+// const TG_BOT_TOKEN = import.meta.env.TELEGRAM_BOT_TOKEN as string | undefined;
+
+
+// console.log("[TG] token present:", Boolean(process.env.TELEGRAM_BOT_TOKEN));
+
+function pickTelegramChatId(branchRaw: string): number {
+  const key = (branchRaw || "default").toLowerCase() as keyof typeof TELEGRAM_CHAT_IDS;
+  return TELEGRAM_CHAT_IDS[key] ?? TELEGRAM_CHAT_IDS.default;
+}
+
+type MessageParams = { 
+  // id: string;
+  parentName: string;
+  childFirstName: string;
+  childLastName: string;
+  childAge: string;
+  addressStreet: string;
+  phone: string;
+  englishCourse: string;
+  referral: string
+};
+
+const getMessageTemplate = ({ parentName, phone, childFirstName, childLastName, childAge, addressStreet, englishCourse, referral }: MessageParams) => `
+  📩 Нова заявка (АНГЛІЙСЬКА)
+👤  Ім'я батьків: ${parentName}
+🧒  Ім’я дитини: ${childFirstName}
+🧒  Прізвище дитини: ${childLastName}
+🎂  Вік: ${childAge}
+🏠  Адреса: ${addressStreet}
+📞  Телефон: ${phone}
+💻  IT курс: ${englishCourse}
+👥  Звідки дізнались: ${referral}
+`.trim();
+
+async function sendTelegramMessage(chatId: number, text: string) {
+  const url =
+    `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage` +
+    `?chat_id=${chatId}` +
+    `&text=${encodeURIComponent(text)}`; 
+
+  const res = await fetch(url);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || (data && data.ok === false)) {
+    throw new Error(`Telegram error: ${res.status} ${JSON.stringify(data)}`);
+  }
+}
 
 const C = {
   cyan: (s: string) => `\x1b[36m${s}\x1b[0m`,
@@ -192,6 +243,25 @@ export const POST: APIRoute = async ({ request }) => {
     ];
     console.log("[FORM] prepared values:", values);
 
+    try {
+      const chatId = pickTelegramChatId(branchRaw);
+      const message = getMessageTemplate({
+        parentName: String(values[0] || ""),
+        childFirstName: String(values[1] || ""),
+        childLastName: String(values[2] || ""),
+        childAge: String(values[3] || ""),
+        addressStreet: String(values[4] || ""),
+        phone: String(values[5] || ""),
+        englishCourse: String(values[6] || ""),
+        referral: String(values[7] || ""),
+      });
+
+      await sendTelegramMessage(chatId, message);
+      console.log("[Telegram] sent OK to", chatId);
+    } catch (tgErr: any) {
+      console.error("[Telegram] FAILED:", tgErr?.message || tgErr);
+    }
+
 
     try {
       await appendRowInsert(cfg.sheetId, cfg.sheetTab, values);
@@ -234,4 +304,5 @@ export const POST: APIRoute = async ({ request }) => {
       { status: 500 }
     );
   }
+
 };

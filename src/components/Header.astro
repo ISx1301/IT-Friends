@@ -28,10 +28,10 @@ interface HeaderData {
 
 const { data, lang } = Astro.props as { data?: HeaderData; lang: string };
 ---
-
-<header data-header class="relative h-[4.625rem] lg:h-auto">
+<header data-header class="top-0 lg:z-10 relative lg:sticky lg:w-full h-auto">
   <!-- Top header block -->
-  <div class="z-50 lg:static fixed flex justify-between items-center bg-white py-2 container header-bg">
+  <div class="z-50 lg:static fixed bg-white py-2 w-full header-bg">
+    <div class="flex justify-between items-center container">
     <!-- Logo -->
     <a href='/'>
       {data?.logo?.src && <img src={data.logo.src} alt={data.logo.alt ?? 'IT Friends logo'} />}
@@ -71,6 +71,8 @@ const { data, lang } = Astro.props as { data?: HeaderData; lang: string };
       <span class="bg-black rounded-[0.125rem] w-full h-[0.1875rem] transition-all duration-300"></span>
       <span class="bg-black rounded-[0.125rem] w-full h-[0.1875rem] transition-all duration-300"></span>
       <span class="bg-black rounded-[0.125rem] w-full h-[0.1875rem] transition-all duration-300"></span>
+    </div>
+
     </div>
   </div>
 
@@ -180,7 +182,7 @@ const { data, lang } = Astro.props as { data?: HeaderData; lang: string };
         </div>
 
         {data?.buttonText && (
-          <button type="button" class="free-lesson-btn free-lesson-open">{data.buttonText}</button>
+          <button type="button" class="free-lesson-btn choose-form-open">{data.buttonText}</button>
         )}
       </nav>
     </div>
