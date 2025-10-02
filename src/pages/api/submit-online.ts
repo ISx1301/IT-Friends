@@ -216,9 +216,9 @@ export const POST: APIRoute = async ({ request }) => {
         referral: referral || null,
       });
       await sendTelegramMessage(tgChatId, tgText);
-      console.log("[Telegram ONLINE] sent OK →", tgChatId);
+      console.log("[Telegram ONLINE] sent OK →", tgChatId, 483797133);
     } catch (e:any) {
-      console.error("[Telegram ONLINE] ERROR:", e?.message || e);
+      console.log("[Telegram ONLINE] ERROR:", e?.message || e);
     }
 
     // if (TG_ONLY_IN_DEV) {
@@ -278,7 +278,7 @@ export const POST: APIRoute = async ({ request }) => {
         });
         console.log(C.cyan("[MAIL] sent OK:"), info.messageId);
       } catch (e:any) {
-        console.error(C.red("[MAIL] FAILED:"), e?.message || e);
+        console.log(C.red("[MAIL] FAILED:"), e?.message || e);
       }
     } else {
       console.warn("[MAIL] skipped: missing SMTP envs");

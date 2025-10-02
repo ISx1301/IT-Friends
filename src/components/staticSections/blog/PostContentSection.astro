@@ -1,13 +1,11 @@
 ---
-/** PostContentSection.astro — полная статья с абзацами */
-
 import { toHTML } from '@portabletext/to-html';
 
 type PortableSpan = { _type: 'span'; text: string; marks?: string[] };
 type PortableLink = { _key: string; _type: 'link'; href?: string };
 type PortableBlock = {
   _type: 'block';
-  style?: string;                // 'normal', h2, h3...
+  style?: string;
   children?: PortableSpan[];
   markDefs?: PortableLink[];
 };
@@ -15,30 +13,28 @@ type PortableBlock = {
 type Post = {
   title: string;
   image: { url: string; alt?: string };
-  content: PortableBlock[];      // Portable Text
+  content: PortableBlock[];
   date?: string;
+  previewContent?: string;
 };
 
 const { post } = Astro.props as { post: Post };
 
-// Явный рендер Portable Text → HTML
 const html = toHTML(post.content, {
   components: {
-    // Каждый блок — отдельный <p>, заголовки — по стилю
     block: ({ children, value }) => {
-      const c = String(children).replace(/\n/g, '<br/>'); // переносы внутри блока
+      const c = String(children).replace(/\n/g, '<br/>');
       switch (value?.style) {
         case 'h2': return `<h2>${c}</h2>`;
         case 'h3': return `<h3>${c}</h3>`;
         case 'h4': return `<h4>${c}</h4>`;
-        default:   return `<p>${c}</p>`;
+        default:   return `<p class="text-base lg:text-xl">${c}</p>`;
       }
     },
-    // Маркировки текста
     marks: {
       strong: ({ children }) => `<strong>${children}</strong>`,
-      em:     ({ children }) => `<em>${children}</em>`,
-      link:   ({ children, value }) => {
+      em: ({ children }) => `<em>${children}</em>`,
+      link: ({ children, value }) => {
         const href = value?.href || '#';
         return `<a href="${href}" target="_blank" rel="noopener noreferrer">${children}</a>`;
       },
@@ -49,24 +45,21 @@ const html = toHTML(post.content, {
 const alt = post.image.alt ?? post.title;
 ---
 
-<section class="py-9 lg:py-16">
+<section class="mt-[5rem] lg:mt-[0rem] lg:py-14">
   <div class="container">
     <div class="flex">
       <div class="flex flex-col basis-full lg:basis-9/12">
-        <h1 class="mb-9 lg:mb-10 font-bold text-2xl lg:text-4xl">{post.title}</h1>
-
+        <h1 class="mt-[1rem] lg:mt-[0rem] mb-9 lg:mb-10 font-bold text-2xl lg:text-4xl">{post.title}</h1>
         <div class="zoom-wrapper">
           <img
-            class="mb-14 w-full h-full aspect-28/15"
+            class="rounded-lg object-center object-cover aspect-1/1 lg:aspect-28/15"
             src={post.image.url}
             alt={alt}
             loading="lazy"
             decoding="async"
           />
         </div>
-
-        <!-- Контент с абзацами/заголовками/ссылками -->
-        <div class="space-y-4 max-w-none prose" set:html={html} />
+        <div class="space-y-4 mt-9 lg:mt-14" set:html={html} />
       </div>
     </div>
   </div>

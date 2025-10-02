@@ -1,32 +1,55 @@
 ---
-import Article from "./Article.astro";
-import { Image } from "astro:assets";
-
 const { post } = Astro.props;
 
+function getPreview(p: { previewContent?: string; content?: any[] }) {
+  if (!p) return '';
+  if (typeof p.previewContent === 'string' && p.previewContent.trim()) {
+    return p.previewContent.trim().slice(0, 220);
+  }
+  try {
+    if (Array.isArray(p.content) && p.content.length > 0) {
+      const first = p.content[0];
+      if (first?.children && Array.isArray(first.children)) {
+        return first.children.map((c: { text: any; }) => c?.text ?? '').join('').slice(0, 220);
+      }
+    }
+  } catch (e) {}
+  return '';
+}
+const preview = getPreview(post);
 
-export interface Post {
-  slug: string;
-  title: string;
-  image: string;  
-  content: string;
-  previewContent: string;
-  date: string;  
+const slug = typeof post.slug === 'string' ? post.slug : post.slug?.current || '';
+
+let formattedDate = '';
+if (post.date) {
+  try {
+    const d = new Date(post.date);
+    formattedDate = d.toLocaleDateString('uk-UA', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  } catch (e) {
+    formattedDate = post.date;
+  }
 }
 ---
 
-<a href={`/blog/${post.slug}`}>
-  <div>
-    <Image
-      class="mb-8 w-full h-full object-cover"
-      src={post.image}
-      format="webp"
-      alt={post.title}
-    />  
-    <h2 class="mb-6 font-bold text-xl">{post.title}</h2>
-    <Article class:list={'mb-6'}>
-        {post.previewContent}
-    </Article>
-    <span class="text-data-gray">{post.date}</span>
+<a href={`/uk/blog/${slug}`} class="block hover:shadow-lg rounded-md overflow-hidden transition-shadow">
+  {post.image?.url && (
+    <div class="mb-4 rounded-md w-full h-64 overflow-hidden">
+      <img
+        src={post.image.url}
+        alt={post.image.alt ?? post.title}
+        class="w-full h-full object-cover"
+        loading="lazy"
+      />
+    </div>
+  )}
+
+  <div class="p-2">
+    <h3 class="mb-2 font-bold text-xl">{post.title}</h3>
+    {preview && <p class="mb-max text-gray-700">{preview}</p>}
+    {formattedDate && <span class="text-gray-400 text-sm">{formattedDate}</span>}
   </div>
 </a>

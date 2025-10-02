@@ -1,59 +1,119 @@
 ---
-import DefaultLayout from "@layouts/Default.astro";
+// src/pages/[lang]/blog/[slug].astro
+import DefaultLayout from '@/layouts/Default.astro';
+import NotFound from '@/pages/404.astro';
+import PostContentSection from '@/components/staticSections/blog/PostContentSection.astro';
+import RelatedPostsSection from '@/components/staticSections/blog/RelatedPostsSection.astro';
+import { query } from '@/lib/sanity';
+import { BLOG_POST_WITH_SETTINGS, LATEST_BLOG_POSTS } from '@/lib/queries';
+import type { BlogPost } from '@/types/blog';
 import { DEFAULT_LANG } from '@/constants';
-
-import { query } from '../../../lib/sanity';
-import { BLOG_POST_WITH_SETTINGS } from '../../../lib/queries';
-import NotFound from '../../404.astro';
-
-type Post = {
-  title: string;
-  image?: { url?: string; alt?: string };
-  content?: any;
-  date?: string;
-  seo?: { title: string; description?: string | null; image?: string | null };
-};
-type SettingsDoc = { header?: any; footer?: any };
-type Data = { post: Post | null; settings: SettingsDoc | null };
 
 export const prerender = false;
 
 const { lang = DEFAULT_LANG, slug = '' } = Astro.params;
-const LOCALES = new Set(['uk','en']);
 
 let notFound = false;
-let post: Post | null = null;
-let settings: SettingsDoc | null = null;
+let post: BlogPost | null = null;
+let settings: any = {};
+let relatedPosts: BlogPost[] = [];
 
-if (!LOCALES.has(String(lang).toLowerCase())) {
-  notFound = true;
-  Astro.response.status = 404;
-} else {
-  const data = await query<Data>(BLOG_POST_WITH_SETTINGS, { lang, slug });
-  if (!data?.post) {
+try {
+  console.log('PAGE: fetching post for', { lang, slug });
+
+  // Получаем пост + settings
+  const data = await query<{ post?: BlogPost | null; settings?: any }>(BLOG_POST_WITH_SETTINGS, { lang, slug });
+  console.log('DBG: BLOG_POST_WITH_SETTINGS raw:', data);
+
+  post = data?.post ?? null;
+  settings = data?.settings ?? {};
+
+  if (!post) {
+    console.warn('WARN: post not found for', { lang, slug });
     notFound = true;
     Astro.response.status = 404;
   } else {
-    post = data.post;
-    settings = data.settings ?? null;
+    // Получаем последние посты — query возвращает МАССИВ (не объект)
+    const postsRaw = await query(LATEST_BLOG_POSTS, { lang });
+    console.log('DBG: LATEST_BLOG_POSTS raw result (could be array or object):', postsRaw);
+
+    // postsRaw может быть:
+    // - массив: [ {slug, ...}, ... ]
+    // - или объект { posts: [...] } (на всякий случай)
+    let rawList: any[] = [];
+    if (Array.isArray(postsRaw)) {
+      rawList = postsRaw;
+      console.log('DBG: postsRaw is array, length=', rawList.length);
+    } else if (postsRaw && Array.isArray((postsRaw as any).posts)) {
+      rawList = (postsRaw as any).posts;
+      console.log('DBG: postsRaw.posts length=', rawList.length);
+    } else {
+      console.log('DBG: postsRaw has unexpected shape:', Object.keys(postsRaw ?? {}));
+    }
+
+    const slugNorm = String(slug ?? '').replace(/^\/+/, '').toLowerCase();
+
+    // Нормализуем объекты (извлечь slug как строку)
+    const normalized = rawList.map((p) => ({
+      ...p,
+      slug: String(p.slug ?? '').replace(/^\/+/, '').toLowerCase(),
+      previewContent: (p.previewContent ?? '') as string
+    }));
+
+    console.log('DBG: normalized latest count=', normalized.length);
+
+    // Исключаем текущий пост
+    const excludingCurrent = normalized.filter(p => p.slug !== slugNorm);
+    console.log('DBG: excludingCurrent count=', excludingCurrent.length);
+
+    if (excludingCurrent.length >= 3) {
+      relatedPosts = excludingCurrent.slice(0, 3);
+      console.log('DBG: using excludingCurrent.slice(0,3)');
+    } else if (excludingCurrent.length > 0) {
+      relatedPosts = excludingCurrent.slice(0, 3);
+      console.log('DBG: using excludingCurrent (<3)');
+    } else {
+      // fallback: если не осталось ничего после исключения - берем первые 3 из normalized (даже если там текущий)
+      relatedPosts = normalized.slice(0, 3);
+      console.log('DBG: fallback taking normalized.slice(0,3)');
+    }
+
+    console.log('DBG: final relatedPosts length=', relatedPosts.length);
+    console.log('DBG: final relatedPosts:', relatedPosts);
   }
+} catch (err) {
+  console.error('Error fetching blog data:', err);
+  notFound = true;
+  Astro.response.status = 500;
 }
 
-const seo = post?.seo ?? {
+const seo = {
   title: post?.title ?? 'Post',
-  description: undefined,
+  description: (post as any)?.previewContent ?? undefined,
   image: post?.image?.url ?? null
 };
 ---
-{ notFound ? (
+
+{notFound ? (
   <NotFound />
 ) : (
-  <DefaultLayout settings={settings!} lang={lang} seo={seo}>
-    <article class="py-10 container">
-      <h1 class="mb-6 font-secondary font-medium text-3xl lg:text-5xl">{post!.title}</h1>
-      {post?.image?.url && (
-        <img src={post.image.url} alt={post.image.alt ?? post.title} class="mx-auto mb-6 max-w-full" />
+  <DefaultLayout settings={settings} lang={lang} seo={seo}>
+    <div class="container">
+      {post ? <PostContentSection post={post} /> : null}
+
+      {relatedPosts && relatedPosts.length > 0 ? (
+        <RelatedPostsSection posts={relatedPosts} />
+      ) : (
+        <section class="py-14">
+          <div class="container">
+            <h2 class="mb-8 font-bold text-3xl">Останні статті</h2>
+            <p>На даний момент немає інших статей.</p>
+            <pre class="mt-6 text-gray-500 text-xs">
+              {`DEBUG: relatedPosts length = ${relatedPosts.length}`}
+            </pre>
+          </div>
+        </section>
       )}
-    </article>
+    </div>
   </DefaultLayout>
 )}

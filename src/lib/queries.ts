@@ -467,7 +467,11 @@ export const PAGE_WITH_SETTINGS = `
     }
   }`;
 
-// === СЛАГИ СТАТЕЙ (для getStaticPaths) ===
+
+
+// src/lib/queries.ts
+// (замени существующий файл или соответствующую часть)
+
 export const BLOG_POST_SLUGS = /* groq */ `
 *[
   _type == "blog" &&
@@ -480,7 +484,25 @@ export const BLOG_POST_SLUGS = /* groq */ `
 }
 `;
 
-// === ОДНА СТАТЬЯ + Settings (+ альтернативы для language switch) ===
+// Возьмём запас (10) и отфильтруем по lang на стороне сервера
+export const LATEST_BLOG_POSTS = /* groq */ `
+*[
+  _type == "blog" &&
+  !(_id in path("drafts.**")) &&
+  defined(slug.current) &&
+  lower(coalesce(language, __i18n_lang)) == lower($lang)
+]
+| order(coalesce(publishedAt, _createdAt) desc)
+[0...10] {
+  "slug": slug.current,
+  "title": coalesce(heading, title),
+  "image": { "url": image.asset->url, "alt": image.alt },
+  "previewContent": pt::text(description),
+  "date": coalesce(publishedAt, _createdAt)
+}
+`;
+
+
 export const BLOG_POST_WITH_SETTINGS = /* groq */ `
 {
   "post": *[
@@ -500,7 +522,6 @@ export const BLOG_POST_WITH_SETTINGS = /* groq */ `
     "content": description,
     "date": coalesce(publishedAt, _createdAt),
 
-    // Альтернативы для языкового переключателя (если i18n-плагин проставляет __i18n_base)
     "alternates": *[
       _type == "blog" &&
       !(_id in path("drafts.**")) &&
@@ -520,11 +541,11 @@ export const BLOG_POST_WITH_SETTINGS = /* groq */ `
       logo{ alt, "src": asset->url },
       buttonText,
       socials[]{ _key, alt, "icon": { "src": icon.asset->url }, "link": link },
-      navigation[]{
+      navigation[] {
         _key, text, "linkType": linkType,
         "page": select(linkType == "page" => page->{ "slug": slug.current, "lang": coalesce(language, __i18n_lang) }),
         "anchor": select(linkType == "anchor" => anchor),
-        submenu[]{
+        submenu[] {
           _key, text, "linkType": linkType,
           "page": select(linkType == "page" => page->{ "slug": slug.current, "lang": coalesce(language, __i18n_lang) }),
           "anchor": select(linkType == "anchor" => anchor)
@@ -535,41 +556,9 @@ export const BLOG_POST_WITH_SETTINGS = /* groq */ `
     footer{
       logo{ alt, "src": asset->url },
       "description": coalesce(description, []),
-
-      "navColumn1": navColumn1[]{
-        _key, text, linkType,
-        "page": select(linkType == "page" => page->{ "slug": slug.current, "lang": coalesce(language, __i18n_lang) }),
-        "anchor": select(linkType == "anchor" => anchor),
-        "externalUrl": select(linkType == "external" => externalUrl),
-        "href": select(
-          linkType == "anchor" => anchor,
-          linkType == "external" => externalUrl,
-          linkType == "page" => select(page->slug.current match '^/' => page->slug.current, "/" + page->slug.current)
-        )
-      },
-      "navColumn2": navColumn2[]{
-        _key, text, linkType,
-        "page": select(linkType == "page" => page->{ "slug": slug.current, "lang": coalesce(language, __i18n_lang) }),
-        "anchor": select(linkType == "anchor" => anchor),
-        "externalUrl": select(linkType == "external" => externalUrl),
-        "href": select(
-          linkType == "anchor" => anchor,
-          linkType == "external" => externalUrl,
-          linkType == "page" => select(page->slug.current match '^/' => page->slug.current, "/" + page->slug.current)
-        )
-      },
-      "navColumn3": navColumn3[]{
-        _key, text, linkType,
-        "page": select(linkType == "page" => page->{ "slug": slug.current, "lang": coalesce(language, __i18n_lang) }),
-        "anchor": select(linkType == "anchor" => anchor),
-        "externalUrl": select(linkType == "external" => externalUrl),
-        "href": select(
-          linkType == "anchor" => anchor,
-          linkType == "external" => externalUrl,
-          linkType == "page" => select(page->slug.current match '^/' => page->slug.current, "/" + page->slug.current)
-        )
-      },
-
+      "navColumn1": navColumn1[]{ _key, text, linkType },
+      "navColumn2": navColumn2[]{ _key, text, linkType },
+      "navColumn3": navColumn3[]{ _key, text, linkType },
       buttonText,
       socials[]{ _key, alt, "icon": { "src": icon.asset->url }, "link": link },
       copyright

@@ -1,28 +1,23 @@
 ---
+// src/components/staticSections/blog/RelatedPostsSection.astro
 import PostCard from '@components/PostCard.astro';
-import postImage from '@images/post-image.png';
-
-export interface Post {
-  slug: string;
-  title: string;
-  image: typeof postImage;  
-  content: string;
-  date: string;
-}
+import type { BlogPost } from '@/types/blog';
 
 interface Props {
-  posts: Post[];
+  posts: BlogPost[];
 }
-
 const { posts } = Astro.props as Props;
 ---
 
 <section class="py-14">
-  <div class="container">
-    <div class="gap-6 grid grid-cols-1 lg:grid-cols-3">
-      {posts.map(post => (
-        <PostCard post={post} key={post.slug} />
-      ))}
-    </div>
+  <div class="gap-8 grid grid-cols-1 md:grid-cols-3 container">
+    {posts && posts.length > 0 ? (
+      posts.map((post) => <PostCard post={post} />)
+    ) : (
+      <div>
+        <h2 class="mb-8 font-bold text-3xl">Останні статті</h2>
+        <p>На даний момент немає інших статей.</p>
+      </div>
+    )}
   </div>
 </section>

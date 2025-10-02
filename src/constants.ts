@@ -278,7 +278,7 @@ export type BranchId =
   | 'poznyaky'
   | 'troieshchyna'
   | 'voskresenka'
-  | 'online';
+  | 'online_it';
 
 export type BranchIdOnline =
   | 'online_it'
@@ -290,7 +290,7 @@ export const BRANCH_ORDER: BranchId[] = [
   'poznyaky',
   'troieshchyna',
   'voskresenka',
-  'online'
+  'online_it'
 ];
 
 export const BRANCH_ORDER_ONLINE: BranchIdOnline[] = [
@@ -317,7 +317,7 @@ export const BRANCHES: Record<
       district: 'ЖМ Воскресенка',
       address: 'Вул. Курнатовського 22',
     },
-    online: {
+    online_it: {
       district: 'Онлайн',
       address: 'Будь-яка точка світу'
     }
@@ -337,7 +337,7 @@ export const BRANCHES: Record<
       district: 'Voskresenka District',
       address: 'Kurnatovskoho St 22',
     },
-    online: {
+    online_it: {
       district: 'Online',
       address: 'Anywhere in the world'
     }
@@ -413,7 +413,7 @@ export const PHONE_LINKS: Record<BranchId, Array<{ label: string; href: string }
   poznyaky:            [{ label: 'Григоренка',         href: 'tel:+380984409447' }],
   troieshchyna:        [{ label: 'Троєщина',           href: 'tel:+380964296130' }],
   voskresenka:         [{ label: 'Воскресенка',        href: 'tel:+380989005905' }],
-  online: [
+  online_it: [
     { label: 'IT онлайн',         href: 'tel:+380956217034' },
     { label: 'Англійська онлайн', href: 'tel:+380989631223' },
   ],
@@ -427,6 +427,7 @@ export const TELEGRAM_BRANCH_LINKS: Record<
   poznyaky:            'https://t.me/itfriendsrigorenko',
   troieshchyna:        'https://t.me/ITFRIENDSTroieschyna',
   voskresenka:         'https://t.me/itfriendsvoskresenka',
+  online_it:           'https://t.me/Online_it_friends'
 };
 
 export const TELEGRAM_ONLINE_LINKS: Record<'online_it' | 'online_eng', string> = {
@@ -444,6 +445,7 @@ export type AnyBranchKey =
   | 'borshchahivka'
   | 'voskresenka'
   | 'troieshchyna'
+  | 'online_it'
 
 
 export const TELEGRAM_CHAT_IDS: Partial<Record<AnyBranchKey, number>> & { default: number } = {
@@ -452,7 +454,8 @@ export const TELEGRAM_CHAT_IDS: Partial<Record<AnyBranchKey, number>> & { defaul
   poznyaky: 5309454463,
   borshchahivka: 1350158841,
   voskresenka: 1073048977,
-  troieshchyna: 979493901
+  troieshchyna: 979493901,
+  online_it:  -4726079889, 
 };
 
 // ==== TELEGRAM per-online-branch 
@@ -461,6 +464,6 @@ export type AnyOnlineKey = 'default' | 'online_it' | 'online_eng';
 
 export const TELEGRAM_CHAT_IDS_ONLINE: Partial<Record<AnyOnlineKey, number>> & { default: number } = {
   default: TELEGRAM_CHAT_IDS.default,
-  online_it:  5746018867,             
+  online_it:  -4726079889,             
   online_eng: 6260129820,             
 };
