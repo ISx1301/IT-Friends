@@ -469,8 +469,6 @@ export const PAGE_WITH_SETTINGS = `
 
 
 
-// src/lib/queries.ts
-// (замени существующий файл или соответствующую часть)
 
 export const BLOG_POST_SLUGS = /* groq */ `
 *[
@@ -484,7 +482,7 @@ export const BLOG_POST_SLUGS = /* groq */ `
 }
 `;
 
-// Возьмём запас (10) и отфильтруем по lang на стороне сервера
+
 export const LATEST_BLOG_POSTS = /* groq */ `
 *[
   _type == "blog" &&
