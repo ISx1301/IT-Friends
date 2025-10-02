@@ -70,9 +70,10 @@ module.exports = {
         '3/4': '3 / 4',
         '11/3': '11 / 3',
         '11/16': '11 / 16',
-        // '33/49': '33 / 49', TODO: check
-        // '28/15': '28 / 15'
-        '3/1': '3 / 1'
+        '3/1': '3 / 1',
+        '4/3': '4 / 3',
+        '28/15': '28 / 15'
+
       },
       keyframes: {
         'marquee-to-top': {
@@ -89,7 +90,7 @@ module.exports = {
         },
         'letterGreen': {
           '0%, 100%': { color: 'inherit' },
-          '50%': { color: '#16a34a' }, // green-600
+          '50%': { color: '#16a34a' }, 
         },
       },
       animation: {
@@ -107,6 +108,10 @@ module.exports = {
     },
     {
       pattern: /^(pt|pb|py)-\[[^\]]+\]$/,
+      variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+    },
+    {
+      pattern: /^(mt|mb|my|mx|m|pt|pb|py|px|py)-(\[[^\]]+\]|\d+)$/,
       variants: ['sm', 'md', 'lg', 'xl', '2xl'],
     },
   ],

@@ -30,26 +30,31 @@ if (post.date) {
       day: 'numeric'
     });
   } catch (e) {
-    formattedDate = post.date;
+    formattedDate = post.date.toLocaleDateString();
   }
 }
 ---
 
-<a href={`/uk/blog/${slug}`} class="block hover:shadow-lg rounded-md overflow-hidden transition-shadow">
-  {post.image?.url && (
-    <div class="mb-4 rounded-md w-full h-64 overflow-hidden">
-      <img
-        src={post.image.url}
-        alt={post.image.alt ?? post.title}
-        class="w-full h-full object-cover"
-        loading="lazy"
-      />
-    </div>
-  )}
+<a href={`/uk/blog/${slug}`} class="flex flex-col mb-11 h-full post-card">
+  <div class="rounded-lg w-full h-64 lg:h-72 overflow-hidden">
+    <img
+      src={post.image.url}
+      alt={post.image.alt || post.title}
+      loading="lazy"
+      decoding="async"
+      class="w-full h-full object-center object-cover"
+    />
+  </div>
 
-  <div class="p-2">
-    <h3 class="mb-2 font-bold text-xl">{post.title}</h3>
-    {preview && <p class="mb-max text-gray-700">{preview}</p>}
-    {formattedDate && <span class="text-gray-400 text-sm">{formattedDate}</span>}
+  <h3 class="mt-3 mb-4 font-bold text-xl">{post.title}</h3>
+
+  <div class="flex flex-col flex-1 mt-0">
+    <p class="opacity-80 mt-0 mb-2 text-lg line-clamp-3">{preview}</p>
+
+    {formattedDate && (
+      <time class="block text-gray-400 text-sm">
+        {formattedDate}
+      </time>
+    )}
   </div>
 </a>

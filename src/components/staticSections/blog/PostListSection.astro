@@ -1,12 +1,10 @@
 ---
-/** PostListSection.astro */
-
 export interface Post {
   slug: string;
   title: string;
-  image: { url: string; alt?: string }; // из Sanity (remote URL)
+  image: { url: string; alt?: string }; 
   content: string;
-  date: string; // ISO-строка
+  date: string; 
 }
 
 type Props = {
@@ -26,24 +24,31 @@ const lang = (Astro.params as { lang?: string }).lang ?? 'uk';
   <div class="container">
     <div class="gap-x-5 gap-y-11 lg:gap-y-16 grid grid-cols-1 lg:grid-cols-3 mb-1 lg:mb-11 posts-container">
       {posts.map((post) => (
-        <a href={`/${lang}/blog/${post.slug}`} class="hidden mb-11 post-card">
+        <a href={`/${lang}/blog/${post.slug}`} class="hidden flex flex-col mb-11 post-card">
+
+          <div class="rounded-lg w-full h-64 lg:h-72 overflow-hidden">
+            <img
+              src={post.image.url}
+              alt={post.image.alt || post.title}
+              loading="lazy"
+              decoding="async"
+              class="w-full h-full object-center object-cover"
+            />
+          </div>
+
+          <h3 class="mt-3 mb-4 font-bold text-xl">{post.title}</h3>
           
-            <div class="aspect-4/3">
-              <img
-                src={post.image.url}
-                alt={post.image.alt || post.title}
-                loading="lazy"
-                decoding="async"
-                class="rounded-lg w-full h-full object-center object-cover"
-              />
-            </div>
+          <div class="flex flex-col flex-1 justify-end mt-0">
+            <p class="opacity-80 mt-0 mb-2 text-lg line-clamp-3">{post.content}</p>
 
-            <h3 class="mt-8 font-bold text-xl">{post.title}</h3>
-            <p class="opacity-80 mt-2 text-lg line-clamp-3">{post.content}</p>
-
-            <time class="block opacity-60 mt-2 text-sm">
-              {new Date(post.date).toLocaleDateString()}
+            <time class="block opacity-60 text-sm">
+              {new Date(post.date).toLocaleDateString('uk-UA', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
             </time>
+          </div>
         </a>
       ))}
     </div>
