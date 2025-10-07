@@ -1,4 +1,6 @@
 ---
+// import Excerpt from "./Excerpt.astro";
+
 const { post } = Astro.props;
 
 function getPreview(p: { previewContent?: string; content?: any[] }) {
@@ -49,7 +51,12 @@ if (post.date) {
   <h3 class="mt-3 font-bold text-xl">{post.title}</h3>
 
   <div class="flex flex-col flex-1 justify-end mt-0">
-    <p class="opacity-80 mt-0 mb-2 text-lg line-clamp-3">{preview}</p>
+                <!-- <Excerpt lineCount={4} > -->
+    
+    <p class="opacity-80 mt-0 mb-1 text-lg line-clamp-3">{preview}</p>
+                  <p class="mb-1 font-bold text-base">читати більше ></p>
+
+                <!-- </Excerpt> -->
 
     {formattedDate && (
       <time class="block text-gray-400 text-sm">
