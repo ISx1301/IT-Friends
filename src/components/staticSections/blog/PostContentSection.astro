@@ -48,18 +48,19 @@ const alt = post.image.alt ?? post.title;
 <section class="mt-[5rem] lg:mt-[0rem] lg:py-14">
   <div class="p-0 container">
     <div class="flex">
-      <div class="flex flex-col basis-full lg:basis-9/12">
-        <h1 class="mt-[1rem] lg:mt-[0rem] mb-9 lg:mb-10 font-bold text-2xl lg:text-4xl">{post.title}</h1>
+      <div class="flex flex-col items-center basis-full">
+        <h1 class="mt-[1rem] lg:mt-[0rem] mb-9 lg:mb-10 font-bold text-2xl lg:text-4xl text-center">{post.title}</h1>
         <div class="zoom-wrapper">
           <img
-            class="rounded-lg object-center object-cover aspect-1/1 lg:aspect-28/15"
+            class="rounded-2xl lg:max-w-5xl object-center object-cover aspect-1/1 lg:aspect-28/15"
             src={post.image.url}
             alt={alt}
             loading="lazy"
             decoding="async"
           />
         </div>
-        <div class="space-y-4 mt-9 lg:mt-14" set:html={html} />
+
+        <div class="space-y-4 mt-9 lg:mt-14 lg:w-full lg:max-w-5xl" set:html={html} />
       </div>
     </div>
   </div>
