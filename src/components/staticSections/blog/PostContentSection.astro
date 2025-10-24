@@ -16,6 +16,7 @@ type Post = {
   content: PortableBlock[];
   date?: string;
   previewContent?: string;
+  form?: { show?: boolean; text?: string };
 };
 
 const { post } = Astro.props as { post: Post };
@@ -43,6 +44,8 @@ const html = toHTML(post.content, {
 });
 
 const alt = post.image.alt ?? post.title;
+const showFormButton = post.form?.show ?? false; // default hidden
+const formButtonText = post.form?.text ?? 'Записатися';
 ---
 
 <section class="mt-[5rem] lg:mt-[0rem] lg:py-14">
@@ -62,8 +65,22 @@ const alt = post.image.alt ?? post.title;
           </div>
 
           <div class="space-y-4 mt-9 lg:mt-14 lg:w-full" set:html={html} />
-        </div>
 
+          {showFormButton && (
+            <div class="mt-10">
+              <button
+                id="post-form-open"
+                class="hover:bg-gray free-lesson-btn"
+                type="button"
+                data-open-form="true"
+                aria-controls="post-form"
+              >
+                {formButtonText}
+              </button>
+            </div>
+          )}
+
+        </div>
       </div>
     </div>
   </div>

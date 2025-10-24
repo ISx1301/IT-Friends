@@ -520,6 +520,11 @@ export const BLOG_POST_WITH_SETTINGS = /* groq */ `
     "content": description,
     "date": coalesce(publishedAt, _createdAt),
 
+    "form": {
+      "show": coalesce(showFormButton, false),
+      "text": select(defined(formButtonText) && formButtonText != "" => formButtonText, "Записатися")
+    },
+
     "alternates": *[
       _type == "blog" &&
       !(_id in path("drafts.**")) &&

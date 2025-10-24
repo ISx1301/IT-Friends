@@ -65,6 +65,29 @@ export const blog = defineType({
         },
       ],
     }),
+
+    defineField({
+      name: 'showFormButton',
+      title: 'Показувати кнопку форми',
+      type: 'boolean',
+      initialValue: false, // default: hidden
+      description: 'Увімкніть, щоб показати кнопку на сторінці статті',
+      options: { layout: 'checkbox' },
+    }),
+    defineField({
+      name: 'formButtonText',
+      title: 'Текст кнопки форми',
+      type: 'string',
+      hidden: ({ parent }) => parent?.showFormButton !== true,
+      validation: (Rule) =>
+        Rule.custom((val, ctx) => {
+          const show = (ctx?.document as any)?.showFormButton;
+          return show ? (!!val || 'Вкажіть текст кнопки') : true;
+        }),
+      placeholder: 'Записатися / Залишити заявку',
+    }),
+
+
     defineField({
       name: 'language',
       title: 'Language',

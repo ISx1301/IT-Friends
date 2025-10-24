@@ -1,0 +1,102 @@
+---
+import { Image } from "astro:assets";
+import "@styles/header.scss";
+---
+
+<div class="z-50 fixed inset-0 transition-transform -translate-x-full duration-300 ease-in-out post-scholarship-slider transform">
+  <div class="fixed inset-0 bg-white/10 backdrop-blur-md js-post-form-close" aria-label="Закрити"></div>
+
+  <div class="flex justify-center items-center w-full h-full">
+    <form
+      class="relative flex flex-col items-center bg-white lg:shadow-2xl mx-auto px-3 lg:px-24 py-9 rounded-3xl w-11/12 lg:w-[42rem] max-h-[85vh] overflow-hidden overflow-y-auto post-scholarship-form"
+      method="POST"
+      action="/api/submit-scholarship"
+      enctype="multipart/form-data"
+      novalidate
+    >
+      <button type="button" class="top-0 mb-5 lg:mb-0 ml-auto cursor-pointer js-post-form-close" aria-label="Закрити">
+        <Image src={import("@images/green-close.svg")} format="svg" alt="Закрити" />
+      </button>
+
+      <h2 class="mb-4 pt-2 font-secondary font-semibold text-primary-green text-xl text-center">
+        Подати заявку
+      </h2>
+
+      <label class="flex flex-col w-full font-secondary font-medium">
+        ПІБ
+        <input name="fullName" class="pl-3 border focus:border-2 rounded-md h-10 js-inp-fullName" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">Обов'язкове поле</span>
+      </label>
+
+      <label class="flex flex-col mt-6 w-full font-secondary font-medium">
+        Телефон
+        <input name="phone" class="pl-3 border focus:border-2 rounded-md h-10 js-inp-phone" type="tel" inputmode="tel" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">Вкажіть коректний номер</span>
+      </label>
+
+      <label class="flex flex-col mt-6 w-full font-secondary font-medium">
+        Філія яку відвідуєте
+        <input name="branch" class="pl-3 border focus:border-2 rounded-md h-10 js-inp-branch" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">Обов'язкове поле</span>
+      </label>
+
+      <label class="flex flex-col mt-6 w-full font-secondary font-medium">
+        Скільки повних років
+        <input name="ageYears" class="pl-3 border focus:border-2 rounded-md h-10 js-inp-age" type="number" min="3" max="120" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">Обов'язкове поле</span>
+      </label>
+
+      <label class="flex flex-col mt-6 w-full font-secondary font-medium">
+        Курс який відвідуєте
+        <input name="courseTitle" class="pl-3 border focus:border-2 rounded-md h-10 js-inp-course" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">Обов'язкове поле</span>
+      </label>
+
+      <label class="flex flex-col mt-6 w-full font-secondary font-medium">
+        Скільки років навчаєтесь в IT Friends
+        <input name="yearsStudying" class="pl-3 border focus:border-2 rounded-md h-10 js-inp-yearsStudying" type="number" step="0.5" min="0" max="20" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">Обов'язкове поле</span>
+      </label>
+
+      <div class="flex flex-col mt-6 w-full font-secondary font-medium">
+        Мотиваційний лист (DOC/DOCX), до 4 МБ
+        <input
+          id="motivationDoc"
+          name="motivationDoc"
+          type="file"
+          class="sr-only peer js-inp-file"
+          accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        />
+
+        <label for="motivationDoc"
+              class="inline-flex items-center gap-2 hover:opacity-90 px-4 border focus:border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-green focus:ring-offset-2 h-11 font-medium cursor-pointer">
+          Завантажити файл
+        </label>
+
+        <span class="mt-2 text-gray-600 text-sm js-file-name">Файл не обрано</span>
+        <span class="hidden mt-1 text-red-error text-sm form-error-file">Тільки .doc/.docx до 4 МБ</span>
+      </div>
+
+
+      <!-- honeypot -->
+      <input type="text" name="hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0" />
+
+      <div class="flex flex-col items-center gap-3 mt-7 w-full">
+        <button class="px-8 py-4 font-secondary font-medium orange-btn js-submit" type="submit">
+          Надіслати
+        </button>
+        <p class="text-base js-status"></p>
+      </div>
+    </form>
+
+    <div class="hidden animate-fadeInUp post-scholarship-success">
+      <div class="flex flex-col items-center gap-6 lg:gap-9 lg:w-96">
+        <h2 class="font-secondary font-semibold text-lg lg:text-2xl text-center">
+          Дякуємо! Заявку надіслано.
+        </h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="@/scripts/hubForm.ts"></script>
