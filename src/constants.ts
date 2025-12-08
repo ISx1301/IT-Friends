@@ -278,6 +278,7 @@ export type BranchId =
   | 'poznyaky'
   | 'troieshchyna'
   | 'voskresenka'
+  | 'sofiivska_borshahivka'
   | 'online_it';
 
 export type BranchIdOnline =
@@ -289,6 +290,7 @@ export const BRANCH_ORDER: BranchId[] = [
   'kharkivska_poznyaky',
   'poznyaky',
   'troieshchyna',
+  'sofiivska_borshahivka',
   'voskresenka',
   'online_it'
 ];
@@ -304,23 +306,31 @@ export const BRANCHES: Record<
 > = {
   uk: {
     borshchahivka: { district: 'ЖМ Борщагівка', address: 'Б-р, Кольцова 14' },
+
     kharkivska_poznyaky: {
       district: 'ЖМ Харківська-Позняки',
       address: 'Вул. Кошиця 9Б',
     },
+
     poznyaky: { district: 'ЖМ Позняки', address: 'Пр-т, Григоренка 16' },
     troieshchyna: {
       district: 'ЖМ Троєщина',
       address: 'Пр-т, Маяковського 91в',
     },
+
     voskresenka: {
       district: 'ЖМ Воскресенка',
       address: 'Вул. Курнатовського 22',
     },
+
+    sofiivska_borshahivka: { district: 'ЖМ Софіївська Борщагівка', address: 'Райдужна 147 (Лівівський маєток)' },
+
     online_it: {
       district: 'Онлайн',
       address: 'Будь-яка точка світу'
     }
+
+
   },
   en: {
     borshchahivka: { district: 'Borshchahivka District', address: 'Kolt­sova Blvd 14' },
@@ -337,6 +347,7 @@ export const BRANCHES: Record<
       district: 'Voskresenka District',
       address: 'Kurnatovskoho St 22',
     },
+    sofiivska_borshahivka: { district: 'ЖМ Софіївська Борщагівка', address: 'Райдужна 147 (Лівівський маєток)' },
     online_it: {
       district: 'Online',
       address: 'Anywhere in the world'
@@ -377,6 +388,7 @@ export const BRANCH_ORDER_OFFLINE: Exclude<BranchId, 'online'>[] = [
   'kharkivska_poznyaky',
   'poznyaky',
   'troieshchyna',
+  'sofiivska_borshahivka',
   'voskresenka',
 ];
 
@@ -413,6 +425,7 @@ export const PHONE_LINKS: Record<BranchId, Array<{ label: string; href: string }
   poznyaky:            [{ label: 'Григоренка',         href: 'tel:+380984409447' }],
   troieshchyna:        [{ label: 'Троєщина',           href: 'tel:+380964296130' }],
   voskresenka:         [{ label: 'Воскресенка',        href: 'tel:+380989005905' }],
+  sofiivska_borshahivka: [{ label: 'Софіївська Борщагівка', href: 'tel:+380689284633' }],
   online_it: [
     { label: 'IT онлайн',         href: 'tel:+380956217034' },
     { label: 'Англійська онлайн', href: 'tel:+380989631223' },
@@ -427,6 +440,7 @@ export const TELEGRAM_BRANCH_LINKS: Record<
   poznyaky:            'https://t.me/itfriendsrigorenko',
   troieshchyna:        'https://t.me/ITFRIENDSTroieschyna',
   voskresenka:         'https://t.me/itfriendsvoskresenka',
+  sofiivska_borshahivka: 'https://t.me/itfriends_sofbor',
   online_it:           'https://t.me/Online_it_friends'
 };
 
@@ -445,6 +459,7 @@ export type AnyBranchKey =
   | 'borshchahivka'
   | 'voskresenka'
   | 'troieshchyna'
+  | 'sofiivska_borshahivka'
   | 'online_it'
 
 
@@ -455,6 +470,7 @@ export const TELEGRAM_CHAT_IDS: Partial<Record<AnyBranchKey, number>> & { defaul
   borshchahivka: 1350158841,
   voskresenka: 1073048977,
   troieshchyna: 979493901,
+  sofiivska_borshahivka: 8230306319,
   online_it:  -4726079889, 
 };
 
