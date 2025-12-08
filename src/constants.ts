@@ -323,7 +323,7 @@ export const BRANCHES: Record<
       address: 'Вул. Курнатовського 22',
     },
 
-    sofiivska_borshahivka: { district: 'ЖМ Софіївська Борщагівка', address: 'Райдужна 147 (Лівівський маєток)' },
+    sofiivska_borshahivka: { district: 'ЖМ Софіївська Борщагівка', address: 'Райдужна 147 (Львівський маєток)' },
 
     online_it: {
       district: 'Онлайн',
@@ -347,7 +347,7 @@ export const BRANCHES: Record<
       district: 'Voskresenka District',
       address: 'Kurnatovskoho St 22',
     },
-    sofiivska_borshahivka: { district: 'ЖМ Софіївська Борщагівка', address: 'Райдужна 147 (Лівівський маєток)' },
+    sofiivska_borshahivka: { district: 'ЖМ Софіївська Борщагівка', address: 'Райдужна 147 (Львівський маєток)' },
     online_it: {
       district: 'Online',
       address: 'Anywhere in the world'
