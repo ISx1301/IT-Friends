@@ -471,7 +471,7 @@ export const TELEGRAM_CHAT_IDS: Partial<Record<AnyBranchKey, number>> & { defaul
   voskresenka: 1073048977,
   troieshchyna: 979493901,
   sofiivska_borshahivka: 8230306319,
-  online_it:  -4726079889, 
+  online_it:  5746018867, 
 };
 
 // ==== TELEGRAM per-online-branch 
@@ -480,6 +480,6 @@ export type AnyOnlineKey = 'default' | 'online_it' | 'online_eng';
 
 export const TELEGRAM_CHAT_IDS_ONLINE: Partial<Record<AnyOnlineKey, number>> & { default: number } = {
   default: TELEGRAM_CHAT_IDS.default,
-  online_it:  -4726079889,             
+  online_it:  5746018867,             
   online_eng: 6260129820,             
 };
