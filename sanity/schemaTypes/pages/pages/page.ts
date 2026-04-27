@@ -43,6 +43,7 @@ export const page = defineType({
         { type: 'videoCampsSection' },
         { type: 'heroBlogSection' },
         { type: 'postListSection' },
+        { type: 'campsInfoSection' },
       ],
     }),
   ],

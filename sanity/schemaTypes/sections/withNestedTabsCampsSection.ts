@@ -316,6 +316,23 @@ export const withNestedTabsCampsSection = defineType({
                               title: 'Текст кнопки',
                               type: 'string',
                             }),
+
+                            defineField({
+                              name: 'buttonHref',
+                              title: 'Посилання кнопки',
+                              type: 'string',
+                              description: 'Вкажіть шлях до сторінки: наприклад, "/uk/it_courses"',
+                              initialValue: '',
+                              validation: (Rule: any) =>
+                                Rule.custom((val: null | undefined) => {
+                                  if (val === undefined || val === null) return true
+                                  const v = String(val).trim()
+                                  if (v === '') return true
+                                  return /^\/[A-Za-z0-9\-._~\/%?#=&]*$/.test(v)
+                                    ? true
+                                    : 'Використовуйте відносний шлях, що починається з "/" (без домену).'
+                                }),
+                            }),
                           ],
                           preview: {
                             select: {

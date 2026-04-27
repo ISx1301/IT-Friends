@@ -20,6 +20,7 @@ import { withNestedTabsCampsSection } from './sections/withNestedTabsCampsSectio
 import { interestingThingsSection } from './sections/interestingThingsSection'
 import { offlineAddressesEnglishSection } from './sections/offlineAddressesEnglishSection'
 import { videoCampsSection } from './sections/videoCampsSection'
+import { campsInfoSection } from './sections/campsInfoSection'  
 
  // helper
 import { aboutContentOrderItem } from './sections/aboutSection'
@@ -53,6 +54,7 @@ export const schemaTypes = [
   videoCampsSection,
   heroBlogSection,
   postListSection,
+  campsInfoSection,
 
   // helper
   aboutContentOrderItem
