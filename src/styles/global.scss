@@ -8,7 +8,7 @@
 
 @layer components {
   .orange-btn {
-    @apply bg-primary-orange hover:bg-[transparent] border border-primary-orange hover:border-primary-orange border-solid rounded-md font-normal hover:text-primary-orange text-base transition-colors duration-300;
+    @apply bg-primary-orange hover:bg-[transparent] border border-primary-orange hover:border-primary-orange border-solid rounded-md font-normal hover:text-primary-orange text-base transition-colors duration-300 cursor-pointer;
 
     @media (max-width: 79.49rem) {
       @apply w-full font-medium text-lg;

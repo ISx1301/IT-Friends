@@ -33,6 +33,7 @@ type RegularCard = {
   location?: { title?: string; icon?: SanityImage };
   ptDescription?: PTBlock[];
   buttonText?: string;
+  buttonHref?: string;
 };
 
 type InnerTab = {
@@ -66,6 +67,7 @@ type WithNestedTabsCampsSection = {
   pillGroups?: PillGroup[];
   showMoreText?: string;  
   buttonText?: string;    
+  buttonHref?: string;
 };
 
 export interface Props {
@@ -304,12 +306,12 @@ const badgeClassByIndex = (i: number) => BADGE_CLASSES[i % BADGE_CLASSES.length]
                                         )}
 
                                         {c.buttonText && (
-                                          <button
-                                            type="button"
-                                            class="mt-auto py-5 w-full font-secondary font-medium text-lg orange-btn"
+                                          <a
+                                            href={c.buttonHref}
+                                            class="mt-auto py-5 w-full font-secondary font-medium text-lg text-center orange-btn test123"
                                           >
                                             {c.buttonText}
-                                          </button>
+                                          </a>
                                         )}
                                       </div>
                                     ));
@@ -343,4 +345,5 @@ const badgeClassByIndex = (i: number) => BADGE_CLASSES[i % BADGE_CLASSES.length]
       </Fragment>
     </Tabs>
   )}
+</section>
 </section>

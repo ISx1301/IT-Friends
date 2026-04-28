@@ -1,0 +1,26 @@
+---
+type SanityImage = { alt?: string; url?: string };
+
+type campsInfoSection = {
+  _type: "campsInfoSection";
+  images?: SanityImage[];
+};
+
+const section = Astro.props.section as campsInfoSection;
+---
+<section class="mt-20 lg:mt-4">
+  <div class="container">
+    <div class="flex flex-col items-center gap-7">
+      {section.images?.map((image) => (
+        image?.url ? (
+          <img
+            src={image.url}
+            alt={image.alt ?? ''}
+            class="rounded object-cover"
+          />
+        ) : null
+      ))}
+    </div>
+    </div>
+  </div>
+</section>

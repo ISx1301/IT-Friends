@@ -20,6 +20,7 @@ import RelatedPostsSection from '@components/staticSections/blog/RelatedPostsSec
 // camps
 import VideoCampsSection from '@components/staticSections/camps/VideoCampsSection.astro';
 import WithNestedTabsCampsSection from '@components/staticSections/camps/WithNestedTabsCampsSection.astro';
+import CampsInfoSection from '@components/staticSections/camps/CampsInfoSection.astro';
 
 // english
 import OfflineAddressesEnglishSection from '@components/staticSections/english/OfflineAddressesEnglishSection.astro';
@@ -51,7 +52,7 @@ export const sectionsRegistry: Record<string, any> = {
   // camps
   videoCampsSection: VideoCampsSection,
   withNestedTabsCampsSection: WithNestedTabsCampsSection,
-
+  campsInfoSection: CampsInfoSection,
   // english
   offlineAddressesEnglishSection: OfflineAddressesEnglishSection,
 

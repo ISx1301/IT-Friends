@@ -303,11 +303,23 @@ export const PAGE_WITH_SETTINGS = `
                     "image": image{ alt, "url": asset->url }, title, ageText,
                     "location": { "title": location.title, "icon": { "alt": location.icon.alt, "url": location.icon.asset->url } },
                     "ptDescription": coalesce(ptDescription[style == "normal"]{ _type, _key, style, children[]{ _type, text, marks }, markDefs[]{ _key, _type, href } }, []),
-                    buttonText
+                    buttonText,
+                    buttonHref
                   }, []
                 )
               }, []
             )
+          }, []
+        )
+      },
+
+      //campsInfoSection
+      _type == "campsInfoSection" => {
+        _type, _key, backgroundColor, heading, paddingClass,
+        "images": coalesce(
+          images[]{
+            alt,
+            "url": asset->url
           }, []
         )
       },
