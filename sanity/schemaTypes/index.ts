@@ -3,6 +3,8 @@ import {globalSettings} from './settings/globalSettings'
 import {page} from './pages/pages/page'
 import {head} from './shared/head'
 import { heroBlogSection } from './sections/heroBlogSection'
+import { sectionWithButton } from './sections/sectionWithButton'
+import { defaultTextSection } from './sections/defaultTextSection'
 
 // sections
 import { heroSectionMainSection } from './sections/heroSection'
@@ -38,6 +40,8 @@ export const schemaTypes = [
   withoutNestedTabsSection,
   interestingThingsSection,
   blog,
+  sectionWithButton,
+  defaultTextSection,
 
   // sections
   heroSectionMainSection,

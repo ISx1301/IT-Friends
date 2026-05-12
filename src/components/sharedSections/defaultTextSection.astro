@@ -1,0 +1,94 @@
+---
+import { toHTML } from '@portabletext/to-html';
+import { BG_CLASSES, type BgColor } from "@/constants";
+
+type defaultTextSection = {
+  _type: "defaultTextSection";
+  _key: string;
+  backgroundColor?: BgColor;
+  paddingClass?: string;
+  heading?: string;
+  description?: any[]; 
+};
+
+export interface Props {
+  section: defaultTextSection;
+  anchorId?: string;
+}
+
+const { section, anchorId } = Astro.props as Props;
+
+const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
+
+const join = (...parts: (string | undefined | false)[]) =>
+  parts
+    .filter(Boolean)
+    .map(String)
+    .map((s) => s.trim())
+    .join(" ");
+
+const isValidPadding = (s: string) =>
+  s.split(/\s+/).every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t));
+
+const padding = (section.paddingClass ?? "").trim();
+
+if (!padding)
+  throw new Error('[defaultTextSection] Missing required "paddingClass" from Sanity');
+if (!isValidPadding(padding))
+  throw new Error('[defaultTextSection] Invalid "paddingClass" value');
+
+const html = section.description 
+  ? toHTML(section.description, {
+      components: {
+        block: ({ children, value }) => {
+          const c = String(children).replace(/\n/g, '<br/>');
+          switch (value?.style) {
+            case 'h2': return `<h2 class="mb-4 font-bold text-xl lg:text-2xl">${c}</h2>`;
+            case 'h3': return `<h3 class="mb-3 font-bold text-lg lg:text-xl">${c}</h3>`;
+            default:   return `<p class="text-base lg:text-xl">${c}</p>`;
+          }
+        },
+        marks: {
+          strong: ({ children }) => `<strong>${children}</strong>`,
+          em: ({ children }) => `<em>${children}</em>`,
+          link: ({ children, value }) => {
+            const href = value?.href || '#';
+            return `<a href="${href}" class="hover:text-orange-500 underline transition-colors" target="_blank" rel="noopener noreferrer">${children}</a>`;
+          },
+        },
+      },
+    })
+  : '';
+---
+
+<section
+  id={anchorId}
+  class={join(bgClass, padding)}
+  data-watch="fade-to-top"
+  data-watch-repeat
+  data-watch-delay="320"
+  data-watch-duration="1000"
+>
+  <div class="container">
+    { (section.heading || html) && (
+    <div class="flex">
+      <div class="flex flex-col items-center basis-full">
+
+        {section.heading && (
+          <div class="lg:w-full lg:max-w-5xl">
+            <h1 class="mt-[1rem] lg:mt-[0rem] mb-9 lg:mb-10 font-bold text-2xl lg:text-4xl text-center">
+              {section.heading}
+            </h1>
+          </div>
+        )}
+
+        {html && (
+          <div class="lg:w-full lg:max-w-5xl">
+            <div class="space-y-4 lg:w-full" set:html={html} />
+          </div>
+        )}
+        
+      </div>
+    </div>)}
+  </div>
+</section>

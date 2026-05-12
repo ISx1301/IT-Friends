@@ -498,13 +498,13 @@ export const CAMPS: Record<CampId, {
 }> = {
   karpaty: {
     label:     'IT FRIENDS Camp Карпати, Поляна',
-    phone:     '+38 067 491 26 80',
+    phone:     '+38 097 893 25 50',
     phoneHref: 'tel:+380674912680',
     telegram:  'https://t.me/tourfriends1',
     chatId:    6686752444,
   },
   trends: {
-    label:     'TRENDS FRIENDS Camp, Новинка',
+    label:     'TRENDS FRIENDS Camp',
     phone:     '+38 097 220 47 35',
     phoneHref: 'tel:+380972204735',
     telegram:  'https://t.me/tourfriends1',

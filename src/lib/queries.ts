@@ -217,6 +217,25 @@ export const PAGE_WITH_SETTINGS = `
         "order": coalesce(order[]{ kind }, [])
       },
 
+      // sectionWithButton
+      _type == 'sectionWithButton' => {
+        _type, _key, backgroundColor, paddingClass,
+        buttonText, buttonClass, "mainImage": mainImage{ alt, "url": asset->url },
+      },
+
+      // defaultTextSection
+      _type == 'defaultTextSection' => {
+        _type, _key, backgroundColor, paddingClass, heading,
+        description[] {
+          ...,
+          markDefs[] {
+            ...,
+            _type == "link" => {
+              href
+            }
+          }
+        }
+      },
 
       // generalDescriptionSection
       _type == "generalDescriptionSection" => {

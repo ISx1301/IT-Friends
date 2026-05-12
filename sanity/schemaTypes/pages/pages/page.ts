@@ -44,6 +44,8 @@ export const page = defineType({
         { type: 'heroBlogSection' },
         { type: 'postListSection' },
         { type: 'campsInfoSection' },
+        { type: 'sectionWithButton' },
+        { type: 'defaultTextSection' },
       ],
     }),
   ],

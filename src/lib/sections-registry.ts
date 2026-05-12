@@ -8,6 +8,8 @@ import PeculiaritiesSection from '@components/sharedSections/PeculiaritiesSectio
 import ReviewsSection from '@components/sharedSections/ReviewsSection.astro';
 import TeamSection from '@components/sharedSections/TeamSection.astro';
 import WithoutNestedTabsSection from '@components/sharedSections/WithoutNestedTabsSection.astro';
+import sectionWithButton from '@components/sharedSections/sectionWithButton.astro';
+import defaultTextSection from '@components/sharedSections/defaultTextSection.astro';
 
 // static
 
@@ -42,6 +44,8 @@ export const sectionsRegistry: Record<string, any> = {
   reviewsSection: ReviewsSection,
   teamSection: TeamSection,
   withoutNestedTabsSection: WithoutNestedTabsSection,
+  sectionWithButton,
+  defaultTextSection,
 
   // blog
   heroBlogSection: HeroBlogSection,

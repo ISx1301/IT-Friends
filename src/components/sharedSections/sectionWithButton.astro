@@ -1,0 +1,63 @@
+---
+import { BG_CLASSES, type BgColor } from "@/constants";
+
+type sectionWithButton = {
+  _type: "sectionWithButton";
+  _key: string;
+  backgroundColor?: BgColor;
+  paddingClass?: string;
+  buttonText?: string;
+  buttonClass?: string;
+};
+
+export interface Props {
+  section: sectionWithButton;
+  anchorId?: string;
+}
+
+const { section, anchorId } = Astro.props as Props;
+
+const bgClass = BG_CLASSES[(section.backgroundColor ?? "white") as BgColor];
+
+const join = (...parts: (string | undefined | false)[]) =>
+  parts
+    .filter(Boolean)
+    .map(String)
+    .map((s) => s.trim())
+    .join(" ");
+const isValidPadding = (s: string) =>
+  s.split(/\s+/).every((t) => /^(?:[a-z]+:)?p[bt]-(?:px|0|[1-9]\d*)$/.test(t));
+
+// padding (required in Sanity)
+const padding = (section.paddingClass ?? "").trim();
+if (!padding)
+  throw new Error(
+    '[sectionWithButton] Missing required "paddingClass" from Sanity',
+  );
+if (!isValidPadding(padding))
+  throw new Error('[sectionWithButton] Invalid "paddingClass" value');
+---
+
+<section
+  id={anchorId}
+  class={join(bgClass, padding)}
+  data-watch="fade-to-top"
+  data-watch-repeat
+  data-watch-delay="320"
+  data-watch-duration="1000"
+>
+  <div class="container">
+    {
+      section.buttonText && (
+        <div class="flex justify-center basis-1/4 lg:basis-1/12">
+          <button
+            class={`px-5 py-4 font-secondary font-medium text-lg orange-btn ${section.buttonClass ?? "free-lesson-open"}`}
+            type="button"
+          >
+            {section.buttonText}
+          </button>
+        </div>
+      )
+    }
+  </div>
+</section>
