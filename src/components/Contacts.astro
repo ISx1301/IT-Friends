@@ -7,6 +7,8 @@ import {
   type Lang,
   LOCALE,
   DIRECTION_OPTIONS,
+  CAMPS,
+  CAMP_ORDER,
 } from "@/constants";
 
 interface Props { lang?: Lang }
@@ -68,6 +70,36 @@ const directions = DIRECTION_OPTIONS[lang];
       </div>
 
       <div class="flex flex-col gap-4 w-full qc-address-list"></div>
+    </div>
+  </div>
+</div>
+
+<div class="top-0 left-0 z-50 fixed flex justify-center items-center w-full h-screen overflow-y-auto transition-transform -translate-x-full duration-300 ease-in-out transform qc-camps-panel">
+  <div class="flex justify-center items-center h-screen overflow-y-auto qc-camps-panel-close">
+    <div class="left-0 absolute bg-white/10 backdrop-blur-md w-full h-screen overflow-y-auto"></div>
+
+    <div class="relative flex flex-col items-center bg-white lg:shadow-2xl px-3 lg:px-14 py-9 rounded-lg w-11/12 lg:w-full">
+      <div class="top-4 right-4 absolute cursor-pointer qc-camps-panel-close" aria-label={ui.close}>
+        <Image src={import("@images/green-close.svg")} format="svg" alt={ui.close} />
+      </div>
+
+      <div class="mb-5">
+        <h2 class="font-secondary font-medium text-xl text-center">Оберіть табір</h2>
+      </div>
+
+      <div class="flex flex-col gap-4 w-full">
+        {CAMP_ORDER.map((id) => (
+          <a
+            class="py-3 px-4 border rounded-lg w-full font-medium text-base text-center qc-camp-link"
+            href="#"
+            data-phone={CAMPS[id].phoneHref}
+            data-telegram={CAMPS[id].telegram}
+          >
+            <span class="block font-semibold">{CAMPS[id].label}</span>
+            <span class="block text-sm text-gray-500">{CAMPS[id].phone}</span>
+          </a>
+        ))}
+      </div>
     </div>
   </div>
 </div>

@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import { buttonClassField } from '../shared/buttonClassField'
 import { ImagesIcon } from '@sanity/icons'
 
 export const backgroundColors = [
@@ -394,6 +395,7 @@ export const withNestedTabsCampsSection = defineType({
       type: 'string',
       description: 'Опціонально (CTA під сіткою клікабельних карток)',
     }),
+    buttonClassField,
   ],
 
   preview: {

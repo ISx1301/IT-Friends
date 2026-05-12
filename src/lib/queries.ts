@@ -141,7 +141,7 @@ export const PAGE_WITH_SETTINGS = `
         "paragraphs": coalesce(
           paragraphs[style == "normal"]{ _type, _key, style, children[]{ _type, text, marks }, markDefs[]{ _key, _type, href } }, []
         ),
-        buttonText,
+        buttonText, buttonClass,
         "reviews": coalesce(reviews[]{
           name,
           "text": coalesce(
@@ -196,7 +196,7 @@ export const PAGE_WITH_SETTINGS = `
         "description": coalesce(
           description[style == "normal"]{ _type, _key, style, children[]{ _type, text, marks }, markDefs[]{ _key, _type, href } }, []
         ),
-        buttonText,
+        buttonText, buttonClass,
         "items": coalesce(items[]{
           question,
           "answer": coalesce(
@@ -213,7 +213,7 @@ export const PAGE_WITH_SETTINGS = `
         "description": coalesce(
           description[style == "normal"]{ _type, _key, style, children[]{ _type, text, marks }, markDefs[]{ _key, _type, href } }, []
         ),
-        buttonText, "mainImage": mainImage{ alt, "url": asset->url },
+        buttonText, buttonClass, "mainImage": mainImage{ alt, "url": asset->url },
         "order": coalesce(order[]{ kind }, [])
       },
 
@@ -284,7 +284,7 @@ export const PAGE_WITH_SETTINGS = `
 
       // withNestedTabsCampsSection
       _type == "withNestedTabsCampsSection" => {
-        _type, _key, backgroundColor, heading, innerTabsColorKey, cardsKind, showMoreText, buttonText,
+        _type, _key, backgroundColor, heading, innerTabsColorKey, cardsKind, showMoreText, buttonText, buttonClass,
         "intro": coalesce(intro[]{ _type, _key, style, children[]{ _type, text, marks }, markDefs[]{ _key, _type, href } }, []),
         "pillGroups": coalesce(
           pillGroups[]{

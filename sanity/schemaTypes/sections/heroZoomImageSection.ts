@@ -1,5 +1,6 @@
 import { defineType, defineField } from 'sanity'
 import { ImagesIcon } from '@sanity/icons'
+import { buttonClassField } from '../shared/buttonClassField'
 
 export const backgroundColors = [
   { title: 'Білий', value: 'white' },
@@ -99,6 +100,8 @@ export const heroZoomImageSection = defineType({
     }),
 
     defineField({ name: 'buttonText', title: 'Текст кнопки (опціонально).', type: 'string' }),
+
+    buttonClassField,
 
     defineField({
       name: 'mainImage',

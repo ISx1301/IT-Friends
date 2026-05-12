@@ -23,6 +23,7 @@ type accordionSection = {
   paddingClass?: string; 
   description?: PTBlock[];
   buttonText?: string;
+  buttonClass?: string;
   items?: FaqItem[];
 };
 
@@ -96,7 +97,7 @@ const descriptionHtml = toHTML(section.description ?? [], { components: ptCompon
         )}
 
         {section.buttonText && (
-          <button type="button" class="hidden lg:inline-block px-7 py-3 leading-none transparent-btn free-lesson-open">
+          <button type="button" class={`hidden lg:inline-block px-7 py-3 leading-none transparent-btn ${section.buttonClass ?? 'free-lesson-open'}`}>
             {section.buttonText}
           </button>
         )}

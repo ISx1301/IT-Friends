@@ -9,6 +9,7 @@ import OnlineForm from "@components/OnlineForm.astro";
 import Contacts from "@/components/Contacts.astro";
 import ChooseForm from "@components/ChooseForm.astro";
 import HubForm from "@components/HubForm.astro";
+import CampForm from "@components/CampForm.astro";
 
 type Lang = 'uk' | 'en';
 
@@ -87,6 +88,7 @@ Astro.cookies.set('language', lang, { maxAge: 31536000 });
     <OnlineForm lang={lang} />
     <ChooseForm lang={lang} />
     <HubForm />
+    <CampForm />
 
     <!-- class="mt-[4rem] lg:mt-0" -->
     <main aria-label="Content" >

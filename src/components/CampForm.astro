@@ -1,0 +1,131 @@
+---
+import { Image } from "astro:assets";
+import "@styles/header.scss";
+import { CAMPS, CAMP_ORDER } from "@/constants";
+---
+
+<!-- Панель вибору табору -->
+<div class="top-0 left-0 z-50 fixed flex justify-center items-center w-full h-screen overflow-y-auto transition-transform -translate-x-full duration-300 ease-in-out transform camp-pick-panel">
+  <div class="flex justify-center items-center h-screen overflow-y-auto">
+    <div class="left-0 absolute bg-white/10 backdrop-blur-md w-full h-screen overflow-y-auto js-camp-pick-close"></div>
+
+    <div class="relative flex flex-col items-center bg-white lg:shadow-2xl px-3 lg:px-14 py-9 rounded-lg w-11/12 lg:w-full">
+      <button type="button" class="top-4 right-4 absolute cursor-pointer js-camp-pick-close" aria-label="Закрити">
+        <Image src={import("@images/green-close.svg")} format="svg" alt="Закрити" />
+      </button>
+
+      <div class="mb-5">
+        <h2 class="font-secondary font-medium text-xl text-center">Оберіть табір, який вас цікавить</h2>
+      </div>
+
+      <div class="flex flex-col gap-4 w-full">
+        {CAMP_ORDER.map((id) => (
+          <button
+            type="button"
+            class="py-4 px-4 border rounded-lg w-full font-medium text-base lg:text-lg text-center js-pick-camp"
+            data-camp={id}
+          >
+            {CAMPS[id].label}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Форма бронювання -->
+<div class="z-50 fixed inset-0 transition-transform -translate-x-full duration-300 ease-in-out camp-form-slider transform">
+  <div class="fixed inset-0 bg-white/10 backdrop-blur-md camp-form-close"></div>
+
+  <div class="flex justify-center items-center w-full h-full">
+    <form
+      class="relative flex flex-col items-center bg-white lg:shadow-2xl mx-auto px-3 lg:px-14 py-9 rounded-3xl w-11/12 lg:w-1/2 max-h-[90vh] overflow-hidden overflow-y-auto camp-lesson-form"
+      method="POST"
+      action="/api/submit-camp"
+      novalidate
+    >
+      <button type="button" class="top-0 lg:sticky mb-5 lg:mb-0 ml-auto cursor-pointer camp-form-close" aria-label="Закрити">
+        <Image src={import("@images/green-close.svg")} format="svg" alt="Закрити" />
+      </button>
+
+      <h2 class="mb-4 pt-2 font-secondary font-semibold text-primary-green text-xl text-center">
+        Забронювати місце
+      </h2>
+
+      <p class="mb-6 text-gray-600 text-sm text-center">
+        Заповніть, будь ласка, цю форму і ми зв'яжемося з вами найближчим часом,
+        щоб обговорити всі деталі та зробити ваше бронювання легким і приємним
+      </p>
+
+      <p class="mb-6 font-secondary font-semibold text-primary-green text-base text-center js-camp-hint"></p>
+
+      <input type="hidden" name="camp" class="js-camp-value" value="" />
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        Ім'я батьків*
+        <input name="parentName" class="pl-3 border focus:border-2 rounded-md h-10 camp-input-parent" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">Поле обов'язкове</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        Ім'я дитини*
+        <input name="childFirstName" class="pl-3 border focus:border-2 rounded-md h-10 camp-input-child-first" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">Поле обов'язкове</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        Прізвище дитини*
+        <input name="childLastName" class="pl-3 border focus:border-2 rounded-md h-10 camp-input-child-last" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">Поле обов'язкове</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        Вік дитини (скільки повних років)*
+        <input name="childAge" class="pl-3 border focus:border-2 rounded-md h-10 camp-input-age" type="number" min="3" max="18" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">Поле обов'язкове</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        Адреса проживання (район, масив)*
+        <input name="addressStreet" class="pl-3 border focus:border-2 rounded-md h-10 camp-input-street" type="text" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">Поле обов'язкове</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        Телефон для контакту*
+        <input name="phone" class="pl-3 border focus:border-2 rounded-md h-10 camp-input-phone" type="tel" inputmode="tel" required />
+        <span class="hidden mt-1 text-red-error text-sm form-error">Введіть номер телефону</span>
+      </label>
+
+      <label class="flex flex-col mb-7 w-full lg:w-80 font-secondary font-medium">
+        Звідки Ви дізнались про нас?
+        <input name="referral" class="pl-3 border focus:border-2 rounded-md h-10 camp-input-referral" type="text" />
+      </label>
+
+      <!-- honeypot -->
+      <input
+        type="text"
+        name="hp"
+        tabindex="-1"
+        autocomplete="off"
+        style="position:absolute;left:-9999px;opacity:0"
+      />
+
+      <button class="px-8 py-4 font-secondary font-medium orange-btn" type="submit">
+        Надіслати заявку
+      </button>
+      <p class="mt-2 text-base camp-form-status"></p>
+    </form>
+
+    <div class="hidden animate-fadeInUp camp-form-success">
+      <div class="flex flex-col items-center gap-6 lg:gap-9 lg:w-96">
+        <h2 class="font-secondary font-semibold text-lg lg:text-2xl text-center">
+          Форма успішно надіслана! Дякуємо, ми зв'яжемось з вами найближчим часом
+        </h2>
+        <Image src={import("@images/form-done.svg")} format="svg" alt="Успішно" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="@/scripts/campForm.ts"></script>

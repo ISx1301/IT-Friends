@@ -1,5 +1,6 @@
 import { defineType, defineField } from 'sanity'
 import { ImagesIcon } from '@sanity/icons'
+import { buttonClassField } from '../shared/buttonClassField'
 
 const backgroundColors = [
   { title: 'Білий', value: 'white' },
@@ -91,6 +92,7 @@ export const accordionSection = defineType({
     }),
 
     defineField({ name: 'buttonText', title: 'Текст кнопки', type: 'string' }),
+    buttonClassField,
 
     defineField({
       name: 'items',

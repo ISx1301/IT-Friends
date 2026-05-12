@@ -72,10 +72,8 @@ const descriptionHtmlByIndex = cards.map((c) =>
   toHTML(c?.description ?? [], { components: ptComponents })
 );
 
-const baseBtn =
-  "px-5 py-4 font-secondary font-medium text-lg orange-btn form-open";
-const extraBtn = (section.buttonClass ?? "").trim();
-const finalBtnClass = (baseBtn + " " + extraBtn).trim();
+const finalBtnClass =
+  `px-5 py-4 font-secondary font-medium text-lg orange-btn ${section.buttonClass ?? 'free-lesson-open'}`;
 ---
 
 <section 

@@ -28,19 +28,18 @@ const hide = (el?: Element|null) => el?.classList.add("-translate-x-full");
 
 // --- helpers ---
 function pickOnlinePhoneHref(direction: DirectionKey): string {
-  const list = PHONE_LINKS.online || [];
+  const list = PHONE_LINKS["online_it"] || [];
   if (!list.length) return "#";
-  const it  = list.find(x => /(it|айті)/i.test(x.label)) || list[0];
-  const eng = list.find(x => /(англій|english|англ)/i.test(x.label)) || list[list.length-1] || list[0];
+  const it  = list.find((x: { label: string; href: string }) => /(it|айті)/i.test(x.label)) || list[0];
+  const eng = list.find((x: { label: string; href: string }) => /(англій|english|англ)/i.test(x.label)) || list[list.length-1] || list[0];
   if (direction === "online_it")  return it.href;
   if (direction === "online_eng") return eng.href;
   return list[0].href;
 }
 
 function phoneHrefFor(branch: BranchId, direction: DirectionKey): string {
-  if (branch === "online") return pickOnlinePhoneHref(direction);
   const list = PHONE_LINKS[branch] || [];
-  return list[0]?.href || "#";
+  return list[0]?.href || pickOnlinePhoneHref(direction);
 }
 
 function telegramHrefForBranch(branch: Exclude<BranchId,'online'>): string {
@@ -70,11 +69,15 @@ export default function setupQuickContacts() {
   const addressClose   = $(".qc-address-panel-close");
   const addressWrap    = $(".qc-address-list") as HTMLElement | null;
 
+  const campsPanel  = $(".qc-camps-panel");
+  const campsClose  = $$(".qc-camps-panel-close");
+
   phoneStart?.addEventListener("click", () => { mode = "phone";    show(directionMenu); });
   tgStart?.addEventListener("click",    () => { mode = "telegram"; show(directionMenu); });
 
   directionClose?.addEventListener("click", () => hide(directionMenu));
   addressClose?.addEventListener("click",   () => hide(addressPanel));
+  campsClose.forEach((el) => el.addEventListener("click", () => hide(campsPanel)));
 
   function openImmediateForOnline(dir: DirectionKey) {
     if (mode === "phone") {
@@ -127,9 +130,31 @@ export default function setupQuickContacts() {
         return;
       }
 
-      if (pickedDirection === "it_camps" || pickedDirection === "franchise") {
+      if (pickedDirection === "franchise") {
         hide(directionMenu);
         return;
+      }
+
+      if (pickedDirection === "it_camps") {
+        hide(directionMenu);
+        show(campsPanel);
+        return;
+      }
+    });
+  });
+
+  $$(".qc-camp-link").forEach((el) => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      const a = el as HTMLAnchorElement;
+      const href = mode === "phone"
+        ? (a.dataset.phone ?? "#")
+        : (a.dataset.telegram ?? "#");
+      if (!href || href === "#") return;
+      if (mode === "phone") {
+        window.location.href = href;
+      } else {
+        window.open(href, "_blank", "noopener");
       }
     });
   });
@@ -138,6 +163,7 @@ export default function setupQuickContacts() {
     if (e.key === "Escape") {
       hide(directionMenu);
       hide(addressPanel);
+      hide(campsPanel);
     }
   });
 }

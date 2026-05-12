@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import { buttonClassField } from '../shared/buttonClassField'
 import { ImagesIcon } from '@sanity/icons'
 
 export const backgroundColors = [
@@ -117,19 +118,7 @@ export const generalDescriptionSection = defineType({
 
     defineField({ name: 'buttonText', title: 'Текст кнопки', type: 'string', description: 'Опціонально.' }),
 
-    defineField({
-      name: 'buttonClass',
-      title: 'CSS (для розробника)',
-      type: 'string',
-      description: 'Опціонально.',
-      validation: (Rule) =>
-        Rule.custom((val) => {
-          if (!val) return true
-          return /^[A-Za-z0-9\-\_: ]+$/.test(val)
-            ? true
-            : 'Тільки літери, цифри, дефіс, підкреслення, двокрапка та пробіли'
-        }),
-    }),
+    buttonClassField,
   ],
 
   preview: {

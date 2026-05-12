@@ -1,5 +1,6 @@
 import { defineType, defineField } from 'sanity'
 import { ImagesIcon } from '@sanity/icons'
+import { buttonClassField } from '../shared/buttonClassField'
 
 const backgroundColors = [
   { title: 'Білий', value: 'white' },
@@ -98,6 +99,7 @@ export const reviewsSection = defineType({
       title: 'Текст кнопки',
       type: 'string',
     }),
+    buttonClassField,
 
     defineField({
       name: 'reviews',

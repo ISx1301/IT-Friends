@@ -483,3 +483,48 @@ export const TELEGRAM_CHAT_IDS_ONLINE: Partial<Record<AnyOnlineKey, number>> & {
   online_it:  5746018867,             
   online_eng: 6260129820,             
 };
+
+
+// ==== CAMPS (Табори TOUR FRIENDS) ====
+
+export type CampId = 'karpaty' | 'trends' | 'more';
+
+export const CAMPS: Record<CampId, {
+  label: string;
+  phone: string;
+  phoneHref: string;
+  telegram: string;
+  chatId: number;
+}> = {
+  karpaty: {
+    label:     'IT FRIENDS Camp Карпати, Поляна',
+    phone:     '+38 067 491 26 80',
+    phoneHref: 'tel:+380674912680',
+    telegram:  'https://t.me/tourfriends1',
+    chatId:    6686752444,
+  },
+  trends: {
+    label:     'TRENDS FRIENDS Camp, Новинка',
+    phone:     '+38 097 220 47 35',
+    phoneHref: 'tel:+380972204735',
+    telegram:  'https://t.me/tourfriends1',
+    chatId:    6686752444,
+  },
+  more: {
+    label:     'IT FRIENDS Camp на МОРІ, Болгарія',
+    phone:     '+38 066 532 70 73',
+    phoneHref: 'tel:+380665327073',
+    telegram:  'https://t.me/ITFRIENDSCAMP1',
+    chatId:    5585321338,
+  },
+};
+
+export const CAMP_ORDER: CampId[] = ['karpaty', 'trends', 'more'];
+
+export const CAMP_MAIL_TO = ['maksimgaliena@gmail.com', 'Katya.galiena@gmail.com'];
+
+export const TELEGRAM_CHAT_IDS_CAMPS: Record<CampId, number> = {
+  karpaty: CAMPS.karpaty.chatId,
+  trends:  CAMPS.trends.chatId,
+  more:    CAMPS.more.chatId,
+};

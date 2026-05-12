@@ -67,6 +67,7 @@ type WithNestedTabsCampsSection = {
   pillGroups?: PillGroup[];
   showMoreText?: string;  
   buttonText?: string;    
+  buttonClass?: string;
   buttonHref?: string;
 };
 
@@ -254,7 +255,7 @@ const badgeClassByIndex = (i: number) => BADGE_CLASSES[i % BADGE_CLASSES.length]
                                     if (section.buttonText) {
                                       nodes.push(
                                         <div class="flex justify-center col-span-full mt-11 lg:mt-16">
-                                          <button class="px-5 py-4 font-secondary font-medium text-lg orange-btn form-open" type="button">
+                                          <button class={`px-5 py-4 font-secondary font-medium text-lg orange-btn ${section.buttonClass ?? 'camp-form-open'}`} type="button">
                                             {section.buttonText}
                                           </button>
                                         </div>
