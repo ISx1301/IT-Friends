@@ -519,7 +519,11 @@ export const CAMPS: Record<CampId, {
   },
 };
 
-export const CAMP_ORDER: CampId[] = ['karpaty', 'trends', 'more'];
+// * CAMPS FULL LIST
+// export const CAMP_ORDER: CampId[] = ['karpaty', 'trends', 'more'];
+
+export const CAMP_ORDER: CampId[] = ['karpaty', 'more'];
+
 
 export const CAMP_MAIL_TO = ['maksimgaliena@gmail.com', 'Katya.galiena@gmail.com'];
 
