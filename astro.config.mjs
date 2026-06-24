@@ -23,7 +23,7 @@ export default defineConfig({
       dataset: 'production',
       apiVersion: '2021-10-21',   
       // Set useCdn to false if you're building statically.
-      useCdn: false,
+      useCdn: true,
       token: process.env.SECRET_API_TOKEN ?? SECRET_API_TOKEN
     }),
     sitemap(),
